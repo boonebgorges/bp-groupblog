@@ -1,0 +1,25 @@
+p.blog-post-footer span.comments a {
+	background: url(../images/comments_icon.gif) center left no-repeat;	
+	padding-left: 1.8em;
+}
+			
+li a#nav-group-blog {
+	background: url(../images/blog_bullet.gif) 87% 52% no-repeat;
+	padding: 0.55em 3.1em 0.55em 0 !important;
+	display: block;
+	margin-right: 0.85em;
+}
+
+.blog-post-metadata {
+	color: #888;
+	font-size: 0.9em;
+}
+
+.blog-post-metadata h5 {
+	font-size: 1.4em;
+}
+
+.blog-post-content,
+.blog-post-footer {
+	margin-left: 70px;
+}
