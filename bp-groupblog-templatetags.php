@@ -157,11 +157,79 @@ function bp_groupblog_silent_add( $group_id ) {
 	
 }
 
-function bp_groupblog_group_blog_id( $group_id ) {
-	$groupblog = new BP_Groupblog ( $group_id );
-			
-	return $groupblog->group_blog_id;
+//Deprecated. Use groupblog_blog_id( $blog_id )
+function bp_groupblog_group_blog_id( $group_id = '' ) {
+	
+	if ( !isset( $group_id ) )
+		$group_id = bp_group_id( false );
+		
+	return groups_get_groupmeta( $group_id, 'groupblog_blog_id' );
 }  
+
+//Deprecated. Use bp_groupblog_group_id( $blog_id )
+//function bp_groupblog_group_id( $blog_id ) {
+//	global $bp, $wpdb;
+//	
+//	if ( !isset( $blog_id ) )
+//		return;
+//	
+//	if ( $row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'groupblog_blog_id' AND meta_value = %d", $blog_id ) ) ) {
+//		return $row->group_id;
+//	}	
+//}
+
+/*
+ * groupblog_blog_id()
+ * 
+ * Echos the blog id of the current group's blog unless
+ * $group_id is explicitly passed in.
+ * 
+ */
+function groupblog_blog_id( $group_id = '' ) {   
+  echo get_groupblog_blog_id( $group_id );
+}
+	function get_groupblog_blog_id( $group_id = '' ) {
+		global $bp;
+		
+		if (  $group_id == '' ) {
+			$group_id = $bp->groups->current_group->id;
+		}
+			
+		return groups_get_groupmeta( $group_id, 'groupblog_blog_id' );
+	}  
+
+/*
+ * groupblog_group_id()
+ * 
+ * Echos the group id of the group associated with the blog id that is passed in.
+ * 
+ */
+function groupblog_group_id( $blog_id ) {
+	echo get_groupblog_group_id( $blog_id );	
+}
+	function get_groupblog_group_id( $blog_id ) {
+		global $bp, $wpdb;
+		
+		if ( !isset( $blog_id ) )
+			return;
+		
+		if ( $row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'groupblog_blog_id' AND meta_value = %d", $blog_id ) ) ) {
+			return $row->group_id;
+		}	
+	}
+
+/*
+ * groupblog_publish_post_link
+ * 
+ * Returns the link for BP Groupblog function to publish the current post
+ *  
+ */
+function groupblog_publish_post_link(){
+	$publish_link = bp_get_group_permalink() . '/?publish-post=yes';
+	$publish_link .= '&blogid=' . get_groupblog_blog_id();
+	$publish_link .= '&postid=' . get_the_ID();
+	return $publish_link;
+}
 
 function bp_groupblog_show_category_slug( $group_id ) {
 	$groupblog = new BP_Groupblog ( $group_id );
