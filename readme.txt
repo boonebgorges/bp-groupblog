@@ -35,13 +35,13 @@ The BuddyPress Groupblog plugin extends the group functionality by enabling each
 
 == Installation ==
 
-NOTE: After plugin installation, you MUST copy the "groupblog" templates folder to your bp active member theme. See below.
+NOTE: After plugin installation, you MUST move the "groupblog" templates folder to your bp active member theme. See below.
 
 1) unzip the bp-groupblog.zip file into `/wp-contents/plugins/bp-groupblog`
 
 2) Copy the template directory `/wp-content/plugins/bp-groupblog/groupblog` to your active member theme directory:
 
-`/wp-content/bp-themes/your-current-theme/groupblog`
+`/wp-content/themes/your-current-active-theme/groupblog`
 
 3) activate the plugin site wide.
 
@@ -67,7 +67,10 @@ This plugin requires the Group API included in BuddyPress 1.1. This API is neede
 `get_groupblog_blog_id( $group_id )`
 `groupblog_group_id( $blog_id )`
 `get_groupblog_group_id( $blog_id )`
-* Group admin now has the option of either creating a new blog or associating one of his blogs with the new group
+* Group admin now has the option of either creating a new blog or associating one of his blogs with the new group.
+* Moved resource folders to the theme folder where they belong.
+* Added version constant.
+* Updated the installation instructions in the Readme.
 
 = 1.0.1 =
 * Added backticks for code in readme.txt
