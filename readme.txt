@@ -3,7 +3,7 @@ Contributors: Rodney Blevins & Marius Ooms
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7374704
 Tags: buddypress,groups,blogs,content
 Requires at least: WPMU 2.8 / BP 1.1
-Tested up to: WPMU 2.8.2
+Tested up to: WPMU 2.8.4a
 Stable tag: 1.0
 
 BuddyPress Groupblog extends the group functionality by enabling the group to have a single blog associated with it. Group members are automatically added to the blog and will have roles as set by the group admin.
