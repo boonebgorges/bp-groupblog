@@ -61,22 +61,17 @@ This plugin requires the Group API included in BuddyPress 1.1. This API is neede
 == Changelog ==
 
 = 1.1-pre =
-* If a member leaves the group they will now be downgraded to 'subscriber' role.
+* If a member leaves the group they will now be downgraded to 'subscriber'.
 * Added template tags:
 `groupblog_blog_id( $group_id )`
 `get_groupblog_blog_id( $group_id )`
 `groupblog_group_id( $blog_id )`
 `get_groupblog_group_id( $blog_id )`
 * Group admin now has the option of either creating a new blog or associating one of his blogs with the new group.
-* Moved resource folders to the theme folder where they belong.
-* Added version constant.
-* Updated the installation instructions in the Readme.
-
-= 1.0.1 =
-* Added backticks for code in readme.txt
+* Moved css, images and js folders to the theme folder.
 
 = 1.0 =
 * Initial release.
 
 = The changelog can also be found here: =
-http://plugins.trac.wordpress.org/log/buddypress-group-blog?verbose=on
+http://plugins.trac.wordpress.org/log/bp-groupblog?verbose=on
