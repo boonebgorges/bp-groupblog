@@ -6,7 +6,7 @@
 function bp_groupblog_add_js() {
   global $bp;
   
-	if ( $bp->current_component == $bp->groups->slug && 'group-blog' == $bp->action_variables[0] )
+	if ( $bp->current_component == $bp->groups->slug && ( ('group-blog' == $bp->action_variables[0]) || ('group-blog' == $bp->action_variables[1]) ) )
 		wp_enqueue_script( 'bp-groupblog-js', get_stylesheet_directory_uri() . '/groupblog/js/general.js' );
 }
 add_action( 'template_redirect', 'bp_groupblog_add_js', 1 );

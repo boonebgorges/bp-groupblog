@@ -1,3 +1,13 @@
+form.standard-form label.groupblog-label {
+	display: inline;
+}
+
+form.standard-form .checkbox, 
+ul#groupblog-details,
+ul#groupblog-members {
+	margin-bottom: 15px;
+}
+
 p.blog-post-footer span.comments a {
 	background: url(../images/comments_icon.gif) center left no-repeat;	
 	padding-left: 1.8em;
