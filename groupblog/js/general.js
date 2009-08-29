@@ -4,9 +4,17 @@ jQuery(document).ready( function() {
 	  if (jQuery(this).is(':checked')) {
 	    jQuery('input[name=groupblog-create-new]').removeAttr('disabled');
 	    jQuery('select[name=groupblog-blogid]').removeAttr('disabled');
+	    jQuery('input[name=groupblog-silent-add]').removeAttr('disabled');
+	    if (jQuery('input[name=groupblog-silent-add]').is(':checked')) {
+	      jQuery('#groupblog-member-options input[type=radio]').removeAttr('disabled');
+	    } else {
+	      jQuery('#groupblog-member-options input[type=radio]').attr('disabled','true');
+	    }
 		} else {
 	    jQuery('input[name=groupblog-create-new]').attr('disabled','true');
 	    jQuery('select[name=groupblog-blogid]').attr('disabled','true');
+	    jQuery('input[name=groupblog-silent-add]').attr('disabled','true');
+	    jQuery('#groupblog-member-options input[type=radio]').attr('disabled','true');
 		}
 	});
  
