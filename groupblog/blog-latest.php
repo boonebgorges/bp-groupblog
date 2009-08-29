@@ -29,7 +29,7 @@ if ( bp_group_is_visible() && bp_groupblog_is_blog_enabled ( bp_group_id(false) 
 		      
 					<p class="blog-post-footer">
 						<?php if ( the_tags() ) : ?>
-							<?php _e( 'Tags: ', 'buddypress' ); ?><?php the_tags( '<span class="tags">', ', ', '</span>' ); ?>
+							<?php _e( 'Tags: ', 'groupblog' ); ?><?php the_tags( '<span class="tags">', ', ', '</span>' ); ?>
 						<?php endif; ?>
 						<span class="comments">
 							<a href="<?php the_permalink(); ?>#comments"><?php comments_number( __('No Comments'), __('1 Comment'), __('% Comments') ); ?> &raquo;</a>
