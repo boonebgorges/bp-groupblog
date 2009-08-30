@@ -25,7 +25,7 @@ li a#nav-group-blog {
 	font-size: 0.9em;
 }
 
-.blog-post-metadata h5 {
+ul.item-list .blog-post-metadata h5 {
 	font-size: 1.4em;
 }
 
