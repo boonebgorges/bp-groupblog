@@ -1,10 +1,3 @@
-<?php get_header() ?>
-
-<div class="content-header">
-	
-</div>
-
-<div id="content">	
 	<?php do_action( 'template_notices' ) // (error/success feedback) ?>
 	
 	<?php if ( bp_has_groups() ) : while ( bp_groups() ) : bp_the_group(); ?>
@@ -105,7 +98,3 @@
 	</div>
 	
 	<?php endwhile; endif; ?>
-
-</div>
-
-<?php get_footer() ?>
