@@ -63,6 +63,7 @@ This plugin requires the Group API included in BuddyPress 1.1. This API is neede
 2. Screenshot of the group blog page.
 
 == Changelog ==
+* Fixed a bug which would cause the group creator to be demoted to subscriber of his own blog if member blogging 
 
 = 1.1.4 =
 * Added file_exists to various files, so templates can be overriden in the theme. This also means we had to move the resource folders back into the theme folder.
