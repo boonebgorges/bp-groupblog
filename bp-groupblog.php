@@ -10,7 +10,7 @@ Site Wide Only: true
 */
 
 define ( 'BP_GROUPBLOG_IS_INSTALLED', 1 );
-define ( 'BP_EVENTS_VERSION', '1.1' );
+define ( 'BP_GROUPBLOG_VERSION', '1.1.3' );
 define ( 'BP_GROUPBLOG_DEFAULT_ADMIN_ROLE', 'administrator' );
 define ( 'BP_GROUPBLOG_DEFAULT_MOD_ROLE', 'editor' );
 define ( 'BP_GROUPBLOG_DEFAULT_MEMBER_ROLE', 'author' );
