@@ -4,7 +4,7 @@ Plugin Name: BP Groupblog
 Plugin URI: http://wordpress.org/extend/plugins/search.php?q=buddypress+groupblog
 Description: Automates and links WPMU blogs groups controlled by the group creator.
 Author: Rodney Blevins & Marius Ooms
-Version: 1.1.2
+Version: 1.1.3
 License: (Groupblog: GNU General Public License 2.0 (GPL) http://www.gnu.org/licenses/gpl.html)
 Site Wide Only: true
 */
@@ -38,7 +38,7 @@ if ( file_exists( WP_PLUGIN_DIR . '/bp-groupblog/languages/' . get_locale() . '.
 function bp_groupblog_setup_globals() {
 	global $bp, $wpdb;
 			
-	$bp->groupblog->image_base = STYLESHEETPATH . '/groupblog/images';
+	$bp->groupblog->image_base = WP_PLUGIN_DIR . '/bp-groupblog/images';
 	$bp->groupblog->slug = BP_GROUPBLOG_SLUG;
 	$bp->groupblog->default_admin_role = BP_GROUPBLOG_DEFAULT_ADMIN_ROLE;
 	$bp->groupblog->default_mod_role = BP_GROUPBLOG_DEFAULT_MOD_ROLE;
@@ -658,14 +658,22 @@ add_action( 'groups_leave_group', 'bp_groupblog_remove_user' );
  * Load the template file to display the group blog contents.
  */
 function groupblog_screen_blog() {
-	global $bp;
+	global $bp, $wp;
 		
 	if ( $bp->current_component == $bp->groups->slug && 'blog' == $bp->current_action ) {
+			
+		add_action( 'bp_template_content', 'groupblog_screen_blog_content' );
 		
-		bp_core_load_template( apply_filters( 'groupblog_screen_blog', 'groupblog/blog' ) );
+		bp_core_load_template( 'plugin-template' );
 	}
 }
-add_action( 'wp', 'groupblog_screen_blog', 4 );
+
+function groupblog_screen_blog_content() {
+	global $bp, $wp;
+	
+  load_template( WP_PLUGIN_DIR . '/bp-groupblog/groupblog/blog.php' );
+  
+}
 
 /**
  * groupblog_screen_blog_latest()
@@ -675,7 +683,7 @@ add_action( 'wp', 'groupblog_screen_blog', 4 );
 function groupblog_screen_blog_latest() {
 	global $bp, $wp; 
 	
-	load_template( STYLESHEETPATH . '/groupblog/blog-latest.php' );
+	load_template( WP_PLUGIN_DIR . '/bp-groupblog/groupblog/blog-latest.php' );
 	
 }
 add_action ('groups_custom_group_boxes', 'groupblog_screen_blog_latest');
