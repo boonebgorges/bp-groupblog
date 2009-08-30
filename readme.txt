@@ -47,6 +47,8 @@ NOTE: After plugin installation, you MUST move the "groupblog" templates folder 
 
 3) You are done!
 
+4) If you want to override the theme files, just copy the 'groupblog' folder into your active theme and modify to your needs.
+
 NOTE: You *must* activate this component AFTER bp has been activated.
 
 == Frequently Asked Questions ==
