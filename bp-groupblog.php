@@ -4,13 +4,13 @@ Plugin Name: BP Groupblog
 Plugin URI: http://wordpress.org/extend/plugins/search.php?q=buddypress+groupblog
 Description: Automates and links WPMU blogs groups controlled by the group creator.
 Author: Rodney Blevins & Marius Ooms
-Version: 1.1.3
+Version: 1.1.4
 License: (Groupblog: GNU General Public License 2.0 (GPL) http://www.gnu.org/licenses/gpl.html)
 Site Wide Only: true
 */
 
 define ( 'BP_GROUPBLOG_IS_INSTALLED', 1 );
-define ( 'BP_GROUPBLOG_VERSION', '1.1.3' );
+define ( 'BP_GROUPBLOG_VERSION', '1.1.4' );
 define ( 'BP_GROUPBLOG_DEFAULT_ADMIN_ROLE', 'administrator' );
 define ( 'BP_GROUPBLOG_DEFAULT_MOD_ROLE', 'editor' );
 define ( 'BP_GROUPBLOG_DEFAULT_MEMBER_ROLE', 'author' );
@@ -38,7 +38,7 @@ if ( file_exists( WP_PLUGIN_DIR . '/bp-groupblog/languages/' . get_locale() . '.
 function bp_groupblog_setup_globals() {
 	global $bp, $wpdb;
 			
-	$bp->groupblog->image_base = WP_PLUGIN_DIR . '/bp-groupblog/images';
+	$bp->groupblog->image_base = WP_PLUGIN_DIR . '/bp-groupblog/groupblog/images';
 	$bp->groupblog->slug = BP_GROUPBLOG_SLUG;
 	$bp->groupblog->default_admin_role = BP_GROUPBLOG_DEFAULT_ADMIN_ROLE;
 	$bp->groupblog->default_mod_role = BP_GROUPBLOG_DEFAULT_MOD_ROLE;
@@ -671,7 +671,10 @@ function groupblog_screen_blog() {
 function groupblog_screen_blog_content() {
 	global $bp, $wp;
 	
-  load_template( WP_PLUGIN_DIR . '/bp-groupblog/groupblog/blog.php' );
+	if ( file_exists( STYLESHEETPATH . '/groupblog/blog.php' ) )
+    load_template( STYLESHEETPATH . '/groupblog/blog.php' );
+  else
+    load_template( WP_PLUGIN_DIR . '/bp-groupblog/groupblog/blog.php' );
   
 }
 
@@ -682,9 +685,11 @@ function groupblog_screen_blog_content() {
  */
 function groupblog_screen_blog_latest() {
 	global $bp, $wp; 
-	
-	load_template( WP_PLUGIN_DIR . '/bp-groupblog/groupblog/blog-latest.php' );
-	
+
+	if ( file_exists( STYLESHEETPATH . '/groupblog/blog-latest.php' ) )
+  	load_template( STYLESHEETPATH . '/groupblog/blog-latest.php' );
+	else
+	  load_template( WP_PLUGIN_DIR . '/bp-groupblog/groupblog/blog-latest.php' );
 }
 add_action ('groups_custom_group_boxes', 'groupblog_screen_blog_latest');
 
