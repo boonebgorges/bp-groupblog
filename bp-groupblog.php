@@ -89,9 +89,7 @@ function groupblog_edit_settings() {
 	
 	if ( !isset( $group_id ) )
 	    $group_id = $bp->groups->current_group->id;
-	
-	//bp_core_add_message( "Trying to save setting. Save: " . $_POST['save'] . " Create new: " . $_POST['groupblog-create-new'] . " Group ID: " . $group_id . " Blog ID: " . $_POST['groupblog-blogid'] );
-		
+			
 	if ( $bp->current_component == $bp->groups->slug && 'group-blog' == $bp->action_variables[0] ) {
 		if ( $bp->is_item_admin || $bp->is_item_mod  ) {
 
@@ -149,7 +147,7 @@ function groupblog_edit_base_settings( $groupblog_enable_blog, $groupblog_silent
 	
 	if ( empty( $group_id ) )
 		return false;
-
+		
 	groups_update_groupmeta ( $group_id, 'groupblog_enable_blog', $groupblog_enable_blog );
 	groups_update_groupmeta ( $group_id, 'groupblog_blog_id', $groupblog_blog_id );
 	groups_update_groupmeta ( $group_id, 'groupblog_silent_add', $groupblog_silent_add );
@@ -167,6 +165,7 @@ function groupblog_edit_base_settings( $groupblog_enable_blog, $groupblog_silent
  * bp_groupblog_create_screen_save()
  *
  * Saves the information from the BP group blog creation step.
+ * TO-DO: groupblog-edit-settings is more efficient, rewrite this to be more like that one.
  */
 
 function bp_groupblog_create_screen_save() {
@@ -178,25 +177,25 @@ function bp_groupblog_create_screen_save() {
 	} else {
 		$groupblog_create_screen = false;
 	}
-	
-	$group_id = $_POST['groupblog-group-id'];
+	 
+	$groupblog_default_admin_role = $_POST['default-administrator'];
+	$groupblog_default_mod_role = $_POST['default-moderator'];
+	$groupblog_default_member_role = $_POST['default-member'];
+	$groupblog_group_id = $_POST['group_id'];
+	$silent_add = $_POST['groupblog-silent-add'];
 	
 	if ( isset ($_POST['save'] ) && isset ($_POST['groupblog-create-save']) && isset($_POST['groupblog-enable-blog']) ) {
-		if ( $_POST['groupblog-create-new'] == 'yes' ) {
-			//Create a new blog and associate it with the group				
-			if ( bp_groupblog_validate_blog_signup() ) {
-				if ( !groupblog_edit_base_settings( $_POST['groupblog-enable-blog'], $_POST['groupblog-silent-add'], $groupblog_default_admin_role, $groupblog_default_mod_role, $groupblog_default_member_role, $group_id, $groupblog_blog_id ) ) {
-					//bp_core_add_message( __( 'There was an error creating your group blog, please try again.' . $group_id, 'groupblog' ), 'error' );
-				}
+	    if ( $_POST['groupblog-create-new'] == 'yes' ) {
+	        //Create a new blog and assign the blog id to the global $groupblog_blog_id
+			if ( !bp_groupblog_validate_blog_signup() ) {
+				$errors = $filtered_results['errors'];
+				bp_core_add_message ( $errors );
+				$group_id = '';
 			}
 		} else if ( $_POST['groupblog-create-new'] == 'no' ) {
-			//User wants to use an existing blog
-			if ( $_POST['groupblog-blogid'] != 0 ) {
-				//If they have chosen a blog then we're okay
-				if ( !groupblog_edit_base_settings( $_POST['groupblog-enable-blog'], $_POST['groupblog-silent-add'], $groupblog_default_admin_role, $groupblog_default_mod_role, $groupblog_default_member_role, $group_id, $_POST['groupblog-blogid'] ) ) {
-				}			
-			} else {
-				//They forgot to choose a blog, so send them back and make them do it!
+		    // They're using an existing blog, so we try to assign that to $groupblog_blog_id
+		    if ( !( $groupblog_blog_id = $_POST['groupblog-blogid'] ) ) {
+		        //They forgot to choose a blog, so send them back and make them do it!
 				bp_core_add_message( __( 'Please choose one of your blogs from the drop-down menu.' . $group_id, 'groupblog' ), 'error' );
 				if ( $bp->action_variables[0] == 'step' ) {
 					bp_core_redirect( $bp->loggedin_user->domain . $bp->groups->slug . '/create/step/' . $bp->action_variables[1] );
@@ -204,6 +203,15 @@ function bp_groupblog_create_screen_save() {
 					bp_core_redirect( site_url() . '/' . $bp->current_component . '/' . $bp->current_item . '/admin/group-blog' );
 				}
 			}
+		} else {
+		    // They already have a blog associated with the group, we're just saving other settings
+			$groupblog_blog_id = groups_get_groupmeta ( $bp->groups->current_group->id, 'groupblog_blog_id' );
+		}
+	
+		if ( !groupblog_edit_base_settings( $_POST['groupblog-enable-blog'], $_POST['groupblog-silent-add'], $_POST['default-administrator'], $_POST['default-moderator'], $_POST['default-member'], $groupblog_group_id, $groupblog_blog_id ) ) {
+			bp_core_add_message( __( 'There was an error creating your group blog, please try again.', 'groupblog' ), 'error' );
+		} else {
+			bp_core_add_message( __( 'Group details were successfully updated.', 'groupblog' ) );
 		}
 	}
 }
