@@ -198,7 +198,6 @@ function bp_groupblog_create_screen_save() {
 		        //They forgot to choose a blog, so send them back and make them do it!
 				bp_core_add_message( __( 'Please choose one of your blogs from the drop-down menu.' . $group_id, 'groupblog' ), 'error' );
 				bp_core_redirect( $bp->loggedin_user->domain . $bp->groups->slug . '/create/step/' . $bp->action_variables[1] );
-				}
 			}
 		} else {
 		    // They already have a blog associated with the group, we're just saving other settings
