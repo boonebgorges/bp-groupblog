@@ -4,13 +4,13 @@ Plugin Name: BP Groupblog
 Plugin URI: http://wordpress.org/extend/plugins/search.php?q=buddypress+groupblog
 Description: Automates and links WPMU blogs groups controlled by the group creator.
 Author: Rodney Blevins & Marius Ooms
-Version: 1.1.4
+Version: 1.1.6
 License: (Groupblog: GNU General Public License 2.0 (GPL) http://www.gnu.org/licenses/gpl.html)
 Site Wide Only: true
 */
 
 define ( 'BP_GROUPBLOG_IS_INSTALLED', 1 );
-define ( 'BP_GROUPBLOG_VERSION', '1.1.4' );
+define ( 'BP_GROUPBLOG_VERSION', '1.1.6' );
 define ( 'BP_GROUPBLOG_DEFAULT_ADMIN_ROLE', 'administrator' );
 define ( 'BP_GROUPBLOG_DEFAULT_MOD_ROLE', 'editor' );
 define ( 'BP_GROUPBLOG_DEFAULT_MEMBER_ROLE', 'author' );
@@ -252,7 +252,9 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 
 	<?php } else { ?>
 		<?php //Showing the create screen form ?>		
-    
+
+    <p><?php _e( 'Choose either one of your existing blogs or create a new one all together with the details displayed below.<br />Take care as you can only choose once.  Later you may still disable or enable the blog, but your choice is set.', 'groupblog' ); ?></p>
+        
 		<p><input<?php if ( !bp_groupblog_is_blog_enabled( bp_group_id(false) ) ) { ?> disabled="true"<?php } ?> type="radio" value="no" name="groupblog-create-new" /><span>&nbsp;<?php _e( 'Use one of your own blogs:', 'groupblog' ); ?>&nbsp;</span>
 	    <select<?php if ( !bp_groupblog_is_blog_enabled( bp_group_id(false) ) ) { ?> disabled="true"<?php } ?> name="groupblog-blogid" id="groupblog-blogid">
 	      <option value="0"><?php _e( 'choose a blog', 'groupblog' ) ?></option>
@@ -459,11 +461,11 @@ function bp_groupblog_validate_blog_signup() {
 
 	if ( $errors->get_error_code() ) {
 		$message .= $errors->get_error_message('blogname');
-		$message .= '<br />' . __( 'However, you may continue with the blog address as listed below.', 'groupblog' );
-		$message .= '<br />' . __( 'We suggest adjusting the group name in group details following these requirements.', 'groupblog' );
-		$message .= '<br />' . __( '- Only letters and numbers allowed.', 'groupblog' );
-		$message .= '<br />' . __( '- Must be at least 4 characters.', 'groupblog' );
-		$message .= '<br />' . __( '- Has to contain letters as well.', 'groupblog' );
+		$message .= __( ' However, you may continue with the blog address as listed below.', 'groupblog' );
+		$message .= __( ' We suggest adjusting the group name in group details following these requirements.', 'groupblog' );
+		$message .= __( ' 1. Only letters and numbers allowed.', 'groupblog' );
+		$message .= __( ' 2. Must be at least four characters.', 'groupblog' );
+		$message .= __( ' 3. Has to contain letters as well.', 'groupblog' );
 		bp_core_add_message( $message, 'error' );
 
 		//Hello Lost fan!

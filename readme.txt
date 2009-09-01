@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: buddypress,groups,blogs,content
 Requires at least: WPMU 2.8 / BP 1.1
 Tested up to: WPMU 2.8.4a
-Stable tag: 1.1.5
+Stable tag: 1.1.6
 
 BuddyPress Groupblog extends the group functionality by enabling the group to have a single blog associated with it. Group members are automatically added to the blog and will have roles as set by the group admin.
 
@@ -24,7 +24,7 @@ The BuddyPress Groupblog plugin extends the group functionality by enabling each
 * Group admin tab to access the group-blog settings.
 * Recent posts are displayed on the group home page, much like the forum topics.
 * A menu tab is added to display the latest blog activity and blog page links.
-* Blog themes will have the ability to pull in group info and create a theme that could ressemble the group exactly.
+* Blog themes will have the ability to pull in group info and create a theme that could resemble the group exactly.
 * Leaving the group will downgrade the member role to 'subscriber'.
 * Allow the group admin to select one of his/her existing blogs.
 
@@ -32,10 +32,6 @@ The BuddyPress Groupblog plugin extends the group functionality by enabling each
 
 * Include an RSS icon for easy access to the Blog's RSS feed.
 * More templates, e.g. a display pages, categories, comments, etc.
-
-**Known issues:**
-
-* Currently the selected member roles are not saving at creation stage. They are updated when you re-save in the admin settings.
 
 == Installation ==
 
@@ -64,14 +60,17 @@ This plugin requires the Group API included in BuddyPress 1.1. This API is neede
 
 == Changelog == 
 
+= 1.1.6 =
+* Added a message to inform the user that a groupblog is only chosen once.
+
 = 1.1.5 =
 * Fixed a bug where the member roles were not being updated upon group creation.
 
 = 1.1.4 =
-* Added file_exists to various files, so templates can be overriden in the theme. This also means we had to move the resource folders back into the theme folder.
+* Added file_exists to various files, so templates can be overridden in the theme. This also means we had to move the resource folders back into the theme folder.
 
 = 1.1.3 =
-* Now using plugin-template.php, so there is no longer a need to move the groupblog folder to the active theme folder. Alos updating the plugin through the wordpress plugin interface now works without problems.
+* Now using plugin-template.php, so there is no longer a need to move the groupblog folder to the active theme folder. Also updating the plugin through the wordpress plugin interface now works without problems.
 
 = 1.1.2 = 
 * Updated language files.
