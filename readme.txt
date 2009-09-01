@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: buddypress,groups,blogs,content
 Requires at least: WPMU 2.8 / BP 1.1
 Tested up to: WPMU 2.8.4a
-Stable tag: 1.1.4
+Stable tag: 1.1.5
 
 BuddyPress Groupblog extends the group functionality by enabling the group to have a single blog associated with it. Group members are automatically added to the blog and will have roles as set by the group admin.
 
@@ -63,6 +63,9 @@ This plugin requires the Group API included in BuddyPress 1.1. This API is neede
 2. Screenshot of the group blog page.
 
 == Changelog == 
+
+= 1.1.5 =
+* Fixed a bug where the member roles were not being updated upon group creation.
 
 = 1.1.4 =
 * Added file_exists to various files, so templates can be overriden in the theme. This also means we had to move the resource folders back into the theme folder.
