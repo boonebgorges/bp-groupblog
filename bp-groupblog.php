@@ -253,7 +253,7 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 	<?php } else { ?>
 		<?php //Showing the create screen form ?>		
 
-    <p><?php _e( 'Choose either one of your existing blogs or create a new one all together with the details displayed below.<br />Take care as you can only choose once.  Later you may still disable or enable the blog, but your choice is set.', 'groupblog' ); ?></p>
+    <p><?php _e( 'Choose either one of your existing blogs or create a new one all together with the details displayed below.', 'groupblog' ); ?><br /><?php _e('Take care as you can only choose once.  Later you may still disable or enable the blog, but your choice is set.', 'groupblog' ); ?></p>
         
 		<p><input<?php if ( !bp_groupblog_is_blog_enabled( bp_group_id(false) ) ) { ?> disabled="true"<?php } ?> type="radio" value="no" name="groupblog-create-new" /><span>&nbsp;<?php _e( 'Use one of your own blogs:', 'groupblog' ); ?>&nbsp;</span>
 	    <select<?php if ( !bp_groupblog_is_blog_enabled( bp_group_id(false) ) ) { ?> disabled="true"<?php } ?> name="groupblog-blogid" id="groupblog-blogid">
@@ -377,7 +377,7 @@ function bp_groupblog_signup_blog($blogname = '', $blog_title = '', $errors = ''
 		
 			<h3><?php _e( 'Member Options', 'groupblog' ) ?></h3>
 			
-			<p><?php _e( 'Enable blog posting to allow adding of group members to the blog with the roles set below. <br />When disabled, all members will temporarily be set to subscribers, disabling posting.', 'groupblog' ); ?></p>
+			<p><?php _e( 'Enable blog posting to allow adding of group members to the blog with the roles set below.', 'groupblog' ); ?><br /><?php _e( 'When disabled, all members will temporarily be set to subscribers, disabling posting.', 'groupblog' ); ?></p>
 				
 			<div class="checkbox">	
 				<label><input<?php if ( !bp_groupblog_is_blog_enabled( bp_group_id(false) ) ) { ?> disabled="true"<?php } ?> type="checkbox" name="groupblog-silent-add" id="groupblog-silent-add" value="1"<?php if ( bp_groupblog_silent_add( bp_group_id(false) ) ) { ?> checked="checked"<?php } ?>/> <?php _e( 'Enable member blog posting', 'groupblog' ); ?></label>
