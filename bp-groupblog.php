@@ -575,6 +575,9 @@ function bp_groupblog_join_this_blog() {
   require_once( ABSPATH . WPINC . '/registration.php'); // is this accessable already? dunno
 
   global $bp, $wpdb, $username, $blog_id, $userdata, $current_blog;
+  
+  if ( is_site_admin() )
+      return;
 
   if  ( groups_get_groupmeta ( $group_id, 'groupblog_enable_blog' ) == '1' )
   	return;
