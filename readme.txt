@@ -10,8 +10,6 @@ BuddyPress Groupblog extends the group functionality by enabling the group to ha
 
 == Description ==
 
-**NOTE: This plugin requires BuddyPress 1.1, released September, 2009. See the FAQ why we build it on the upcoming BuddyPress version.**
-
 The BuddyPress Groupblog plugin extends the group functionality by enabling each group to have a single blog associated with it. Group members are automatically added to the blog and will have blog roles as set by the groupblog admin settings.
 
 **Features:**
@@ -35,8 +33,6 @@ The BuddyPress Groupblog plugin extends the group functionality by enabling each
 
 == Installation ==
 
-NOTE: After plugin installation, you MUST move the "groupblog" templates folder to your bp active member theme. See below.
-
 1) unzip the bp-groupblog.zip file into `/wp-contents/plugins/bp-groupblog`
 
 2) activate the plugin
@@ -59,6 +55,8 @@ This plugin requires the Group API included in BuddyPress 1.1. This API is neede
 2. Screenshot of the group blog page.
 
 == Changelog == 
+
+= 1.1.7 =
 
 = 1.1.6 =
 * Added a message to inform the user that a groupblog is only chosen once.
