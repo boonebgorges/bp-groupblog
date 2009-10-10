@@ -4,13 +4,13 @@ Plugin Name: BP Groupblog
 Plugin URI: http://wordpress.org/extend/plugins/search.php?q=buddypress+groupblog
 Description: Automates and links WPMU blogs groups controlled by the group creator.
 Author: Rodney Blevins & Marius Ooms
-Version: 1.1.6
+Version: 1.2
 License: (Groupblog: GNU General Public License 2.0 (GPL) http://www.gnu.org/licenses/gpl.html)
 Site Wide Only: true
 */
 
 define ( 'BP_GROUPBLOG_IS_INSTALLED', 1 );
-define ( 'BP_GROUPBLOG_VERSION', '1.1.6' );
+define ( 'BP_GROUPBLOG_VERSION', '1.2' );
 define ( 'BP_GROUPBLOG_DEFAULT_ADMIN_ROLE', 'administrator' );
 define ( 'BP_GROUPBLOG_DEFAULT_MOD_ROLE', 'editor' );
 define ( 'BP_GROUPBLOG_DEFAULT_MEMBER_ROLE', 'author' );
@@ -22,6 +22,7 @@ define ( 'BP_GROUPBLOG_SLUG', 'group-blog' );
 /**
  * Load the required groupblog component files.
  */
+require ( WP_PLUGIN_DIR . '/bp-groupblog/bp-groupblog-admin.php' );
 require ( WP_PLUGIN_DIR . '/bp-groupblog/bp-groupblog-cssjs.php' );
 require ( WP_PLUGIN_DIR . '/bp-groupblog/bp-groupblog-classes.php' );
 require ( WP_PLUGIN_DIR . '/bp-groupblog/bp-groupblog-templatetags.php' );
@@ -49,6 +50,21 @@ add_action( 'plugins_loaded', 'bp_groupblog_setup_globals', 5 );
 add_action( 'admin_menu', 'bp_groupblog_setup_globals', 1 );
 
 /**
+ * bp_groupblog_add_admin_menu()
+ */
+function bp_groupblog_add_admin_menu() {
+	global $wpdb, $bp;
+	
+	if ( !is_site_admin() )
+		return false;
+			
+	/* Add the administration tab under the "Site Admin" tab for site administrators */
+	add_submenu_page( 'wpmu-admin.php', __( 'Groupblog Settings', 'bp-groupblog' ), __( 'Groupblog Settings', 'bp-groupblog' ), 1, 'bp_groupblog_management_page', 'bp_groupblog_management_page' );
+		
+}
+add_action( 'admin_menu', 'bp_groupblog_add_admin_menu' );
+
+/**
  * bp_groupblog_setup_nav()
  */
 function bp_groupblog_setup_nav() {
@@ -69,7 +85,7 @@ function bp_groupblog_setup_nav() {
 					'parent_slug' => $bp->groups->slug,
 					'screen_function' => 'groupblog_screen_blog',
 					'position' => 32,
-					'item_css_id' => 'nav-group-blog'
+					'item_css_id' => 'group-blog'
 				)
 			);
 	}
@@ -292,15 +308,9 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 				* If we're re-directing from bp_groupblog_validate_blog_signup(), it means that there was a problem
 				* creating the blog either because the name already exists, or it doesn't have enough characters, or
 				* because it only contains numbers.
-				*
-				* We're simply appending the letter 'r' and a random number on to the end of the blogname.
-				* The reason we add the 'r' is because WordPress does not allow blognames with only numbers.
-				* I.e., if someone creates a group called '42' for some reason.  This is allowed by BuddyPress, but
-				* WordPress will send us back an error, since we will be trying to create a blog with the blogname '42'.
-				* To-Do: put this in a function?
 				*/
 				if ( isset ( $_GET['create_error'] ) ) {
-					$blog_address .= 'r' . rand();
+					$blog_address .= 'blog';
 				}
 				?>
 		
@@ -576,19 +586,16 @@ function bp_groupblog_join_this_blog() {
 
   global $bp, $wpdb, $username, $blog_id, $userdata, $current_blog;
   
-  if ( is_site_admin() )
+  if ( is_site_admin() || !is_user_logged_in() ) // do nothing
       return;
 
   if  ( groups_get_groupmeta ( $group_id, 'groupblog_enable_blog' ) == '1' )
   	return;
-
-	if (!is_user_logged_in()) // do nothing
-		return;
 		
 	$blog_id = $current_blog->blog_id;
 	
 	// If the blog being viewed isn't linked to a group, get the heck out of here!
-	if ( !( $group_id = bp_groupblog_group_id ( $blog_id ) ) )
+	if ( !( $group_id = get_groupblog_group_id ( $blog_id ) ) )
 		return;
 		
 	// Setup some variables
@@ -661,9 +668,28 @@ function bp_groupblog_remove_user( $group_id, $user_id = false ) {
 add_action( 'groups_leave_group', 'bp_groupblog_remove_user' );
 
 /**
+ * groupblog_screen_blog_latest()
+ *
+ * Load the group blog latest on group home page, loaded through a template file.
+ */
+function groupblog_screen_blog_latest() {
+	global $bp, $wp; 
+
+	if ( file_exists( STYLESHEETPATH . '/groupblog/blog-latest.php' ) )
+  	load_template( STYLESHEETPATH . '/groupblog/blog-latest.php' );
+	else
+	  load_template( WP_PLUGIN_DIR . '/bp-groupblog/groupblog/blog-latest.php' );
+}
+add_action ('groups_custom_group_boxes', 'groupblog_screen_blog_latest');
+
+/**
  * groupblog_screen_blog()
  *
  * Load the template file to display the group blog contents.
+ * The following method uses the BuddyPress plugin-template.
+ * If you wish to use your own template, comment out these two
+ * functions and un-comment the 'groupblog_screen_blog()' below.
+ * This requires a different theme file. Advanced users only!
  */
 function groupblog_screen_blog() {
 	global $bp, $wp;
@@ -687,19 +713,26 @@ function groupblog_screen_blog_content() {
 }
 
 /**
- * groupblog_screen_blog_latest()
+ * groupblog_screen_blog()
  *
- * Load the group blog latest on group home page, loaded through a template file.
+ * Load the template file to display the group blog contents.
+ * This function is a replacement for the two function mentioned
+ * just above here. This function loads its own template, thus it
+ * does not rely on the BUddyPress plugin-template.
+ * Make sure you have an appropiate theme folder/file in the root
+ * of your active theme. Advanced users only!
  */
-function groupblog_screen_blog_latest() {
-	global $bp, $wp; 
-
-	if ( file_exists( STYLESHEETPATH . '/groupblog/blog-latest.php' ) )
-  	load_template( STYLESHEETPATH . '/groupblog/blog-latest.php' );
-	else
-	  load_template( WP_PLUGIN_DIR . '/bp-groupblog/groupblog/blog-latest.php' );
+/*
+function groupblog_screen_blog() {
+	global $bp;
+		
+	if ( $bp->current_component == $bp->groups->slug && 'blog' == $bp->current_action ) {
+		
+		bp_core_load_template( apply_filters( 'groupblog_screen_blog', 'groupblog/blog' ) );
+	}
 }
-add_action ('groups_custom_group_boxes', 'groupblog_screen_blog_latest');
+add_action( 'wp', 'groupblog_screen_blog', 4 );
+*/
 
 /**
  * bp_groupblog_blog_publish()

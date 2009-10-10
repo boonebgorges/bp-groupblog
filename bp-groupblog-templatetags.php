@@ -155,28 +155,7 @@ function bp_groupblog_silent_add( $group_id ) {
   	return false;
   }
 	
-}
-
-//Deprecated. Use groupblog_blog_id( $blog_id )
-function bp_groupblog_group_blog_id( $group_id = '' ) {
-	
-	if ( !isset( $group_id ) )
-		$group_id = bp_group_id( false );
-		
-	return groups_get_groupmeta( $group_id, 'groupblog_blog_id' );
 }  
-
-//Deprecated. Use bp_groupblog_group_id( $blog_id )
-//function bp_groupblog_group_id( $blog_id ) {
-//	global $bp, $wpdb;
-//	
-//	if ( !isset( $blog_id ) )
-//		return;
-//	
-//	if ( $row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'groupblog_blog_id' AND meta_value = %d", $blog_id ) ) ) {
-//		return $row->group_id;
-//	}	
-//}
 
 /*
  * groupblog_blog_id()
@@ -219,25 +198,49 @@ function groupblog_group_id( $blog_id ) {
 	}
 
 /*
- * groupblog_publish_post_link
+ * bp_groupblog_id()
  * 
- * Returns the link for BP Groupblog function to publish the current post
- *  
+ * Echos the group id of the group associated with the blog id.
+ * 
  */
-function groupblog_publish_post_link(){
-	$publish_link = bp_get_group_permalink() . '/?publish-post=yes';
-	$publish_link .= '&blogid=' . get_groupblog_blog_id();
-	$publish_link .= '&postid=' . get_the_ID();
-	return $publish_link;
+function bp_groupblog_id() {
+	echo bp_get_groupblog_id();
 }
+	function bp_get_groupblog_id() {
+		global $current_blog;
+		
+		return apply_filters( 'bp_get_groupblog_id', get_groupblog_group_id( $current_blog->blog_id ) );
+	}
 
-function bp_groupblog_show_category_slug( $group_id ) {
-	$groupblog = new BP_Groupblog ( $group_id );
-
-	if ( $groupblog->blog_category_slug )
-		echo $groupblog->blog_category_slug;
+/*
+ * bp_groupblog_slug()
+ * 
+ * Echos the group slug of the group associated with the blog id.
+ * 
+ */	
+function bp_groupblog_slug() {
+	echo bp_get_groupblog_slug();
 }
+	function bp_get_groupblog_slug() {
 
+		$group = new BP_Groups_Group( bp_get_groupblog_id(), false, false );		
+		return apply_filters( 'bp_get_groupblog_slug', $group->slug );
+	}
+
+function bp_groupblog_forum() {
+ echo bp_get_groupblog_forum();
+}
+	function bp_get_groupblog_forum() {
+		global $bp;
+	
+		$forum_id = groups_get_groupmeta( bp_get_groupblog_id(), 'forum_id' );	
+		return apply_filters( 'bp_get_groupblog_forum', $forum_id );
+	}
+
+/*
+ * bp_groupblog_admin_form_action()
+ *
+ */
 function bp_groupblog_admin_form_action( $page, $group = false ) {
 	global $bp, $groups_template;
 
@@ -246,16 +249,4 @@ function bp_groupblog_admin_form_action( $page, $group = false ) {
 	
 	echo apply_filters( 'bp_groupblog_admin_form_action', bp_group_permalink( $group, false ) . '/admin/' . $page );
 }
-
-function bp_groupblog_group_id( $blog_id ) {
-	global $bp, $wpdb;
-	
-	if ( !isset( $blog_id ) )
-		return;
-	
-	if ( $row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'groupblog_blog_id' AND meta_value = %d", $blog_id ) ) ) {
-		return $row->group_id;
-	}	
-}
-
 ?>
