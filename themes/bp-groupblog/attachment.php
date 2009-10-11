@@ -1,9 +1,7 @@
-
 <?php get_header() ?>
 
 <?php if ( bp_has_groups( 'type=single-group&slug=' . bp_get_groupblog_slug() ) ) : while ( bp_groups() ) : bp_the_group(); ?>
 
-	<?php locate_template( array( 'userbar.php' ), true ) /* Load the user navigation */ ?>
 	<?php load_template( STYLESHEETPATH . '/optionsbar.php' ) /* Load the currently displayed object navigation */ ?>
 
 	<div class="content-header">

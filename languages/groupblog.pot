@@ -29,21 +29,21 @@ msgid " We suggest adjusting the group name in group details following these req
 msgstr ""
 
 #. Text in function
-#: groupblog/blog-latest.php:35
-#: groupblog/blog.php:73
+#: groupblog/blog-latest.php:34
+#: groupblog/blog.php:72
 msgid "% Comments"
 msgstr ""
 
 #. Text in function
-#: themes/bp-groupblog/archive.php:79
-#: themes/bp-groupblog/search.php:73
+#: themes/bp-groupblog/archive.php:78
+#: themes/bp-groupblog/search.php:72
 msgid "% Comments &#187;"
 msgstr ""
 
 #. Text in function
-#: themes/bp-groupblog/archive.php:89
-#: themes/bp-groupblog/single.php:58
-#: themes/bp-groupblog/search.php:84
+#: themes/bp-groupblog/archive.php:88
+#: themes/bp-groupblog/single.php:57
+#: themes/bp-groupblog/search.php:83
 msgid "&laquo; Previous Entries"
 msgstr ""
 
@@ -63,32 +63,32 @@ msgid "(Overwrites \"Uncategorized\")"
 msgstr ""
 
 #. Text in function
-#: groupblog/blog-latest.php:35
-#: groupblog/blog.php:73
+#: groupblog/blog-latest.php:34
+#: groupblog/blog.php:72
 msgid "1 Comment"
 msgstr ""
 
 #. Text in function
-#: themes/bp-groupblog/archive.php:79
-#: themes/bp-groupblog/search.php:73
+#: themes/bp-groupblog/archive.php:78
+#: themes/bp-groupblog/search.php:72
 msgid "1 Comment &#187;"
 msgstr ""
 
 #. Text in function
-#: themes/bp-groupblog/attachment.php:70
-#: themes/bp-groupblog/single.php:71
+#: themes/bp-groupblog/attachment.php:68
+#: themes/bp-groupblog/single.php:70
 msgid "<p class=\"serif\">Read the rest of this entry &raquo;</p>"
 msgstr ""
 
 #. Text in function
-#: themes/bp-groupblog/page.php:60
+#: themes/bp-groupblog/page.php:59
 msgid "<p class=\"serif\">Read the rest of this page &raquo;</p>"
 msgstr ""
 
 #. Text in function
-#: themes/bp-groupblog/attachment.php:72
-#: themes/bp-groupblog/page.php:62
-#: themes/bp-groupblog/single.php:73
+#: themes/bp-groupblog/attachment.php:70
+#: themes/bp-groupblog/page.php:61
+#: themes/bp-groupblog/single.php:72
 msgid "<p><strong>Pages:</strong> "
 msgstr ""
 
@@ -120,11 +120,12 @@ msgstr ""
 
 #. Text in function
 #: bp-groupblog.php:329
-#: themes/bp-groupblog/attachment.php:54
-#: themes/bp-groupblog/archive.php:53
+#: themes/bp-groupblog/header.php:90
+#: themes/bp-groupblog/attachment.php:52
+#: themes/bp-groupblog/archive.php:52
 #: themes/bp-groupblog/optionsbar.php:18
-#: themes/bp-groupblog/single.php:52
-#: themes/bp-groupblog/search.php:53
+#: themes/bp-groupblog/single.php:51
+#: themes/bp-groupblog/search.php:52
 msgid "Blog"
 msgstr ""
 
@@ -146,9 +147,24 @@ msgid "Blog Posts"
 msgstr ""
 
 #. Text in echo
+#: themes/bp-groupblog/header.php:22
+msgid "Blog Posts Atom Feed"
+msgstr ""
+
+#. Text in echo
+#: themes/bp-groupblog/header.php:21
+msgid "Blog Posts RSS Feed"
+msgstr ""
+
+#. Text in echo
 #: bp-groupblog.php:246
 #: bp-groupblog.php:290
 msgid "Blog Title:"
+msgstr ""
+
+#. Text in echo
+#: themes/bp-groupblog/header.php:102
+msgid "Blogs"
 msgstr ""
 
 #. Text in echo
@@ -210,18 +226,18 @@ msgid "Delete Initial Comment"
 msgstr ""
 
 #. Text in echo
-#: themes/bp-groupblog/home.php:50
+#: themes/bp-groupblog/home.php:49
 msgid "Description"
 msgstr ""
 
 #. Text in function
-#: themes/bp-groupblog/archive.php:79
-#: themes/bp-groupblog/search.php:73
+#: themes/bp-groupblog/archive.php:78
+#: themes/bp-groupblog/search.php:72
 msgid "Edit"
 msgstr ""
 
 #. Text in function
-#: themes/bp-groupblog/page.php:63
+#: themes/bp-groupblog/page.php:62
 msgid "Edit this entry."
 msgstr ""
 
@@ -254,17 +270,23 @@ msgid "Forum"
 msgstr ""
 
 #. Text in echo
-#: themes/bp-groupblog/home.php:76
+#: themes/bp-groupblog/header.php:98
+msgid "Forums"
+msgstr ""
+
+#. Text in echo
+#: themes/bp-groupblog/home.php:75
 msgid "Group Activity"
 msgstr ""
 
 #. Text in echo
 #: bp-groupblog.php:373
+#: bp-groupblog-classes.php:1
 msgid "Group Blog"
 msgstr ""
 
 #. Text in echo
-#: themes/bp-groupblog/home.php:182
+#: themes/bp-groupblog/home.php:181
 msgid "Group Wire"
 msgstr ""
 
@@ -280,13 +302,25 @@ msgid "Groupblog Settings"
 msgstr ""
 
 #. Text in echo
+#: themes/bp-groupblog/header.php:94
+msgid "Groups"
+msgstr ""
+
+#. Text in echo
+#: themes/bp-groupblog/header.php:86
+#: themes/bp-groupblog/header.php:89
 #: themes/bp-groupblog/optionsbar.php:14
 msgid "Home"
 msgstr ""
 
 #. Text in echo
-#: themes/bp-groupblog/links.php:53
+#: themes/bp-groupblog/links.php:52
 msgid "Links"
+msgstr ""
+
+#. Text in echo
+#: themes/bp-groupblog/header.php:52
+msgid "Log In"
 msgstr ""
 
 #. Text in echo
@@ -295,56 +329,57 @@ msgid "Member Options"
 msgstr ""
 
 #. Text in echo
+#: themes/bp-groupblog/header.php:91
 #: themes/bp-groupblog/optionsbar.php:25
 msgid "Members"
 msgstr ""
 
 #. Text in function
-#: themes/bp-groupblog/home.php:151
+#: themes/bp-groupblog/home.php:150
 msgid "Members (%d)"
 msgstr ""
 
 #. Text in echo
-#: themes/bp-groupblog/home.php:61
+#: themes/bp-groupblog/home.php:60
 msgid "News"
 msgstr ""
 
 #. Text in function
-#: themes/bp-groupblog/archive.php:90
-#: themes/bp-groupblog/single.php:59
-#: themes/bp-groupblog/search.php:85
+#: themes/bp-groupblog/archive.php:89
+#: themes/bp-groupblog/single.php:58
+#: themes/bp-groupblog/search.php:84
 msgid "Next Entries &raquo;"
 msgstr ""
 
 #. Text in function
-#: groupblog/blog-latest.php:35
-#: groupblog/blog.php:73
+#: groupblog/blog-latest.php:34
+#: groupblog/blog.php:72
 msgid "No Comments"
 msgstr ""
 
 #. Text in function
-#: themes/bp-groupblog/archive.php:79
-#: themes/bp-groupblog/search.php:73
+#: themes/bp-groupblog/archive.php:78
+#: themes/bp-groupblog/search.php:72
 msgid "No Comments &#187;"
 msgstr ""
 
 #. Text in echo
-#: themes/bp-groupblog/search.php:90
+#: themes/bp-groupblog/search.php:89
 msgid "No posts found. Try a different search?"
 msgstr ""
 
 #. Text in echo
-#: groupblog/blog.php:85
+#: groupblog/blog.php:84
 msgid "No posts have been made yet to this group blog."
 msgstr ""
 
 #. Text in echo
-#: themes/bp-groupblog/archive.php:96
+#: themes/bp-groupblog/archive.php:95
 msgid "Not Found"
 msgstr ""
 
 #. Text in function
-#: themes/bp-groupblog/home.php:217
+#: themes/bp-groupblog/home.php:216
 msgid "On %1$s %2$s said:"
 msgstr ""
 
@@ -359,19 +394,19 @@ msgid "Or, create a new blog"
 msgstr ""
 
 #. Text in echo
+#: themes/bp-groupblog/home.php:120
 #: themes/bp-groupblog/home.php:121
-#: themes/bp-groupblog/home.php:122
 msgid "Permalink"
 msgstr ""
 
 #. Text in echo
-#: themes/bp-groupblog/archive.php:72
-#: themes/bp-groupblog/search.php:70
+#: themes/bp-groupblog/archive.php:71
+#: themes/bp-groupblog/search.php:69
 msgid "Permanent Link to"
 msgstr ""
 
 #. Text in echo
-#: themes/bp-groupblog/single.php:67
+#: themes/bp-groupblog/single.php:66
 msgid "Permanent link to"
 msgstr ""
 
@@ -381,14 +416,19 @@ msgid "Please choose one of your blogs from the drop-down menu."
 msgstr ""
 
 #. Text in echo
-#: themes/bp-groupblog/archive.php:79
-#: themes/bp-groupblog/search.php:73
+#: themes/bp-groupblog/archive.php:78
+#: themes/bp-groupblog/search.php:72
 msgid "Posted in"
 msgstr ""
 
 #. Text in echo
-#: themes/bp-groupblog/home.php:113
+#: themes/bp-groupblog/home.php:112
 msgid "Recently Active Topics"
+msgstr ""
+
+#. Text in echo
+#: themes/bp-groupblog/header.php:50
+msgid "Remember Me"
 msgstr ""
 
 #. Text in echo
@@ -402,14 +442,19 @@ msgid "Save Changes &raquo;"
 msgstr ""
 
 #. Text in echo
-#: themes/bp-groupblog/search.php:57
+#: themes/bp-groupblog/header.php:40
+msgid "Search"
+msgstr ""
+
+#. Text in echo
+#: themes/bp-groupblog/search.php:56
 msgid "Search Results"
 msgstr ""
 
 #. Text in echo
-#: themes/bp-groupblog/home.php:113
-#: themes/bp-groupblog/home.php:151
-#: themes/bp-groupblog/home.php:182
+#: themes/bp-groupblog/home.php:112
+#: themes/bp-groupblog/home.php:150
+#: themes/bp-groupblog/home.php:181
 msgid "See All"
 msgstr ""
 
@@ -431,6 +476,16 @@ msgstr ""
 #. Text in echo
 #: bp-groupblog-admin.php:205
 msgid "Set First Post to Draft"
+msgstr ""
+
+#. Text in echo
+#: themes/bp-groupblog/header.php:55
+msgid "Sign Up"
+msgstr ""
+
+#. Text in echo
+#: themes/bp-groupblog/header.php:18
+msgid "Site Wide Activity RSS Feed"
 msgstr ""
 
 #. Text in echo
@@ -459,12 +514,12 @@ msgid "Somebody who has access to all the administration features."
 msgstr ""
 
 #. Text in echo
-#: themes/bp-groupblog/attachment.php:83
+#: themes/bp-groupblog/attachment.php:81
 msgid "Sorry, no attachments matched your criteria."
 msgstr ""
 
 #. Text in echo
-#: themes/bp-groupblog/single.php:85
+#: themes/bp-groupblog/single.php:84
 msgid "Sorry, no posts matched your criteria."
 msgstr ""
 
@@ -477,8 +532,12 @@ msgid "Subscriber"
 msgstr ""
 
 #. Text in echo
-#: groupblog/blog-latest.php:32
-#: groupblog/blog.php:70
+#: groupblog/blog-latest.php:31
+msgid "Tags:"
+msgstr ""
+
+#. Text in echo
+#: groupblog/blog.php:69
 msgid "Tags: "
 msgstr ""
 
@@ -493,12 +552,12 @@ msgid "The post was successfully published."
 msgstr ""
 
 #. Text in echo
-#: themes/bp-groupblog/home.php:135
+#: themes/bp-groupblog/home.php:134
 msgid "There are no active forum topics for this group"
 msgstr ""
 
 #. Text in echo
-#: themes/bp-groupblog/home.php:244
+#: themes/bp-groupblog/home.php:243
 msgid "There are no wire posts for"
 msgstr ""
 
@@ -515,6 +574,11 @@ msgstr ""
 #. Text in echo
 #: bp-groupblog.php:274
 msgid "Use one of your own blogs:"
+msgstr ""
+
+#. Text in echo
+#: themes/bp-groupblog/header.php:47
+msgid "Username"
 msgstr ""
 
 #. Text in echo
@@ -535,7 +599,7 @@ msgid "Yes"
 msgstr ""
 
 #. Text in function
-#: themes/bp-groupblog/archive.php:57
+#: themes/bp-groupblog/archive.php:56
 msgid "You are browsing the archive for %1$s."
 msgstr ""
 
@@ -544,7 +608,19 @@ msgstr ""
 msgid "You do not have permission to access this page."
 msgstr ""
 
+#. Text in function
+#: groupblog/blog-latest.php:22
+#: groupblog/blog.php:60
+msgid "by %s"
+msgstr ""
+
 #. Text in echo
 #: bp-groupblog.php:276
 msgid "choose a blog"
+msgstr ""
+
+#. Text in echo
+#: groupblog/blog-latest.php:22
+#: groupblog/blog.php:60
+msgid "in"
 msgstr ""
