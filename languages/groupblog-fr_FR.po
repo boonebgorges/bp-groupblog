@@ -1,0 +1,252 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: dan <contact@netajour.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+
+#. Text in function
+#: bp-groupblog.php:434
+msgid "- Has to contain letters as well."
+msgstr "- Doit contenir des lettres"
+
+#. Text in function
+#: bp-groupblog.php:434
+msgid "- Must be at least 4 characters."
+msgstr "- Doit contenir au moins 4 caract&egrave;res"
+
+#. Text in function
+#: bp-groupblog.php:434
+msgid "- Only letters and numbers allowed."
+msgstr "- Caract&egrave;res alpha-num&eacute;riques uniquement"
+
+#. Text in echo
+#: bp-groupblog.php:417
+msgid "A bit about the WPMU member roles:"
+msgstr "D&eacute;tails des r&ocirc;les dans WPMU:"
+
+#. Text in echo
+#: bp-groupblog.php:396
+#: bp-groupblog.php:403
+#: bp-groupblog.php:410
+#: bp-groupblog.php:419
+msgid "Administrator"
+msgstr "Administrateur"
+
+#. Text in echo
+#: bp-groupblog.php:398
+#: bp-groupblog.php:405
+#: bp-groupblog.php:412
+#: bp-groupblog.php:421
+msgid "Author"
+msgstr "Auteur"
+
+#. Text in function
+#: bp-groupblog.php:314
+msgid "Blog"
+msgstr "Blog"
+
+#. Text in echo
+#: bp-groupblog.php:234
+#: bp-groupblog.php:278
+msgid "Blog Address:"
+msgstr "Adresse du blog"
+
+#. Text in echo
+#: groupblog/blog.php:30
+msgid "Blog Pages"
+msgstr "Pages du blog"
+
+#. Text in echo
+#: groupblog/blog-latest.php:9
+#: groupblog/blog.php:53
+msgid "Blog Posts"
+msgstr "Actuellement sur le blog du groupe"
+
+#. Text in echo
+#: bp-groupblog.php:227
+#: bp-groupblog.php:269
+msgid "Blog Title:"
+msgstr "Titre du blog:"
+
+#. Text in echo
+#: bp-groupblog.php:399
+#: bp-groupblog.php:406
+#: bp-groupblog.php:413
+#: bp-groupblog.php:422
+msgid "Contributor"
+msgstr "Contributeur"
+
+#. Text in echo
+#: bp-groupblog.php:395
+msgid "Default Administrator Role:"
+msgstr "R&ocirc;le par d&eacute;faut administrateur:"
+
+#. Text in echo
+#: bp-groupblog.php:409
+msgid "Default Member Role:"
+msgstr "R&ocirc;le par d&eacute;faut membre:"
+
+#. Text in echo
+#: bp-groupblog.php:402
+msgid "Default Moderator Role:"
+msgstr "R&ocirc;le par d&eacute;faut mod&eacute;rateur:"
+
+#. Text in echo
+#: bp-groupblog.php:397
+#: bp-groupblog.php:404
+#: bp-groupblog.php:411
+#: bp-groupblog.php:420
+msgid "Editor"
+msgstr "Editeur"
+
+#. Text in echo
+#. Text in echo
+#: bp-groupblog.php:272
+msgid "Choose either one of your existing blogs or create a new one all together with the details displayed below."
+msgstr "S&eacute;lectionnez un blog existant ou cr&eacute;ez-en un nouveau selon les d&eacute;tails ci-dessous"
+
+#. Text in echo
+#. Text in echo
+#: bp-groupblog.php:272
+msgid "Take care as you can only choose once.  Later you may still disable or enable the blog, but your choice is set."
+msgstr "Attention vous ne pouvez choisir qu&#180;une seule fois. Plus tard vous pourrez activer ou d&eacute;sactiver le blog mais le choix ne pourra plus &ecirc;tre modifi&eacute;."
+
+#. Text in echo
+#: bp-groupblog.php:390
+msgid "Enable blog posting to allow adding of group members to the blog with the roles set below."
+msgstr "Activez la publication pour autoriser l&#180;ajout de membres avec les droits ci-dessous."
+
+#. Text in echo
+#: bp-groupblog.php:390
+msgid "When disabled, all members will temporarily be set to subscribers, disabling posting."
+msgstr "Si d&eacute;sactiv&eacute;, tous les membres du groupe se verront attribuer temporairement le r&ocirc;le d&#180;abonn&eacute;, sans possibilit&eacute; de poster."
+
+#. Text in echo
+#: bp-groupblog.php:366
+msgid "Enable group blog"
+msgstr "Activer le blog de groupe"
+
+#. Text in echo
+#: bp-groupblog.php:378
+msgid "Enable member blog posting"
+msgstr "Activer la publication pour les membres"
+
+#. Text in echo
+#: bp-groupblog.php:358
+msgid "Group Blog"
+msgstr "Blog de groupe"
+
+#. Text in function
+#: bp-groupblog.php:314
+msgid "Group details were successfully updated."
+msgstr "Les options ont &eacute;t&eacute; mises &agrave; jour avec succ&egrave;s"
+
+#. Text in function
+#: bp-groupblog.php:434
+msgid "However, you may continue with the blog address as listed below."
+msgstr "Quoi qu&#180;il en soit, vous pouvez continuer &agrave; utiliser l&#180;adresse de blog indiqu&eacute;e ci-dessous"
+
+#. Text in echo
+#: bp-groupblog.php:373
+msgid "Member Options"
+msgstr "Options des membres"
+
+#. Text in echo
+#: groupblog/blog.php:92
+msgid "No posts have been made yet to this group blog."
+msgstr "Ce blog de groupe ne contient pas encore d&#180;article."
+
+#. Text in echo
+#: bp-groupblog.php:265
+msgid "Or, create a new blog"
+msgstr "Ou cr&eacute;ez un nouveau blog"
+
+#. Text in function
+#: bp-groupblog.php:314
+msgid "Please choose one of your blogs from the drop-down menu."
+msgstr "S&eacute;lectionnez l&#180;un de vos blogs &agrave; l&#180;aide du memnu d&eacute;roulant"
+
+#. Text in echo
+#: bp-groupblog.php:431
+msgid "Save Changes &raquo;"
+msgstr "Enregistrer les modifications  &raquo;"
+
+#. Text in echo
+#: groupblog/blog-latest.php:9
+msgid "See All &rarr;"
+msgstr "Tout afficher &rarr;"
+
+#. Text in echo
+#: bp-groupblog.php:421
+msgid "Somebody who can publish and manage their own posts."
+msgstr "Peut publier et g&eacute;rer ses propres articles."
+
+#. Text in echo
+#: bp-groupblog.php:420
+msgid "Somebody who can publish posts, manage posts as well as manage other people's posts, etc."
+msgstr "Peut publier et g&eacute;rer ses articles et ceux des autres membres"
+
+#. Text in echo
+#: bp-groupblog.php:423
+msgid "Somebody who can read comments/comment/receive news letters, etc."
+msgstr "Peut commenter, lire et &eacute;crire des commentaires, recevoir des lettres d&#180;informations, etc."
+
+#. Text in echo
+#: bp-groupblog.php:422
+msgid "Somebody who can write and manage their posts but not publish posts."
+msgstr "Peut &eacute;crire et g&eacute;rer ses articles mais pas les modifier."
+
+#. Text in echo
+#: bp-groupblog.php:419
+msgid "Somebody who has access to all the administration features."
+msgstr "Peut acc&eacute;der &agrave; la totalit&eacute; des options d&#180;aministration du groupe"
+
+#. Text in echo
+#: bp-groupblog.php:400
+#: bp-groupblog.php:407
+#: bp-groupblog.php:414
+#: bp-groupblog.php:423
+msgid "Subscriber"
+msgstr "Abonn&eacute;"
+
+#. Text in echo
+#: groupblog/blog-latest.php:32
+#: groupblog/blog.php:77
+msgid "Tags: "
+msgstr "tags:"
+
+#. Text in function
+#: bp-groupblog.php:434
+msgid "The post was successfully published."
+msgstr "L&#180;article a &eacute;t&eacute; publi&eacute; avec succ&egrave;s"
+
+#. Text in function
+#: bp-groupblog.php:314
+msgid "There was an error creating your group blog, please try again."
+msgstr "Une erreur est survenue pendant le processus de cr&eacute;ation du blog de groupe. Veuillez essayer &agrave; nouveau."
+
+#. Text in function
+#: bp-groupblog.php:434
+msgid "There was an error publishing the post. Please try again."
+msgstr "Une erreur est survenue pendant la publication de l&#180;article. Veuillez essayer &agrave; nouveau."
+
+#. Text in echo
+#: bp-groupblog.php:253
+msgid "Use one of your own blogs:"
+msgstr "Utilisez un de vos propres blogs:"
+
+#. Text in function
+#: bp-groupblog.php:434
+msgid "We suggest adjusting the group name in group details following these requirements."
+msgstr "Nous vous sugg&eacute;rons de modifier le nom du groupe depuis Groupe &rarr; Options en suivant ces recommandations."
+
+#. Text in echo
+#: bp-groupblog.php:255
+msgid "choose a blog"
+msgstr "s&eacute;lectionnez un blog"
+
