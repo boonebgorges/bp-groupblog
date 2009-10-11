@@ -108,26 +108,26 @@ function bp_groupblog_management_page() {
 	
 	// only allow site admins to come here.
 	if( is_site_admin() == false )
-		wp_die( __('You do not have permission to access this page.') );
+		wp_die( __( 'You do not have permission to access this page.', 'groupblog' ) );
 		
 	// process form submission    	
-  if ($_POST['action'] == 'update') {
+  if ( $_POST['action'] == 'update' ) {
 		bp_groupblog_update_defaults();
 		$updated = true;
   }
 
 	// make sure we're using latest data
-	$opt = get_site_option('bp_groupblog_blog_defaults_options');
+	$opt = get_site_option( 'bp_groupblog_blog_defaults_options' );
 	?>
 			
 	<?php if ($updated) { ?>
   	<div id="message" class="updated fade">
-  		<p><?php _e('Options saved.') ?></p>
+  		<p><?php _e( 'Options saved.', 'groupblog' ) ?></p>
   	</div>
   <?php	} ?>
         	
 	<div class="wrap" style="position: relative">
-		<h2><?php _e( 'Groupblog Settings', 'bp-groupblog' ) ?></h2>
+		<h2><?php _e( 'Groupblog Settings', 'groupblog' ) ?></h2>
 
 		<form name="blogdefaultsform" action="" method="post">
 		
@@ -162,10 +162,10 @@ function bp_groupblog_management_page() {
 			natcasesort( $theme_names );
 			?>
 	
-			<h3><?php _e( 'Default Theme', 'bp-groupblog' ) ?></h3>
+			<h3><?php _e( 'Default Theme', 'groupblog' ) ?></h3>
 			<table class="form-table">
 		  	<tr valign="top">
-			  	<th><?php _e( 'Select the default theme:', 'bp-groupblog' ) ?></th>
+			  	<th><?php _e( 'Select the default theme:', 'groupblog' ) ?></th>
 			    <td>
 						<select name="theme" size="1">
 		       	
@@ -187,41 +187,41 @@ function bp_groupblog_management_page() {
 	      </tr>
 	    </table>
 
-      <h3><?php _e( 'Bonus Options', 'bp-groupblog' ) ?></h3>
+      <h3><?php _e( 'Bonus Options', 'groupblog' ) ?></h3>
 			<table class="form-table">
 				<tr valign="top">
-	        <th><?php _e( 'Default Post Category:', 'bp-groupblog' ) ?><br /> <?php _e( '(Overwrites "Uncategorized")', 'bp-groupblog' ) ?></th>
+	        <th><?php _e( 'Default Post Category:', 'groupblog' ) ?><br /> <?php _e( '(Overwrites "Uncategorized")', 'groupblog' ) ?></th>
 					<td>
 						<input name="default_cat_name" type="text" id="default_cat_name" size="30" value="<?php echo($opt['default_cat_name']); ?>"  />
 					</td>
 				</tr>
 				<tr valign="top">
-		    	<th><?php _e( 'Default Link Category:', 'bp-groupblog' ) ?><br /> <?php _e( '(Overwrites "Bogroll")', 'bp-groupblog' ) ?></th>
+		    	<th><?php _e( 'Default Link Category:', 'groupblog' ) ?><br /> <?php _e( '(Overwrites "Bogroll")', 'groupblog' ) ?></th>
 					<td>
 						<input name="default_link_cat" type="text" id="default_link_cat" size="30" value="<?php echo($opt['default_link_cat']); ?>"  />
 					</td>
 				</tr>
 				<tr>
-					<th><?php _e( 'Set First Post to Draft', 'bp-groupblog' ) ?><br /> <?php _e( '(Default Post "Hello World")', 'bp-groupblog' ) ?></th>
+					<th><?php _e( 'Set First Post to Draft', 'groupblog' ) ?><br /> <?php _e( '(Default Post "Hello World")', 'groupblog' ) ?></th>
 					<td>
 						<label for="delete_first_post">
-		       		<input name="delete_first_post" type="checkbox" id="delete_first_post" value="1" <?php if ($opt['delete_first_post'] == 1) echo('checked="checked"'); ?> /> <?php _e('Yes') ?>
+		       		<input name="delete_first_post" type="checkbox" id="delete_first_post" value="1" <?php if ($opt['delete_first_post'] == 1) echo('checked="checked"'); ?> /> <?php _e( 'Yes', 'groupblog' ) ?>
 		       	</label>
 					</td>
 				</tr>
 		    <tr>
-					<th><?php _e( 'Delete Initial Comment', 'bp-groupblog' ) ?></th>
+					<th><?php _e( 'Delete Initial Comment', 'groupblog' ) ?></th>
 					<td>
 						<label for="delete_first_comment">
-			        <input name="delete_first_comment" type="checkbox" id="delete_first_comment" value="1" <?php if ($opt['delete_first_comment'] == 1) echo('checked="checked"'); ?> /> <?php _e('Yes') ?>
+			        <input name="delete_first_comment" type="checkbox" id="delete_first_comment" value="1" <?php if ($opt['delete_first_comment'] == 1) echo('checked="checked"'); ?> /> <?php _e( 'Yes', 'groupblog' ) ?>
 			       </label>
 					</td>
 				</tr>
 				<tr>
-					<th><?php _e( 'Delete Blogroll Links', 'bp-groupblog' ) ?></th>
+					<th><?php _e( 'Delete Blogroll Links', 'groupblog' ) ?></th>
 					<td>
 						<label for="delete_blogroll_links">
-							<input name="delete_blogroll_links" type="checkbox" id="delete_blogroll_links" value="1" <?php if ($opt['delete_blogroll_links'] == 1) echo('checked="checked"'); ?> /> <?php _e('Yes') ?>
+							<input name="delete_blogroll_links" type="checkbox" id="delete_blogroll_links" value="1" <?php if ($opt['delete_blogroll_links'] == 1) echo('checked="checked"'); ?> /> <?php _e( 'Yes', 'groupblog' ) ?>
 						</label>
 					</td>
 				</tr>
@@ -229,7 +229,7 @@ function bp_groupblog_management_page() {
 	    
 	    <p class="submit">  
 	    	<input type="hidden" name="action" value="update" />
-	      <input type="submit" name="Submit" value="<?php _e('Save Changes') ?>" />
+	      <input type="submit" name="Submit" value="<?php _e( 'Save Changes', 'groupblog' ) ?>" />
 	    </p>
 	    
  		</form>

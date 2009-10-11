@@ -70,7 +70,7 @@
 										<?php _e( 'Tags: ', 'groupblog' ); ?><?php the_tags( '<span class="tags">', ', ', '</span>' ); ?>
 									<?php endif; ?>
 									<span class="comments">
-										<a href="<?php the_permalink(); ?>#comments"><?php comments_number( __('No Comments'), __('1 Comment'), __('% Comments') ); ?> &raquo;</a>
+										<a href="<?php the_permalink(); ?>#comments"><?php comments_number( __( 'No Comments', 'groupblog' ), __( '1 Comment', 'groupblog' ), __( '% Comments', 'groupblog' ) ); ?> &raquo;</a>
 									</span>
 								</p>				
 							</li>
