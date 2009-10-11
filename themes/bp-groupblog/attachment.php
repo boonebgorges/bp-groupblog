@@ -49,7 +49,7 @@
 					
 					<div class="bp-widget page" id="attachments-page">
 					
-						<h4><?php _e( 'Blog', 'groupblog' ) ?></h4>
+						<h4><?php _e( 'Blog', 'buddypress' ) ?></h4>
 			  		
 							<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
 			
@@ -65,9 +65,9 @@
 									<div class="entry">
 										<p class="<?php echo $classname; ?>"><?php echo $attachment_link; ?><br /><?php echo basename($post->guid); ?></p>
 			
-										<?php the_content( __('<p class="serif">Read the rest of this entry &raquo;</p>', 'groupblog' ) ); ?>
+										<?php the_content( __('<p class="serif">Read the rest of this entry &raquo;</p>', 'buddypress' ) ); ?>
 			
-										<?php wp_link_pages( array( 'before' => __( '<p><strong>Pages:</strong> ', 'groupblog' ), 'after' => '</p>', 'next_or_number' => 'number')); ?>
+										<?php wp_link_pages( array( 'before' => __( '<p><strong>Pages:</strong> ', 'buddypress' ), 'after' => '</p>', 'next_or_number' => 'number')); ?>
 									</div>
 								
 								</div>
@@ -78,7 +78,7 @@
 			
 							<?php endwhile; else: ?>
 			
-								<p><?php _e( 'Sorry, no attachments matched your criteria.', 'groupblog' ) ?></p>
+								<p><?php _e( 'Sorry, no attachments matched your criteria.', 'buddypress' ) ?></p>
 			
 							<?php endif; ?>
 					</div>

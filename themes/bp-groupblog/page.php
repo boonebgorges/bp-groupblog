@@ -56,10 +56,10 @@
 								
 								<div class="entry">
 									
-									<?php the_content( __( '<p class="serif">Read the rest of this page &raquo;</p>', 'groupblog' ) ); ?>
+									<?php the_content( __( '<p class="serif">Read the rest of this page &raquo;</p>', 'buddypress' ) ); ?>
 			
-									<?php wp_link_pages( array( 'before' => __( '<p><strong>Pages:</strong> ', 'groupblog' ), 'after' => '</p>', 'next_or_number' => 'number')); ?>
-									<?php edit_post_link( __( 'Edit this entry.', 'groupblog' ), '<p>', '</p>'); ?>
+									<?php wp_link_pages( array( 'before' => __( '<p><strong>Pages:</strong> ', 'buddypress' ), 'after' => '</p>', 'next_or_number' => 'number')); ?>
+									<?php edit_post_link( __( 'Edit this entry.', 'buddypress' ), '<p>', '</p>'); ?>
 									
 								</div>
 								

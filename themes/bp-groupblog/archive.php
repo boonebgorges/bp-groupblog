@@ -49,16 +49,16 @@
 					
 					<div class="bp-widget page" id="blog-archives">
 					
-						<h4><?php _e( 'Blog', 'groupblog' ) ?></h4>
+						<h4><?php _e( 'Blog', 'buddypress' ) ?></h4>
 						
 						<?php if ( have_posts() ) : ?>
 			
-							<h3><?php printf( __( 'You are browsing the archive for %1$s.', 'groupblog' ), wp_title( false, false ) ); ?></h3>
+							<h3><?php printf( __( 'You are browsing the archive for %1$s.', 'buddypress' ), wp_title( false, false ) ); ?></h3>
 			
 							<div class="navigation">
 								
-								<div class="alignleft"><?php next_posts_link( __( '&laquo; Previous Entries', 'groupblog' ) ) ?></div>
-								<div class="alignright"><?php previous_posts_link( __( 'Next Entries &raquo;', 'groupblog' ) ) ?></div>
+								<div class="alignleft"><?php next_posts_link( __( '&laquo; Previous Entries', 'buddypress' ) ) ?></div>
+								<div class="alignright"><?php previous_posts_link( __( 'Next Entries &raquo;', 'buddypress' ) ) ?></div>
 							
 							</div>
 			
@@ -68,14 +68,14 @@
 							
 								<div class="post">
 									
-									<h3 id="post-<?php the_ID(); ?>"><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php _e( 'Permanent Link to', 'groupblog' ) ?> <?php the_title(); ?>"><?php the_title(); ?></a></h3>
+									<h3 id="post-<?php the_ID(); ?>"><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php _e( 'Permanent Link to', 'buddypress' ) ?> <?php the_title(); ?>"><?php the_title(); ?></a></h3>
 									<small><?php the_time('F j, Y') ?></small>
 			
 									<div class="entry">
 										<?php the_content() ?>
 									</div>
 			
-									<p class="postmetadata"><?php _e( 'Posted in', 'groupblog' ) ?> <?php the_category(', ') ?> | <?php edit_post_link( __( 'Edit', 'groupblog' ), '', ' | '); ?>  <?php comments_popup_link( __( 'No Comments &#187;', 'groupblog' ), __( '1 Comment &#187;', 'groupblog' ), __( '% Comments &#187;', 'groupblog' ) ); ?></p>
+									<p class="postmetadata"><?php _e( 'Posted in', 'buddypress' ) ?> <?php the_category(', ') ?> | <?php edit_post_link( __( 'Edit', 'buddypress' ), '', ' | '); ?>  <?php comments_popup_link( __( 'No Comments &#187;', 'buddypress' ), __( '1 Comment &#187;', 'buddypress' ), __( '% Comments &#187;', 'buddypress' ) ); ?></p>
 			
 								</div>
 			
@@ -85,14 +85,14 @@
 			
 							<div class="navigation">
 								
-								<div class="alignleft"><?php next_posts_link( __( '&laquo; Previous Entries', 'groupblog' ) ) ?></div>
-								<div class="alignright"><?php previous_posts_link( __( 'Next Entries &raquo;', 'groupblog' ) ) ?></div>
+								<div class="alignleft"><?php next_posts_link( __( '&laquo; Previous Entries', 'buddypress' ) ) ?></div>
+								<div class="alignright"><?php previous_posts_link( __( 'Next Entries &raquo;', 'buddypress' ) ) ?></div>
 							
 							</div>
 			
 						<?php else : ?>
 			
-							<h2 class="center"><?php _e( 'Not Found', 'groupblog' ) ?></h2>
+							<h2 class="center"><?php _e( 'Not Found', 'buddypress' ) ?></h2>
 							<?php locate_template( array( 'searchform.php' ), true ) ?>
 						
 						<?php endif; ?>

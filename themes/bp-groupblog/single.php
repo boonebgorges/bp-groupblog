@@ -48,14 +48,14 @@
 					<?php do_action( 'bp_before_blog_single_post' ) ?>
 					
 					<div class="bp-widget" id="blog-single">					
-						<h4><?php _e( 'Blog', 'groupblog' ) ?></h4>
+						<h4><?php _e( 'Blog', 'buddypress' ) ?></h4>
 	
 						<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
 	
 							<div class="item-options">
 							
-								<div class="alignleft"><?php next_posts_link( __( '&laquo; Previous Entries', 'groupblog' ) ) ?></div>
-								<div class="alignright"><?php previous_posts_link( __( 'Next Entries &raquo;', 'groupblog' ) ) ?></div>
+								<div class="alignleft"><?php next_posts_link( __( '&laquo; Previous Entries', 'buddypress' ) ) ?></div>
+								<div class="alignright"><?php previous_posts_link( __( 'Next Entries &raquo;', 'buddypress' ) ) ?></div>
 							
 							</div>
 											
@@ -63,13 +63,13 @@
 								
 								<?php do_action( 'bp_before_blog_post' ) ?>
 						
-								<h3><a href="<?php echo get_permalink() ?>" rel="bookmark" title="<?php _e( 'Permanent link to', 'groupblog' ) ?> <?php the_title(); ?>"><?php the_title(); ?></a></h3>
+								<h3><a href="<?php echo get_permalink() ?>" rel="bookmark" title="<?php _e( 'Permanent link to', 'buddypress' ) ?> <?php the_title(); ?>"><?php the_title(); ?></a></h3>
 			
 								<div class="entry">
 									
-									<?php the_content( __( '<p class="serif">Read the rest of this entry &raquo;</p>', 'groupblog' ) ); ?>
+									<?php the_content( __( '<p class="serif">Read the rest of this entry &raquo;</p>', 'buddypress' ) ); ?>
 			
-									<?php wp_link_pages(array('before' => __( '<p><strong>Pages:</strong> ', 'groupblog' ), 'after' => '</p>', 'next_or_number' => 'number')); ?>
+									<?php wp_link_pages(array('before' => __( '<p><strong>Pages:</strong> ', 'buddypress' ), 'after' => '</p>', 'next_or_number' => 'number')); ?>
 			
 								</div>
 			
@@ -81,7 +81,7 @@
 				
 						<?php endwhile; else: ?>
 			
-							<p><?php _e( 'Sorry, no posts matched your criteria.', 'groupblog' ) ?></p>
+							<p><?php _e( 'Sorry, no posts matched your criteria.', 'buddypress' ) ?></p>
 			
 						<?php endif; ?>
 			

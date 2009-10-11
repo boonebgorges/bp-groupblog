@@ -49,7 +49,7 @@
 			
 					<div class="bp-widget page" id="blog-latest">
 					
-						<h4><?php _e( 'Links', 'groupblog' ) ?></h4>
+						<h4><?php _e( 'Links', 'buddypress' ) ?></h4>
 			
 						<ul id="links-list">
 							<?php get_links_list(); ?>

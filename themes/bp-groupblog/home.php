@@ -46,7 +46,7 @@
 				<?php do_action( 'bp_before_group_description' ) ?>
 			
 				<div class="bp-widget">
-					<h4><?php _e( 'Description', 'groupblog' ); ?></h4>
+					<h4><?php _e( 'Description', 'buddypress' ); ?></h4>
 					<p><?php bp_group_description() ?></p>
 				</div>
 				
@@ -57,7 +57,7 @@
 					<?php do_action( 'bp_before_group_news' ) ?>
 					
 					<div class="bp-widget">
-						<h4><?php _e( 'News', 'groupblog' ); ?></h4>
+						<h4><?php _e( 'News', 'buddypress' ); ?></h4>
 						<p><?php bp_group_news() ?></p>
 					</div>
 					
@@ -72,7 +72,7 @@
 						<?php do_action( 'bp_before_group_activity' ) ?>
 
 						<div class="bp-widget">
-							<h4><?php _e( 'Group Activity', 'groupblog' ); ?></h4>
+							<h4><?php _e( 'Group Activity', 'buddypress' ); ?></h4>
 							
 							<div class="pagination">
 								<div class="pag-count" id="activity-count">
@@ -109,7 +109,7 @@
 					<?php do_action( 'bp_before_group_active_topics' ) ?>
 					
 					<div class="bp-widget">
-						<h4><?php _e( 'Recently Active Topics', 'groupblog' ); ?> <span><a href="<?php bp_group_forum_permalink() ?>"><?php _e( 'See All', 'groupblog' ) ?> &rarr;</a></span></h4>
+						<h4><?php _e( 'Recently Active Topics', 'buddypress' ); ?> <span><a href="<?php bp_group_forum_permalink() ?>"><?php _e( 'See All', 'buddypress' ) ?> &rarr;</a></span></h4>
 			
 						<?php if ( bp_has_forum_topics( 'no_stickies=true&max=5&per_page=5&forum_id=' . bp_get_groupblog_forum() ) ) : ?>
 																
@@ -117,8 +117,8 @@
 								<?php while ( bp_topics() ) : bp_the_topic(); ?>
 								
 									<li>
-										<a class="topic-avatar" href="<?php bp_the_topic_permalink() ?>" title="<?php bp_the_topic_title() ?> - <?php _e( 'Permalink', 'groupblog' ) ?>"><?php bp_the_topic_last_poster_avatar( 'width=30&height=30') ?></a>
-										<a class="topic-title" href="<?php bp_the_topic_permalink() ?>" title="<?php bp_the_topic_title() ?> - <?php _e( 'Permalink', 'groupblog' ) ?>"><?php bp_the_topic_title() ?></a> 
+										<a class="topic-avatar" href="<?php bp_the_topic_permalink() ?>" title="<?php bp_the_topic_title() ?> - <?php _e( 'Permalink', 'buddypress' ) ?>"><?php bp_the_topic_last_poster_avatar( 'width=30&height=30') ?></a>
+										<a class="topic-title" href="<?php bp_the_topic_permalink() ?>" title="<?php bp_the_topic_title() ?> - <?php _e( 'Permalink', 'buddypress' ) ?>"><?php bp_the_topic_title() ?></a> 
 										<span class="small topic-meta">(<?php bp_the_topic_total_post_count() ?> &rarr; <?php bp_the_topic_time_since_last_post() ?> ago)</span>
 										<span class="small latest topic-excerpt"><?php bp_the_topic_latest_post_excerpt() ?></span>
 									
@@ -131,7 +131,7 @@
 						<?php else: ?>
 
 							<div id="message" class="info">
-								<p><?php _e( 'There are no active forum topics for this group', 'groupblog' ) ?></p>
+								<p><?php _e( 'There are no active forum topics for this group', 'buddypress' ) ?></p>
 							</div>
 
 						<?php endif;?>
@@ -147,7 +147,7 @@
 					<?php do_action( 'bp_before_group_member_widget' ) ?>
 					
 					<div class="bp-widget">
-						<h4><?php printf( __( 'Members (%d)', 'groupblog' ), bp_get_group_total_members() ); ?> <span><a href="<?php bp_group_all_members_permalink() ?>"><?php _e( 'See All', 'groupblog' ) ?> &rarr;</a></span></h4>
+						<h4><?php printf( __( 'Members (%d)', 'buddypress' ), bp_get_group_total_members() ); ?> <span><a href="<?php bp_group_all_members_permalink() ?>"><?php _e( 'See All', 'buddypress' ) ?> &rarr;</a></span></h4>
 
 						<?php if ( bp_group_has_members( 'max=5&exclude_admins_mods=0&group_id=' . bp_get_groupblog_id() ) ) : ?>
 					
@@ -178,7 +178,7 @@
 						<?php do_action( 'bp_before_group_wire_widget' ) ?>
 
 						<div class="bp-widget">
-							<h4><?php _e( 'Group Wire', 'groupblog' ); ?> <span><a href="<?php bp_group_permalink() ?>/wire"><?php _e( "See All", 'groupblog' ) ?> &rarr;</a></span></h4>
+							<h4><?php _e( 'Group Wire', 'buddypress' ); ?> <span><a href="<?php bp_group_permalink() ?>/wire"><?php _e( "See All", 'buddypress' ) ?> &rarr;</a></span></h4>
 
 							<?php do_action( 'bp_before_wire_post_list_form' ) ?>
 							
@@ -213,7 +213,7 @@
 											
 											<div class="wire-post-metadata">
 												<?php bp_wire_post_author_avatar() ?>
-												<?php printf ( __( 'On %1$s %2$s said:', 'groupblog' ), bp_get_wire_post_date(), bp_get_wire_post_author_name() ) ?>
+												<?php printf ( __( 'On %1$s %2$s said:', 'buddypress' ), bp_get_wire_post_date(), bp_get_wire_post_author_name() ) ?>
 												<?php bp_wire_delete_link() ?>
 												
 												<?php do_action( 'bp_wire_post_list_metadata' ) ?>
@@ -240,7 +240,7 @@
 							<?php else: ?>
 							
 							  <div id="message" class="info">
-							    <p><?php _e( 'There are no wire posts for', 'groupblog'); ?> <?php bp_group_name(); ?></p>
+							    <p><?php _e( 'There are no wire posts for', 'buddypress'); ?> <?php bp_group_name(); ?></p>
 							  </div>
 							
 							<?php endif;?>

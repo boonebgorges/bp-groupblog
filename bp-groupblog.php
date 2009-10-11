@@ -30,8 +30,8 @@ require ( WP_PLUGIN_DIR . '/bp-groupblog/bp-groupblog-templatetags.php' );
 /**
  * Add language support.
  */
-if ( file_exists( WP_PLUGIN_DIR . '/bp-groupblog/languages/' . get_locale() . '.mo' ) )
-	load_textdomain( 'groupblog', WP_PLUGIN_DIR . '/bp-groupblog/languages/' . get_locale() . '.mo' );
+if ( file_exists( WP_PLUGIN_DIR . '/bp-groupblog/languages/groupblog-' . get_locale() . '.mo' ) )
+	load_textdomain( 'groupblog', WP_PLUGIN_DIR . '/bp-groupblog/languages/groupblog-' . get_locale() . '.mo' );
 
 /**
  * bp_groupblog_setup_globals()
