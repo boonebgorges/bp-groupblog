@@ -44,7 +44,7 @@ The BuddyPress Groupblog plugin extends the group functionality by enabling each
 
 5) If you want to override the groupblog theme files, just copy the 'groupblog' folder into your active theme and modify to your needs.
 
-NOTE: You *must* activate this component AFTER bp has been activated.
+**NOTE: Please deactivate the plugin before running automatic upgrade or you will get a big fat 'Cannot redeclare' fatal error. Regardless, if you do activate while the plugin is active it will still work fine. It is just that nobody likes errors, even when they are not real.**
 
 == Screenshots ==
 
@@ -52,6 +52,12 @@ NOTE: You *must* activate this component AFTER bp has been activated.
 2. Screenshot of the group blog page.
 
 == Changelog == 
+
+= 1.2.2 =
+* Added a function to check BuddyPress is loaded first
+
+= 1.2.1 =
+Updated language files
 
 = 1.2 =
 * Added admin settings screen. You can now set the default groupblog theme, plus some bonus options.
