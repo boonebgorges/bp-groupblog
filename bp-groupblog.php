@@ -11,21 +11,50 @@ Site Wide Only: true
 
 define ( 'BP_GROUPBLOG_IS_INSTALLED', 1 );
 define ( 'BP_GROUPBLOG_VERSION', '1.2.2' );
-define ( 'BP_GROUPBLOG_DEFAULT_ADMIN_ROLE', 'administrator' );
-define ( 'BP_GROUPBLOG_DEFAULT_MOD_ROLE', 'editor' );
-define ( 'BP_GROUPBLOG_DEFAULT_MEMBER_ROLE', 'author' );
+
+// Define default roles
+if ( !defined( 'BP_GROUPBLOG_DEFAULT_ADMIN_ROLE' ) )
+	define ( 'BP_GROUPBLOG_DEFAULT_ADMIN_ROLE', 'administrator' );
+if ( !defined( 'BP_GROUPBLOG_DEFAULT_MOD_ROLE' ) )	
+	define ( 'BP_GROUPBLOG_DEFAULT_MOD_ROLE', 'editor' );
+if ( !defined( 'BP_GROUPBLOG_DEFAULT_MEMBER_ROLE' ) )
+	define ( 'BP_GROUPBLOG_DEFAULT_MEMBER_ROLE', 'author' );
 
 // Base groupblog component slug
 if ( !defined( 'BP_GROUPBLOG_SLUG' ) )
 define ( 'BP_GROUPBLOG_SLUG', 'group-blog' );
 
 /**
- * Load the required groupblog component files.
+ * Check that BuddyPress is loaded before GroupBlog
  */
-require ( WP_PLUGIN_DIR . '/bp-groupblog/bp-groupblog-admin.php' );
-require ( WP_PLUGIN_DIR . '/bp-groupblog/bp-groupblog-cssjs.php' );
-require ( WP_PLUGIN_DIR . '/bp-groupblog/bp-groupblog-classes.php' );
-require ( WP_PLUGIN_DIR . '/bp-groupblog/bp-groupblog-templatetags.php' );
+function bp_groupblog_load_buddypress() {
+	if ( function_exists( 'bp_core_setup_globals' ) )
+		return true;
+
+	/* Get the list of active sitewide plugins */
+	$active_sitewide_plugins = maybe_unserialize( get_site_option( 'active_sitewide_plugins' ) );
+
+	if ( !isset( $active_sidewide_plugins['buddypress/bp-loader.php'] ) )
+		return false;
+
+	if ( isset( $active_sidewide_plugins['buddypress/bp-loader.php'] ) && !function_exists( 'bp_core_setup_globals' ) ) {
+		require_once( WP_PLUGIN_DIR . '/buddypress/bp-loader.php' );
+		return true;
+	}
+
+	return false;
+}
+
+/**
+ * Load the required groupblog component files.
+ * Check for BuddyPress and don't include the other files if it's not there.
+ */
+if ( bp_groupblog_load_buddypress() ) {
+	require ( WP_PLUGIN_DIR . '/bp-groupblog/bp-groupblog-admin.php' );
+	require ( WP_PLUGIN_DIR . '/bp-groupblog/bp-groupblog-cssjs.php' );
+	require ( WP_PLUGIN_DIR . '/bp-groupblog/bp-groupblog-classes.php' );
+	require ( WP_PLUGIN_DIR . '/bp-groupblog/bp-groupblog-templatetags.php' );
+}
 
 /**
  * Add language support.
@@ -47,7 +76,7 @@ function bp_groupblog_setup_globals() {
 
 }
 add_action( 'plugins_loaded', 'bp_groupblog_setup_globals', 5 );	
-add_action( 'admin_menu', 'bp_groupblog_setup_globals', 1 );
+add_action( 'admin_menu', 'bp_groupblog_setup_globals', 2 );
 
 /**
  * bp_groupblog_add_admin_menu()
