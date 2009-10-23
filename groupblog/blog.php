@@ -20,7 +20,7 @@
 		
 				<div class="bp-widget">
 				
-					<h4><?php _e( 'Blog Pages', 'buddypress' ); ?></h4>
+					<h4><?php _e( 'Blog Pages', 'groupblog' ); ?></h4>
 					           
 					<?php $current = $post->ID; ?> 
 	  			<?php $nav_query = new WP_Query( 'post_type=page&showposts=-1' );	?>
@@ -43,7 +43,7 @@
 	   
 				<div class="bp-widget">
 				
-					<h4><?php _e( 'Blog Posts', 'buddypress' ); ?></h4>
+					<h4><?php _e( 'Blog Posts', 'groupblog' ); ?></h4>
 					           
 				  <?php query_posts( 'showposts=5' );	?>
 				
@@ -57,7 +57,7 @@
 								<div class="blog-post-metadata">
 									<?php echo bp_core_get_avatar ( $post->post_author, 1 ); ?>
 								  <h5><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h5>
-					        <?php the_time('F j, Y') ?> <?php _e( 'in', 'buddypress' ) ?> <?php the_category(', '); ?> <?php printf( __( 'by %s', 'buddypress' ), bp_core_get_userlink( $post->post_author ) ) ?> <?php edit_post_link('[Edit]', '<span>', '</span>'); ?>
+					        <?php the_time('F j, Y') ?> <?php _e( 'in', 'groupblog' ) ?> <?php the_category(', '); ?> <?php printf( __( 'by %s', 'groupblog' ), bp_core_get_userlink( $post->post_author ) ) ?> <?php edit_post_link('[Edit]', '<span>', '</span>'); ?>
 								</div>
 					      
 					      <div class="blog-post-content">
@@ -66,10 +66,10 @@
 					      
 								<p class="blog-post-footer">
 									<?php if ( the_tags() ) : ?>
-										<?php _e( 'Tags: ', 'buddypress' ); ?><?php the_tags( '<span class="tags">', ', ', '</span>' ); ?>
+										<?php _e( 'Tags: ', 'groupblog' ); ?><?php the_tags( '<span class="tags">', ', ', '</span>' ); ?>
 									<?php endif; ?>
 									<span class="comments">
-										<a href="<?php the_permalink(); ?>#comments"><?php comments_number( __( 'No Comments', 'buddypress' ), __( '1 Comment', 'buddypress' ), __( '% Comments', 'buddypress' ) ); ?> &raquo;</a>
+										<a href="<?php the_permalink(); ?>#comments"><?php comments_number( __( 'No Comments', 'groupblog' ), __( '1 Comment', 'groupblog' ), __( '% Comments', 'groupblog' ) ); ?> &raquo;</a>
 									</span>
 								</p>				
 							</li>
@@ -81,7 +81,7 @@
 					<?php else: ?>
 					
 						<div id="message" class="info">
-							<p><?php _e( 'No posts have been made yet to this group blog.', 'buddypress' ); ?></p>
+							<p><?php _e( 'No posts have been made yet to this group blog.', 'groupblog' ); ?></p>
 						</div>
 						
 					<?php endif;?>

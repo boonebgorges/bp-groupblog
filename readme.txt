@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: buddypress,groups,blogs,content
 Requires at least: WPMU 2.8 / BP 1.1
 Tested up to: WPMU 2.8.4a
-Stable tag: 1.2.2
+Stable tag: 1.2.3
 
 BuddyPress Groupblog extends the group functionality by enabling the group to have a single blog associated with it. Group members are automatically added to the blog and will have roles as set by the group admin.
 
@@ -52,6 +52,11 @@ The BuddyPress Groupblog plugin extends the group functionality by enabling each
 2. Screenshot of the group blog page.
 
 == Changelog == 
+
+= 1.2.3 =
+* Removed unncessary code, fixing mysql errors.
+* Added Blog links menu.
+* Changed the local to use 'groupblog' in group template files.
 
 = 1.2.2 =
 * Added a function to check BuddyPress is loaded first

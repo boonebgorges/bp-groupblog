@@ -4,13 +4,13 @@ Plugin Name: BP Groupblog
 Plugin URI: http://wordpress.org/extend/plugins/search.php?q=buddypress+groupblog
 Description: Automates and links WPMU blogs groups controlled by the group creator.
 Author: Rodney Blevins & Marius Ooms
-Version: 1.2.2
+Version: 1.2.3
 License: (Groupblog: GNU General Public License 2.0 (GPL) http://www.gnu.org/licenses/gpl.html)
 Site Wide Only: true
 */
 
 define ( 'BP_GROUPBLOG_IS_INSTALLED', 1 );
-define ( 'BP_GROUPBLOG_VERSION', '1.2.2' );
+define ( 'BP_GROUPBLOG_VERSION', '1.2.3' );
 
 // Define default roles
 if ( !defined( 'BP_GROUPBLOG_DEFAULT_ADMIN_ROLE' ) )
@@ -764,30 +764,60 @@ add_action( 'wp', 'groupblog_screen_blog', 4 );
 */
 
 /**
- * bp_groupblog_blog_publish()
+ * groupblog_blog_links()
  *
- * Allows publishing from the group itself when posts are unpublished.
+ * List some quick links to the blog admin from the frontend pages.
  */
-function groupblog_publish_post() {
-	global $bp;
+function groupblog_blog_links() {
+	global $current_user, $current_blog;
 	
-	if ( isset( $_GET['publish-post'] ) ) {
-	  if ( $bp->is_item_admin || $bp->is_item_mod  ) {	
-			$blog_ID = $_GET['blogid'];
-			$post_ID = $_GET['postid'];
-			switch_to_blog( $blog_ID );
-			wp_publish_post( $post_ID );
-			
-			if ( !(get_post_status( $post_ID ) == 'published' ) ) {
-			bp_core_add_message(  __('There was an error publishing the post. Please try again.', 'groupblog'), 'error' );
-			bp_core_redirect( site_url() . '/' . $bp->groups->slug . '/' . $bp->current_item . '/group-blog' );
-			} else {
-			bp_core_add_message( __('The post was successfully published.', 'groupblog') );
-			bp_core_redirect( site_url() . '/' . $bp->groups->slug . '/' . $bp->current_item . '/group-blog' );
-			}
-		}
+	if ( get_groupblog_blog_id() ) {
+		$blog_details = get_blog_details( get_groupblog_blog_id() );
+		$role = get_blog_role_for_user( $current_user->id, get_groupblog_blog_id() );
+	} else {
+		$blog_details = get_blog_details( $current_blog->blog_id );
+		$role = get_blog_role_for_user( $current_user->id, $current_blog->blog_id );
 	}
+	?>
+	
+	<?php if ( bp_groupblog_is_blog_enabled ( bp_group_id(false) ) ) : ?>
+
+		<?php if ( is_blog_user() || bp_group_is_member() ) : ?>
+					
+			<div class="bp-widget">
+				<h4><?php _e( 'Blog Menu', 'groupblog' ) ?></h4>
+
+				<ul id="blog-menu" class="">
+						
+					<?php if ( !( 'Subscriber' == $role ) ) : ?>
+					
+						<li><a href="<?php echo $blog_details->siteurl; ?>/wp-admin"><?php _e('Dashboard', 'groupblog') ?></a></li>
+						<li><a href="<?php echo $blog_details->siteurl; ?>/wp-admin/post-new.php"><?php _e('Add New Post', 'groupblog') ?></a></li>
+						
+						<?php if ( !( 'Contributor' == $role || 'Author' == $role ) ) : ?>	
+
+							<li><a href="<?php echo $blog_details->siteurl; ?>/wp-admin/link-add.php"><?php _e('Add New Link', 'groupblog') ?></a></li>									
+							<li><a href="<?php echo $blog_details->siteurl; ?>/wp-admin/page-new.php"><?php _e('Add New Page', 'groupblog') ?></a></li>
+							
+						<?php endif; ?>							
+						
+					<?php elseif ( 'Subscriber' == $role ): ?>	
+			
+						<li><?php echo $role; ?></li>
+						<li><a href="<?php echo $blog_details->siteurl; ?>/wp-admin"><?php _e('Dashboard', 'groupblog') ?></a></li>
+						
+					<?php endif; ?>
+				
+				</ul>
+						
+			</div>
+	
+		<?php endif; ?>
+					
+	<?php endif; ?>
+		
+	<?php
 }
-add_action( 'wp', 'groupblog_publish_post', 1 );
+add_action( 'bp_after_group_menu_buttons', 'groupblog_blog_links' );
 
 ?>

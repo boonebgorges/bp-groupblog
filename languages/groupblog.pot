@@ -4,27 +4,27 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #. Text in function
-#: bp-groupblog.php:449
+#: bp-groupblog.php:478
 msgid " 1. Only letters and numbers allowed."
 msgstr ""
 
 #. Text in function
-#: bp-groupblog.php:449
+#: bp-groupblog.php:478
 msgid " 2. Must be at least four characters."
 msgstr ""
 
 #. Text in function
-#: bp-groupblog.php:449
+#: bp-groupblog.php:478
 msgid " 3. Has to contain letters as well."
 msgstr ""
 
 #. Text in function
-#: bp-groupblog.php:449
+#: bp-groupblog.php:478
 msgid " However, you may continue with the blog address as listed below."
 msgstr ""
 
 #. Text in function
-#: bp-groupblog.php:449
+#: bp-groupblog.php:478
 msgid " We suggest adjusting the group name in group details following these requirements."
 msgstr ""
 
@@ -32,19 +32,6 @@ msgstr ""
 #: groupblog/blog-latest.php:34
 #: groupblog/blog.php:72
 msgid "% Comments"
-msgstr ""
-
-#. Text in function
-#: themes/bp-groupblog/archive.php:78
-#: themes/bp-groupblog/search.php:72
-msgid "% Comments &#187;"
-msgstr ""
-
-#. Text in function
-#: themes/bp-groupblog/archive.php:88
-#: themes/bp-groupblog/single.php:57
-#: themes/bp-groupblog/search.php:83
-msgid "&laquo; Previous Entries"
 msgstr ""
 
 #. Text in echo
@@ -68,71 +55,56 @@ msgstr ""
 msgid "1 Comment"
 msgstr ""
 
-#. Text in function
-#: themes/bp-groupblog/archive.php:78
-#: themes/bp-groupblog/search.php:72
-msgid "1 Comment &#187;"
-msgstr ""
-
-#. Text in function
-#: themes/bp-groupblog/attachment.php:68
-#: themes/bp-groupblog/single.php:70
-msgid "<p class=\"serif\">Read the rest of this entry &raquo;</p>"
-msgstr ""
-
-#. Text in function
-#: themes/bp-groupblog/page.php:59
-msgid "<p class=\"serif\">Read the rest of this page &raquo;</p>"
-msgstr ""
-
-#. Text in function
-#: themes/bp-groupblog/attachment.php:70
-#: themes/bp-groupblog/page.php:61
-#: themes/bp-groupblog/single.php:72
-msgid "<p><strong>Pages:</strong> "
-msgstr ""
-
 #. Text in echo
-#: bp-groupblog.php:432
+#: bp-groupblog.php:461
 msgid "A bit about the WPMU member roles:"
 msgstr ""
 
 #. Text in echo
-#: themes/bp-groupblog/optionsbar.php:16
-msgid "Admin"
+#: bp-groupblog.php:799
+msgid "Add New Link"
 msgstr ""
 
 #. Text in echo
-#: bp-groupblog.php:411
-#: bp-groupblog.php:418
-#: bp-groupblog.php:425
-#: bp-groupblog.php:434
+#: bp-groupblog.php:800
+msgid "Add New Page"
+msgstr ""
+
+#. Text in echo
+#: bp-groupblog.php:795
+msgid "Add New Post"
+msgstr ""
+
+#. Text in echo
+#: bp-groupblog.php:440
+#: bp-groupblog.php:447
+#: bp-groupblog.php:454
+#: bp-groupblog.php:463
 msgid "Administrator"
 msgstr ""
 
 #. Text in echo
-#: bp-groupblog.php:413
-#: bp-groupblog.php:420
-#: bp-groupblog.php:427
-#: bp-groupblog.php:436
+#: bp-groupblog.php:442
+#: bp-groupblog.php:449
+#: bp-groupblog.php:456
+#: bp-groupblog.php:465
 msgid "Author"
 msgstr ""
 
 #. Text in function
-#: bp-groupblog.php:329
-#: themes/bp-groupblog/header.php:90
-#: themes/bp-groupblog/attachment.php:52
-#: themes/bp-groupblog/archive.php:52
-#: themes/bp-groupblog/optionsbar.php:18
-#: themes/bp-groupblog/single.php:51
-#: themes/bp-groupblog/search.php:52
+#: bp-groupblog.php:358
 msgid "Blog"
 msgstr ""
 
 #. Text in echo
-#: bp-groupblog.php:253
-#: bp-groupblog.php:299
+#: bp-groupblog.php:282
+#: bp-groupblog.php:328
 msgid "Blog Address:"
+msgstr ""
+
+#. Text in echo
+#: bp-groupblog.php:788
+msgid "Blog Menu"
 msgstr ""
 
 #. Text in echo
@@ -147,24 +119,9 @@ msgid "Blog Posts"
 msgstr ""
 
 #. Text in echo
-#: themes/bp-groupblog/header.php:22
-msgid "Blog Posts Atom Feed"
-msgstr ""
-
-#. Text in echo
-#: themes/bp-groupblog/header.php:21
-msgid "Blog Posts RSS Feed"
-msgstr ""
-
-#. Text in echo
-#: bp-groupblog.php:246
-#: bp-groupblog.php:290
+#: bp-groupblog.php:275
+#: bp-groupblog.php:319
 msgid "Blog Title:"
-msgstr ""
-
-#. Text in echo
-#: themes/bp-groupblog/header.php:102
-msgid "Blogs"
 msgstr ""
 
 #. Text in echo
@@ -173,20 +130,25 @@ msgid "Bonus Options"
 msgstr ""
 
 #. Text in echo
-#: bp-groupblog.php:272
+#: bp-groupblog.php:301
 msgid "Choose either one of your existing blogs or create a new one all together with the details displayed below."
 msgstr ""
 
 #. Text in echo
-#: bp-groupblog.php:414
-#: bp-groupblog.php:421
-#: bp-groupblog.php:428
-#: bp-groupblog.php:437
+#: bp-groupblog.php:443
+#: bp-groupblog.php:450
+#: bp-groupblog.php:457
+#: bp-groupblog.php:466
 msgid "Contributor"
 msgstr ""
 
 #. Text in echo
-#: bp-groupblog.php:410
+#: bp-groupblog.php:807
+msgid "Dashboard"
+msgstr ""
+
+#. Text in echo
+#: bp-groupblog.php:439
 msgid "Default Administrator Role:"
 msgstr ""
 
@@ -196,12 +158,12 @@ msgid "Default Link Category:"
 msgstr ""
 
 #. Text in echo
-#: bp-groupblog.php:424
+#: bp-groupblog.php:453
 msgid "Default Member Role:"
 msgstr ""
 
 #. Text in echo
-#: bp-groupblog.php:417
+#: bp-groupblog.php:446
 msgid "Default Moderator Role:"
 msgstr ""
 
@@ -226,129 +188,48 @@ msgid "Delete Initial Comment"
 msgstr ""
 
 #. Text in echo
-#: themes/bp-groupblog/home.php:49
-msgid "Description"
-msgstr ""
-
-#. Text in function
-#: themes/bp-groupblog/archive.php:78
-#: themes/bp-groupblog/search.php:72
-msgid "Edit"
-msgstr ""
-
-#. Text in function
-#: themes/bp-groupblog/page.php:62
-msgid "Edit this entry."
-msgstr ""
-
-#. Text in echo
-#: bp-groupblog.php:412
-#: bp-groupblog.php:419
-#: bp-groupblog.php:426
-#: bp-groupblog.php:435
+#: bp-groupblog.php:441
+#: bp-groupblog.php:448
+#: bp-groupblog.php:455
+#: bp-groupblog.php:464
 msgid "Editor"
 msgstr ""
 
 #. Text in echo
-#: bp-groupblog.php:390
+#: bp-groupblog.php:419
 msgid "Enable blog posting to allow adding of group members to the blog with the roles set below."
 msgstr ""
 
 #. Text in echo
-#: bp-groupblog.php:381
+#: bp-groupblog.php:410
 msgid "Enable group blog"
 msgstr ""
 
 #. Text in echo
-#: bp-groupblog.php:393
+#: bp-groupblog.php:422
 msgid "Enable member blog posting"
 msgstr ""
 
 #. Text in echo
-#: themes/bp-groupblog/optionsbar.php:20
-msgid "Forum"
-msgstr ""
-
-#. Text in echo
-#: themes/bp-groupblog/header.php:98
-msgid "Forums"
-msgstr ""
-
-#. Text in echo
-#: themes/bp-groupblog/home.php:75
-msgid "Group Activity"
-msgstr ""
-
-#. Text in echo
-#: bp-groupblog.php:373
+#: bp-groupblog.php:402
 #: bp-groupblog-classes.php:1
 msgid "Group Blog"
 msgstr ""
 
-#. Text in echo
-#: themes/bp-groupblog/home.php:181
-msgid "Group Wire"
-msgstr ""
-
 #. Text in function
-#: bp-groupblog.php:329
+#: bp-groupblog.php:358
 msgid "Group details were successfully updated."
 msgstr ""
 
 #. Text in function
-#: bp-groupblog.php:329
+#: bp-groupblog.php:358
 #: bp-groupblog-admin.php:130
 msgid "Groupblog Settings"
 msgstr ""
 
 #. Text in echo
-#: themes/bp-groupblog/header.php:94
-msgid "Groups"
-msgstr ""
-
-#. Text in echo
-#: themes/bp-groupblog/header.php:86
-#: themes/bp-groupblog/header.php:89
-#: themes/bp-groupblog/optionsbar.php:14
-msgid "Home"
-msgstr ""
-
-#. Text in echo
-#: themes/bp-groupblog/links.php:52
-msgid "Links"
-msgstr ""
-
-#. Text in echo
-#: themes/bp-groupblog/header.php:52
-msgid "Log In"
-msgstr ""
-
-#. Text in echo
-#: bp-groupblog.php:388
+#: bp-groupblog.php:417
 msgid "Member Options"
-msgstr ""
-
-#. Text in echo
-#: themes/bp-groupblog/header.php:91
-#: themes/bp-groupblog/optionsbar.php:25
-msgid "Members"
-msgstr ""
-
-#. Text in function
-#: themes/bp-groupblog/home.php:150
-msgid "Members (%d)"
-msgstr ""
-
-#. Text in echo
-#: themes/bp-groupblog/home.php:60
-msgid "News"
-msgstr ""
-
-#. Text in function
-#: themes/bp-groupblog/archive.php:89
-#: themes/bp-groupblog/single.php:58
-#: themes/bp-groupblog/search.php:84
-msgid "Next Entries &raquo;"
 msgstr ""
 
 #. Text in function
@@ -357,30 +238,9 @@ msgstr ""
 msgid "No Comments"
 msgstr ""
 
-#. Text in function
-#: themes/bp-groupblog/archive.php:78
-#: themes/bp-groupblog/search.php:72
-msgid "No Comments &#187;"
-msgstr ""
-
-#. Text in echo
-#: themes/bp-groupblog/search.php:89
-msgid "No posts found. Try a different search?"
-msgstr ""
-
 #. Text in echo
 #: groupblog/blog.php:84
 msgid "No posts have been made yet to this group blog."
-msgstr ""
-
-#. Text in echo
-#: themes/bp-groupblog/archive.php:95
-msgid "Not Found"
-msgstr ""
-
-#. Text in function
-#: themes/bp-groupblog/home.php:216
-msgid "On %1$s %2$s said:"
 msgstr ""
 
 #. Text in echo
@@ -389,46 +249,13 @@ msgid "Options saved."
 msgstr ""
 
 #. Text in echo
-#: bp-groupblog.php:286
+#: bp-groupblog.php:315
 msgid "Or, create a new blog"
 msgstr ""
 
-#. Text in echo
-#: themes/bp-groupblog/home.php:120
-#: themes/bp-groupblog/home.php:121
-msgid "Permalink"
-msgstr ""
-
-#. Text in echo
-#: themes/bp-groupblog/archive.php:71
-#: themes/bp-groupblog/search.php:69
-msgid "Permanent Link to"
-msgstr ""
-
-#. Text in echo
-#: themes/bp-groupblog/single.php:66
-msgid "Permanent link to"
-msgstr ""
-
 #. Text in function
-#: bp-groupblog.php:329
+#: bp-groupblog.php:358
 msgid "Please choose one of your blogs from the drop-down menu."
-msgstr ""
-
-#. Text in echo
-#: themes/bp-groupblog/archive.php:78
-#: themes/bp-groupblog/search.php:72
-msgid "Posted in"
-msgstr ""
-
-#. Text in echo
-#: themes/bp-groupblog/home.php:112
-msgid "Recently Active Topics"
-msgstr ""
-
-#. Text in echo
-#: themes/bp-groupblog/header.php:50
-msgid "Remember Me"
 msgstr ""
 
 #. Text in echo
@@ -437,25 +264,8 @@ msgid "Save Changes"
 msgstr ""
 
 #. Text in echo
-#: bp-groupblog.php:446
+#: bp-groupblog.php:475
 msgid "Save Changes &raquo;"
-msgstr ""
-
-#. Text in echo
-#: themes/bp-groupblog/header.php:40
-msgid "Search"
-msgstr ""
-
-#. Text in echo
-#: themes/bp-groupblog/search.php:56
-msgid "Search Results"
-msgstr ""
-
-#. Text in echo
-#: themes/bp-groupblog/home.php:112
-#: themes/bp-groupblog/home.php:150
-#: themes/bp-groupblog/home.php:181
-msgid "See All"
 msgstr ""
 
 #. Text in echo
@@ -469,65 +279,40 @@ msgid "Select the default theme:"
 msgstr ""
 
 #. Text in echo
-#: themes/bp-groupblog/optionsbar.php:27
-msgid "Send Invites"
-msgstr ""
-
-#. Text in echo
 #: bp-groupblog-admin.php:205
 msgid "Set First Post to Draft"
 msgstr ""
 
 #. Text in echo
-#: themes/bp-groupblog/header.php:55
-msgid "Sign Up"
-msgstr ""
-
-#. Text in echo
-#: themes/bp-groupblog/header.php:18
-msgid "Site Wide Activity RSS Feed"
-msgstr ""
-
-#. Text in echo
-#: bp-groupblog.php:436
+#: bp-groupblog.php:465
 msgid "Somebody who can publish and manage their own posts."
 msgstr ""
 
 #. Text in echo
-#: bp-groupblog.php:435
+#: bp-groupblog.php:464
 msgid "Somebody who can publish posts, manage posts as well as manage other people's posts, etc."
 msgstr ""
 
 #. Text in echo
-#: bp-groupblog.php:438
+#: bp-groupblog.php:467
 msgid "Somebody who can read comments/comment/receive news letters, etc."
 msgstr ""
 
 #. Text in echo
-#: bp-groupblog.php:437
+#: bp-groupblog.php:466
 msgid "Somebody who can write and manage their posts but not publish posts."
 msgstr ""
 
 #. Text in echo
-#: bp-groupblog.php:434
+#: bp-groupblog.php:463
 msgid "Somebody who has access to all the administration features."
 msgstr ""
 
 #. Text in echo
-#: themes/bp-groupblog/attachment.php:81
-msgid "Sorry, no attachments matched your criteria."
-msgstr ""
-
-#. Text in echo
-#: themes/bp-groupblog/single.php:84
-msgid "Sorry, no posts matched your criteria."
-msgstr ""
-
-#. Text in echo
-#: bp-groupblog.php:415
-#: bp-groupblog.php:422
-#: bp-groupblog.php:429
-#: bp-groupblog.php:438
+#: bp-groupblog.php:444
+#: bp-groupblog.php:451
+#: bp-groupblog.php:458
+#: bp-groupblog.php:467
 msgid "Subscriber"
 msgstr ""
 
@@ -542,53 +327,23 @@ msgid "Tags: "
 msgstr ""
 
 #. Text in echo
-#: bp-groupblog.php:272
+#: bp-groupblog.php:301
 msgid "Take care as you can only choose once.  Later you may still disable or enable the blog, but your choice is set."
 msgstr ""
 
 #. Text in function
-#: bp-groupblog.php:449
-msgid "The post was successfully published."
-msgstr ""
-
-#. Text in echo
-#: themes/bp-groupblog/home.php:134
-msgid "There are no active forum topics for this group"
-msgstr ""
-
-#. Text in echo
-#: themes/bp-groupblog/home.php:243
-msgid "There are no wire posts for"
-msgstr ""
-
-#. Text in function
-#: bp-groupblog.php:329
+#: bp-groupblog.php:358
 msgid "There was an error creating your group blog, please try again."
 msgstr ""
 
-#. Text in function
-#: bp-groupblog.php:449
-msgid "There was an error publishing the post. Please try again."
-msgstr ""
-
 #. Text in echo
-#: bp-groupblog.php:274
+#: bp-groupblog.php:303
 msgid "Use one of your own blogs:"
 msgstr ""
 
 #. Text in echo
-#: themes/bp-groupblog/header.php:47
-msgid "Username"
-msgstr ""
-
-#. Text in echo
-#: bp-groupblog.php:390
+#: bp-groupblog.php:419
 msgid "When disabled, all members will temporarily be set to subscribers, disabling posting."
-msgstr ""
-
-#. Text in echo
-#: themes/bp-groupblog/optionsbar.php:23
-msgid "Wire"
 msgstr ""
 
 #. Text in echo
@@ -596,11 +351,6 @@ msgstr ""
 #: bp-groupblog-admin.php:216
 #: bp-groupblog-admin.php:224
 msgid "Yes"
-msgstr ""
-
-#. Text in function
-#: themes/bp-groupblog/archive.php:56
-msgid "You are browsing the archive for %1$s."
 msgstr ""
 
 #. Text in function
@@ -615,7 +365,7 @@ msgid "by %s"
 msgstr ""
 
 #. Text in echo
-#: bp-groupblog.php:276
+#: bp-groupblog.php:305
 msgid "choose a blog"
 msgstr ""
 
