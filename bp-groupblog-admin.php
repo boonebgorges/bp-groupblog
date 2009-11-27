@@ -6,23 +6,6 @@
  * found at http://wpmudev.org/project/New-Blog-Defaults.
  */
  
-function bp_groupblog_setup() {
-	global $wpdb;
-
-	// Set up the array of potential defaults
-	$groupblog_blogdefaults = array(
-		'theme' => '',
-		'delete_blogroll_links' => '1',
-		'default_cat_name' => 'Uncategorized',
-		'default_link_cat' => 'Links',
-		'delete_first_post' => 0,
-		'delete_first_comment' => 0
-	);
- 	// Add a site option so that we'll know set up ran
-	add_site_option( 'bp_groupblog_blog_defaults_setup', 1 );
-	add_site_option( 'bp_groupblog_blog_defaults_options', $groupblog_blogdefaults);   		
-}
-
 function bp_groupblog_blog_defaults( $blog_id ) {
 	global $bp, $wp_rewrite;
 			
