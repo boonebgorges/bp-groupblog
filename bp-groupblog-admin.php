@@ -179,7 +179,7 @@ function bp_groupblog_management_page() {
 					</td>
 				</tr>
 				<tr valign="top">
-		    	<th><?php _e( 'Default Link Category:', 'groupblog' ) ?><br /> <?php _e( '(Overwrites "Bogroll")', 'groupblog' ) ?></th>
+		    	<th><?php _e( 'Default Link Category:', 'groupblog' ) ?><br /> <?php _e( '(Overwrites "Blogroll")', 'groupblog' ) ?></th>
 					<td>
 						<input name="default_link_cat" type="text" id="default_link_cat" size="30" value="<?php echo($opt['default_link_cat']); ?>"  />
 					</td>
