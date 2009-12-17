@@ -688,7 +688,8 @@ function bp_groupblog_validate_blog_signup() {
 		$message .= __( ' However, you may continue with the blog address as listed below.', 'groupblog' );
 		$message .= __( ' We suggest adjusting the group name in group details following these requirements.', 'groupblog' );
 		$message .= __( ' 1. Only letters and numbers allowed.', 'groupblog' );
-		$message .= __( ' 2. Has to contain letters as well.', 'groupblog' );
+		$message .= __( ' 2. Must be at least four characters.', 'groupblog' );
+		$message .= __( ' 3. Has to contain letters as well.', 'groupblog' );
 		bp_core_add_message( $message, 'error' );
 
 		//Hello Lost fan!
