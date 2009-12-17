@@ -3,8 +3,8 @@ Contributors: Rodney Blevins & Marius Ooms
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7374704
 Tags: buddypress,groups,blogs,content
 Requires at least: WPMU 2.8 / BP 1.1
-Tested up to: WPMU 2.8.4a
-Stable tag: 1.2.4
+Tested up to: WPMU 2.8.6
+Stable tag: 1.3
 
 BuddyPress Groupblog extends the group functionality by enabling the group to have a single blog associated with it. Group members are automatically added to the blog and will have roles as set by the group admin.
 
@@ -46,6 +46,10 @@ The BuddyPress Groupblog plugin extends the group functionality by enabling each
 
 **NOTE: Please deactivate the plugin before running automatic upgrade or you will get a big fat 'Cannot redeclare' fatal error. Regardless, if you do activate while the plugin is active it will still work fine. It is just that nobody likes errors, even when they are not real.**
 
+== Other Notes ==
+
+Thanks to Boone for coming up with a solid solution to add users to the groupblog immediately after joining the group. Also his implementation of updating the member permissions of the groupblog when saving the settings is a solid bonus!
+
 == Screenshots ==
 
 1. Screenshot of the group blog creation stage.
@@ -53,11 +57,17 @@ The BuddyPress Groupblog plugin extends the group functionality by enabling each
 
 == Changelog == 
 
+= 1.3 =
+* Reworked all the code regarding adding users to the groupblog
+* Users are now immediately added on group join (No more visiting the blog first!)
+* Promoting, Demoting, Banning and Unbanning directly adjusts the member permissions
+* **Big thanks goes out to Boone for developing much of the needed code!**
+
 = 1.2.4 =
 * Added missing registration hook, to ensure default settings are set.
 
 = 1.2.3 =
-* Removed unncessary code, fixing mysql errors.
+* Removed unnecessary code, fixing mysql errors.
 * Added Blog links menu.
 * Changed the local to use 'groupblog' in group template files.
 

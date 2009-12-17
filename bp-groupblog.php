@@ -4,13 +4,13 @@ Plugin Name: BP Groupblog
 Plugin URI: http://wordpress.org/extend/plugins/search.php?q=buddypress+groupblog
 Description: Automates and links WPMU blogs groups controlled by the group creator.
 Author: Rodney Blevins & Marius Ooms
-Version: 1.2.4
+Version: 1.3
 License: (Groupblog: GNU General Public License 2.0 (GPL) http://www.gnu.org/licenses/gpl.html)
 Site Wide Only: true
 */
 
 define ( 'BP_GROUPBLOG_IS_INSTALLED', 1 );
-define ( 'BP_GROUPBLOG_VERSION', '1.2.4' );
+define ( 'BP_GROUPBLOG_VERSION', '1.3' );
 
 // Define default roles
 if ( !defined( 'BP_GROUPBLOG_DEFAULT_ADMIN_ROLE' ) )
@@ -44,7 +44,8 @@ function bp_groupblog_load_buddypress() {
 
 	return false;
 }
-function bp_groupblog_setup() {
+
+function bp_groupblog_setup() {
 	global $wpdb;
 
 	// Set up the array of potential defaults
@@ -60,7 +61,8 @@ function bp_groupblog_load_buddypress() {
 	add_site_option( 'bp_groupblog_blog_defaults_setup', 1 );
 	add_site_option( 'bp_groupblog_blog_defaults_options', $groupblog_blogdefaults);   		
 }
-register_activation_hook( __FILE__, 'bp_groupblog_setup' );
+
+register_activation_hook( __FILE__, 'bp_groupblog_setup' );
 
 /**
  * Load the required groupblog component files.
@@ -174,7 +176,7 @@ function groupblog_edit_settings() {
         						if ( $bp->action_variables[0] == 'step' ) {
         							bp_core_redirect( $bp->loggedin_user->domain . $bp->groups->slug . '/create/step/' . $bp->action_variables[1] );
         						} else {
-        							bp_core_redirect( site_url() . '/' . $bp->current_component . '/' . $bp->current_item . '/admin/group-blog' );
+        							bp_core_redirect( $bp->root_domain . '/' . $bp->current_component . '/' . $bp->current_item . '/admin/group-blog' );
         						}
     					    }
     					}
@@ -192,7 +194,7 @@ function groupblog_edit_settings() {
 
 				do_action( 'groupblog_details_edited', $bp->groups->current_group->id );
 
-				bp_core_redirect( site_url() . '/' . $bp->current_component . '/' . $bp->current_item . '/admin/group-blog' );
+				bp_core_redirect( $bp->root_domain . '/' . $bp->current_component . '/' . $bp->current_item . '/admin/group-blog' );
 			}
 		}
 	}
@@ -202,25 +204,191 @@ add_action( 'wp', 'groupblog_edit_settings', 4 );
 /**
  * groupblog_edit_base_settings()
  *
- * Updates the groupmeta with the blog_id and if it is enabled or not.
+ * Updates the groupmeta with the blog_id, default roles and if it is enabled or not.
+ * Initiating member permissions loop on save - by Boone
  */
 function groupblog_edit_base_settings( $groupblog_enable_blog, $groupblog_silent_add = NULL, $groupblog_default_admin_role, $groupblog_default_mod_role, $groupblog_default_member_role, $group_id, $groupblog_blog_id = NULL ) {
 	global $bp;
 	
 	if ( empty( $group_id ) )
 		return false;
-		
+	
+	$default_role_array = array( 'groupblog_default_admin_role' => $groupblog_default_admin_role, 'groupblog_default_mod_role' => $groupblog_default_mod_role, 'groupblog_default_member_role' => $groupblog_default_member_role );
+	
+	$update_users = false;
+	
+	foreach ( $default_role_array as $role_name => $role ) {
+		$old_default_role = groups_get_groupmeta ( $group_id, $role_name );
+		if ( $role != $old_default_role ) {
+			$update_users = true;
+			break;
+		}
+	}
+
 	groups_update_groupmeta ( $group_id, 'groupblog_enable_blog', $groupblog_enable_blog );
 	groups_update_groupmeta ( $group_id, 'groupblog_blog_id', $groupblog_blog_id );
 	groups_update_groupmeta ( $group_id, 'groupblog_silent_add', $groupblog_silent_add );
-	
-	groups_update_groupmeta ( $group_id, 'groupblog_default_admin_role', $groupblog_default_admin_role );
+
+  groups_update_groupmeta ( $group_id, 'groupblog_default_admin_role', $groupblog_default_admin_role );
 	groups_update_groupmeta ( $group_id, 'groupblog_default_mod_role', $groupblog_default_mod_role );
-	groups_update_groupmeta ( $group_id, 'groupblog_default_member_role', $groupblog_default_member_role );
+	groups_update_groupmeta ( $group_id, 'groupblog_default_member_role', $groupblog_default_member_role );	
+		
+	if ( $update_users ) {
+		bp_groupblog_member_join( $group_id );
+	}
 	
 	do_action( 'groups_details_updated', $group->id );
 	
 	return true;
+}
+
+/**
+ * bp_groupblog_member_join( $group_id )
+ *
+ * Runs whenever member permissions are changed and saved - by Boone
+ */
+function bp_groupblog_member_join( $group_id ) {
+  global $bp, $wpdb, $username, $blog_id, $userdata, $current_blog;
+  
+  $blog_id = groups_get_groupmeta ( $group_id, 'groupblog_blog_id' );
+		
+	$group = new BP_Groups_Group ( $group_id );
+		
+	if ( bp_group_has_members( 'exclude_admins_mods=false&per_page=1000' ) ) {
+		while ( bp_group_members() ) {
+			bp_group_the_member();
+			$user_id = bp_get_group_member_id();
+			bp_groupblog_upgrade_user( $blog_id, $user_id, $group_id );
+		}
+	}
+}
+
+/**
+ * bp_groupblog_upgrade_user( $blog_id, $user_id, $group_id )
+ *
+ * Subscribes user in question to blog in question
+ * This code was initially inspired by Burt Adsit re-interpreted by Boone
+ */
+function bp_groupblog_upgrade_user( $blog_id, $user_id, $group_id ) {
+  global $blog_id;
+	
+	$blog_id = groups_get_groupmeta ( $group_id, 'groupblog_blog_id' );
+				
+	// Setup some variables
+	$groupblog_silent_add = groups_get_groupmeta ( $group_id, 'groupblog_silent_add' );
+	$groupblog_default_member_role = groups_get_groupmeta ( $group_id, 'groupblog_default_member_role' );
+	$groupblog_default_mod_role = groups_get_groupmeta ( $group_id, 'groupblog_default_mod_role' );
+	$groupblog_default_admin_role = groups_get_groupmeta ( $group_id, 'groupblog_default_admin_role' );
+	$groupblog_creator_role = 'admin';
+		
+	$user = new WP_User($user_id);
+			
+	$user_role = bp_groupblog_get_user_role( $user_id, $user->data->user_login, $blog_id );	
+					
+	if ( groups_is_user_admin ( $user_id, $group_id ) ) {
+		$default_role = $groupblog_default_admin_role;
+	} else if ( groups_is_user_mod ( $user_id, $group_id ) ) {
+		$default_role = $groupblog_default_mod_role;
+	} else if ( groups_is_user_member ( $user_id, $group_id ) ) {
+		$default_role = $groupblog_default_member_role;
+	} 
+
+	if ($user_role == $default_role && $groupblog_silent_add == true) return false;
+						
+	if ( !is_user_member_of_blog($user_id, $blog_id) && $groupblog_silent_add == true ){
+		add_user_to_blog($blog_id, $user_id, $default_role);
+  	}
+	else if ( $groupblog_silent_add == true ) {
+  	$user = new WP_User($user_id);
+  	$user->set_role($default_role);
+  	wp_cache_delete($user_id, 'users' );
+ 	}
+ 	else if ( $groupblog_silent_add != true ) {
+  	$user = new WP_User($user_id);
+  	$user->set_role('subscriber');
+  	wp_cache_delete($user_id, 'users' );
+  }
+  		
+  do_action('bp_groupblog_upgrade_user',$user_id, $user_role, $default_role);	
+}
+
+/**
+ * bp_groupblog_just_joined_group( $group_id, $user_id )
+ *
+ * Called when user joins group - by Boone
+ */
+function bp_groupblog_just_joined_group( $group_id, $user_id ) {
+	bp_groupblog_upgrade_user( $blog_id, $user_id, $group_id );
+}
+add_action( 'groups_join_group', 'bp_groupblog_just_joined_group', 10, 2 );
+
+/* 
+ * bp_groupblog_changed_status_group( $user_id, $group_id )
+ * 
+ * Called when user changes status in the group
+ *
+ * Variables ($user_id, $group_id) are switched around for these hooks, 
+ * therefore we put these in a sepperate function.
+ */
+function bp_groupblog_changed_status_group( $user_id, $group_id ) {
+	bp_groupblog_upgrade_user( $blog_id, $user_id, $group_id );
+}
+add_action( 'groups_promoted_member', 'bp_groupblog_changed_status_group', 10, 2 );
+add_action( 'groups_demoted_member', 'bp_groupblog_changed_status_group', 10, 2 );
+add_action( 'groups_unbanned_member', 'bp_groupblog_changed_status_group', 10, 2 );
+
+/**
+ * bp_groupblog_remove_user( $group_id, $user_id = false )
+ *
+ * Called when user leaves, or is banned from, the group
+ */
+function bp_groupblog_remove_user( $group_id, $user_id = false ) {
+  global $bp, $blog_id;
+
+  $blog_id = get_groupblog_blog_id( $group_id );
+
+  if ( !$user_id )
+    $user_id = $bp->loggedin_user->id;
+
+  if ( !is_user_member_of_blog($user_id, $blog_id) )
+	  return;
+
+  $user = new WP_User( $user_id );
+  $user->set_role('subscriber');
+  wp_cache_delete($user_id, 'users' );	
+}
+add_action( 'groups_leave_group', 'bp_groupblog_remove_user' );
+add_action( 'groups_banned_member', 'bp_groupblog_remove_user' );
+
+/**
+ * bp_groupblog_get_user_role( $user_id, $user_login, $blog_id )
+ *
+ * Reworked function to retrieve the users current role - by Boone
+ */
+function bp_groupblog_get_user_role( $user_id, $user_login, $blog_id ) {
+	global $bp, $blog_id, $current_blog;
+	
+	if ( !$blog_id || !$user_id )
+		return false;
+	
+	// determine users role, if any, on this blog
+	$roles = get_usermeta( $user_id, 'wp_' . $blog_id . '_capabilities' );
+
+	// this seems to be the only way to do this
+	if ( isset( $roles['subscriber'] ) ) 
+		$user_role = 'subscriber'; 
+	elseif	( isset( $roles['contributor'] ) )
+		$user_role = 'contributor';
+	elseif	( isset( $roles['author'] ) )
+		$user_role = 'author';
+	elseif ( isset( $roles['editor'] ) )
+		$user_role = 'editor';
+	elseif ( isset( $roles['administrator'] ) )
+		$user_role = 'administrator';
+	elseif ( is_site_admin( $user_login ) )
+		$user_role = 'siteadmin';	
+	else $user_role = 'norole';
+	return $user_role;
 }
 
 /**
@@ -520,15 +688,14 @@ function bp_groupblog_validate_blog_signup() {
 		$message .= __( ' However, you may continue with the blog address as listed below.', 'groupblog' );
 		$message .= __( ' We suggest adjusting the group name in group details following these requirements.', 'groupblog' );
 		$message .= __( ' 1. Only letters and numbers allowed.', 'groupblog' );
-		$message .= __( ' 2. Must be at least four characters.', 'groupblog' );
-		$message .= __( ' 3. Has to contain letters as well.', 'groupblog' );
+		$message .= __( ' 2. Has to contain letters as well.', 'groupblog' );
 		bp_core_add_message( $message, 'error' );
 
 		//Hello Lost fan!
 		if ( $bp->action_variables[0] == 'step' ) {
 			bp_core_redirect( $bp->loggedin_user->domain . $bp->groups->slug . '/create/step/' . $bp->action_variables[1] . '/?create_error=4815162342' );
 		} else {
-			bp_core_redirect( site_url() . '/' . $bp->current_component . '/' . $bp->current_item . '/admin/group-blog/?create_error=4815162342' );
+			bp_core_redirect( $bp->root_domain . '/' . $bp->current_component . '/' . $bp->current_item . '/admin/group-blog/?create_error=4815162342' );
 		}
 	}
 
@@ -542,176 +709,6 @@ function bp_groupblog_validate_blog_signup() {
 
 	return true;
 }
-
-/**
- * Silently add a user to a group blog
- *
- * This next section contains functions to silently add a user to a group blog.
- * This code runs every time the site is loaded, but exits out if:
- *		- the group blogging function is not enabled
- * 		- the site being visited is not linked to a group
- *		- the user is not logged in
- *		- the logged in user is not a group member
- *		- the user has already been assigned a role
- *		- the user is an admin
- *
- * Inspired by and borrowing some code from Burt Adsit's plugin Community Blogs
- * Plugin URI: http://wordpress.org/extend/plugins/bp-community-blogs/
- * Author URI: http://buddypress.org/developers/burtadsit/
- */
-
-/**
- * bp_groupblog_get_current_role()
- *
- * Retrieves the current role of the logged in user of the blog being viewed.
- */
-function bp_groupblog_get_current_role() {
-	global $bp, $blog_id, $current_blog;
-	
-	$blog_id = $current_blog->blog_id;
-	
-	// determine users role, if any, on this blog
-	$roles = get_usermeta( $bp->loggedin_user->id, 'wp_' . $blog_id . '_capabilities' );
-	
-	// this seems to be the only way to do this
-	if ( isset( $roles['subscriber'] ) ) 
-		$user_role = 'subscriber'; 
-	elseif	( isset( $roles['contributor'] ) )
-		$user_role = 'contributor';
-	elseif	( isset( $roles['author'] ) )
-		$user_role = 'author';
-	elseif ( isset( $roles['editor'] ) )
-		$user_role = 'editor';
-	elseif ( isset( $roles['administrator'] ) )
-		$user_role = 'administrator';
-	elseif ( is_site_admin() )
-		$user_role = 'siteadmin';	
-	else $user_role = 'norole';
-	return $user_role;
-}
-
-/** 
- * Why do we have to repate these?
- * These are taken from bp-groups-classes.php.
- * For whatever reason we could not call them any other way.
- */
-function bp_groupblog_check_is_admin( $user_id, $group_id ) {
-	global $wpdb, $bp;
-	
-	if ( !$user_id )
-		return false;
-	
-	return $wpdb->query( $wpdb->prepare( "SELECT id FROM {$bp->groups->table_name_members} WHERE user_id = %d AND group_id = %d AND is_admin = 1 AND is_banned = 0", $user_id, $group_id ) );
-}
-
-function bp_groupblog_check_is_mod( $user_id, $group_id ) {
-	global $wpdb, $bp;
-	
-	if ( !$user_id )
-		return false;
-			
-	return $wpdb->query( $wpdb->prepare( "SELECT id FROM {$bp->groups->table_name_members} WHERE user_id = %d AND group_id = %d AND is_mod = 1 AND is_banned = 0", $user_id, $group_id ) );
-}
-
-function bp_groupblog_check_is_member( $user_id, $group_id ) {
-	global $wpdb, $bp;
-	
-	if ( !$user_id )
-		return false;
-	
-	return $wpdb->query( $wpdb->prepare( "SELECT id FROM {$bp->groups->table_name_members} WHERE user_id = %d AND group_id = %d AND is_confirmed = 1 AND is_banned = 0", $user_id, $group_id ) );	
-}
-
-/**
- * bp_groupblog_join_this_blog()
- *
- * Set the user role based on the different variables.
- */
-function bp_groupblog_join_this_blog() {
-  require_once( ABSPATH . WPINC . '/registration.php'); // is this accessable already? dunno
-
-  global $bp, $wpdb, $username, $blog_id, $userdata, $current_blog;
-  
-  if ( is_site_admin() || !is_user_logged_in() ) // do nothing
-      return;
-
-  if  ( groups_get_groupmeta ( $group_id, 'groupblog_enable_blog' ) == '1' )
-  	return;
-		
-	$blog_id = $current_blog->blog_id;
-	
-	// If the blog being viewed isn't linked to a group, get the heck out of here!
-	if ( !( $group_id = get_groupblog_group_id ( $blog_id ) ) )
-		return;
-		
-	// Setup some variables
-	$groupblog_silent_add = groups_get_groupmeta ( $group_id, 'groupblog_silent_add' );
-	$groupblog_default_member_role = groups_get_groupmeta ( $group_id, 'groupblog_default_member_role' );
-	$groupblog_default_mod_role = groups_get_groupmeta ( $group_id, 'groupblog_default_mod_role' );
-	$groupblog_default_admin_role = groups_get_groupmeta ( $group_id, 'groupblog_default_admin_role' );
-	$groupblog_creator_role = 'admin';
-	
-	$group = new BP_Groups_Group ( $group_id );
-		
-	if ( $group->creator_id == $bp->loggedin_user->id ) {
-	  return;
-		//$default_role = $groupblog_creator_role;
-	} else if ( bp_groupblog_check_is_admin ( $bp->loggedin_user->id, $group_id ) ) {
-		$default_role = $groupblog_default_admin_role;
-	} else if ( bp_groupblog_check_is_mod ( $bp->loggedin_user->id, $group_id ) ) {
-		$default_role = $groupblog_default_mod_role;
-	} else if ( bp_groupblog_check_is_member ( $bp->loggedin_user->id, $group_id ) ) {
-		$default_role = $groupblog_default_member_role;
-	} else {
-		return;
-	}	
-
-	$user_role = bp_groupblog_get_current_role();
-	
-	if ($user_role == $default_role && $groupblog_silent_add == true) return false;
-	
-  if ( !is_user_member_of_blog($bp->loggedin_user->id, $blog_id) && $groupblog_silent_add == true ){
-    add_user_to_blog($blog_id, $bp->loggedin_user->id, $default_role);
-  }
-  else if ( $groupblog_silent_add == true ) {
-    $user = new WP_User($bp->loggedin_user->id);
-    $user->set_role($default_role);
-    wp_cache_delete($bp->loggedin_user->id, 'users' );
-  }
-  else if ( $groupblog_silent_add != true ) {
-    $user = new WP_User($bp->loggedin_user->id);
-    $user->set_role('subscriber');
-    wp_cache_delete($bp->loggedin_user->id, 'users' );
-  }
-	// user_id, old role, new role
-	do_action('bp_groupblog_upgrade_user',$bp->loggedin_user->id, $user_role, $default_role);
-	
-}
-add_action( 'wp_head', 'bp_groupblog_join_this_blog', 99 );
-add_action( 'admin_head', 'bp_groupblog_join_this_blog', 99 );
-
-function bp_groupblog_remove_user( $group_id, $user_id = false ) {
-  require_once( ABSPATH . WPINC . '/registration.php'); // is this accessable already? dunno
-
-  global $bp, $wpdb, $username, $blog_id, $userdata, $current_blog;
-
-  if (!is_user_logged_in()) // do nothing
-    return;
-
-  if ( !$user_id )
-    $user_id = $bp->loggedin_user->id;
-		
-	$blog_id = get_groupblog_blog_id( $group_id );
-
-  if ( !is_user_member_of_blog($user_id, $blog_id) )
-	  return;
-
-  switch_to_blog( $blog_id );
-  $user = new WP_User( $user_id );
-  $user->set_role('subscriber');
-  wp_cache_delete($bp->loggedin_user->id, 'users' );	
-}
-add_action( 'groups_leave_group', 'bp_groupblog_remove_user' );
 
 /**
  * groupblog_screen_blog_latest()
