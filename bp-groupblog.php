@@ -4,13 +4,13 @@ Plugin Name: BP Groupblog
 Plugin URI: http://wordpress.org/extend/plugins/search.php?q=buddypress+groupblog
 Description: Automates and links WPMU blogs groups controlled by the group creator.
 Author: Rodney Blevins & Marius Ooms
-Version: 1.3
+Version: 1.3.1
 License: (Groupblog: GNU General Public License 2.0 (GPL) http://www.gnu.org/licenses/gpl.html)
 Site Wide Only: true
 */
 
 define ( 'BP_GROUPBLOG_IS_INSTALLED', 1 );
-define ( 'BP_GROUPBLOG_VERSION', '1.3' );
+define ( 'BP_GROUPBLOG_VERSION', '1.3.1' );
 
 // Define default roles
 if ( !defined( 'BP_GROUPBLOG_DEFAULT_ADMIN_ROLE' ) )
@@ -258,7 +258,8 @@ function bp_groupblog_member_join( $group_id ) {
 		while ( bp_group_members() ) {
 			bp_group_the_member();
 			$user_id = bp_get_group_member_id();
-			bp_groupblog_upgrade_user( $blog_id, $user_id, $group_id );
+			if ( $group->creator_id != $user_id )
+  			bp_groupblog_upgrade_user( $blog_id, $user_id, $group_id );
 		}
 	}
 }
