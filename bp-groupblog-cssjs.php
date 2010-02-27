@@ -19,10 +19,10 @@ add_action( 'template_redirect', 'bp_groupblog_add_js', 1 );
  */
 function bp_groupblog_add_screen_css() {
 
-  if ( file_exists( STYLESHEETPATH . '/groupblog/css/screen.css' ) )
-  	wp_enqueue_style( 'bp-groupblog-screen', get_stylesheet_directory_uri() . '/groupblog/css/screen.css' );
+  if ( file_exists( STYLESHEETPATH . '/groupblog/css/style.css' ) )
+  	wp_enqueue_style( 'bp-groupblog-screen', get_stylesheet_directory_uri() . '/groupblog/css/style.css' );
   	  else
-  	wp_enqueue_style( 'bp-groupblog-screen', WP_PLUGIN_URL . '/bp-groupblog/groupblog/css/screen.css' );
+  	wp_enqueue_style( 'bp-groupblog-screen', WP_PLUGIN_URL . '/bp-groupblog/groupblog/css/style.css' );
 }
 add_action( 'wp_print_styles', 'bp_groupblog_add_screen_css' );
 

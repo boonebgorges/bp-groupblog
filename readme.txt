@@ -2,8 +2,8 @@
 Contributors: Rodney Blevins & Marius Ooms
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7374704
 Tags: buddypress,groups,blogs,content
-Requires at least: WPMU 2.8 / BP 1.1
-Tested up to: WPMU 2.8.6
+Requires at least: WPMU 2.9 / BP 1.2
+Tested up to: WPMU 2.9.1
 Stable tag: 1.3.1
 
 BuddyPress Groupblog extends the group functionality by enabling the group to have a single blog associated with it. Group members are automatically added to the blog and will have roles as set by the group admin.
@@ -17,6 +17,7 @@ The BuddyPress Groupblog plugin extends the group functionality by enabling each
 * Full blog theme integration. The included bp-groupblog theme mimics the group pages.
 * WP Admin option to set default blog for groups plus bonus options.
 * Automated blog registration at group creation stage.
+* Bypass default blog validation to allow dashes, underscores, numeral only and minimum character count.
 * Blog privacy settings are initially inherited from group privacy settings.
 * Group members are automatically added to the blog.
 * Blog roles match group roles as set by the group admin.
@@ -30,19 +31,21 @@ The BuddyPress Groupblog plugin extends the group functionality by enabling each
 
 **Roadmap:**
 
+* Allow the admin to let group admins choose the blog name, instead of following the group name.
+* Frontend posting from the blg home page.
 * Include an RSS icon for easy access to the Blog's RSS feed.
 
 == Installation ==
 
 1) unzip the bp-groupblog.zip file into `/wp-contents/plugins/bp-groupblog`
 
-2) move the `/bp-groupblog/themes/bp-groupblog` folder to your WPMU themes folder
+2) move the `/themes/bp-groupblog` folder to your WPMU themes folder
 
 3) activate the plugin
 
 4) You are done!
 
-5) If you want to override the groupblog theme files, just copy the 'groupblog' folder into your active theme and modify to your needs.
+5) Optionally, if you wish to override the files inside the folder called groupblog, first copy that folder over to the BuddyPress bp-default theme folder. You can make any changes in the folder that you just copied and they will take precedence over the original folder.
 
 **NOTE: Please deactivate the plugin before running automatic upgrade or you will get a big fat 'Cannot redeclare' fatal error. Regardless, if you do activate while the plugin is active it will still work fine. It is just that nobody likes errors, even when they are not real.**
 
@@ -56,6 +59,12 @@ Thanks to Boone for coming up with a solid solution to add users to the groupblo
 2. Screenshot of the group blog page.
 
 == Changelog == 
+
+= 1.4 =
+* Made it compatible with WPMU 2.9 / BP 1.2
+* Moved the moment when the blog is actually created to the group save step
+* Updated the included theme to reflect the new BP Default theme
+* Added new admin option, such validation overrides and redirect option
 
 = 1.3.1 =
 * Prevented group creator from demoting him/herself to anything lower than administrator.
