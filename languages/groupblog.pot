@@ -1,0 +1,552 @@
+# Translation of the WordPress plugin BP Groupblog 1.4 by Rodney Blevins & Marius Ooms.
+# Copyright (C) 2010 Rodney Blevins & Marius Ooms
+# This file is distributed under the same license as the BP Groupblog package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: BP Groupblog 1.4\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/bp-groupblog\n"
+"POT-Creation-Date: 2010-02-27 22:43+0000\n"
+"PO-Revision-Date: 2010-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: bp-groupblog-admin.php:110
+msgid "Group Blog Setup"
+msgstr ""
+
+#: bp-groupblog-admin.php:120
+msgid "You do not have permission to access this page."
+msgstr ""
+
+#: bp-groupblog-admin.php:134
+msgid "Options saved."
+msgstr ""
+
+#: bp-groupblog-admin.php:139
+msgid "Group Blog Settings"
+msgstr ""
+
+#: bp-groupblog-admin.php:174
+msgid "Default Theme"
+msgstr ""
+
+#: bp-groupblog-admin.php:177
+msgid "Select the default theme:"
+msgstr ""
+
+#: bp-groupblog-admin.php:201
+msgid "Validation Settings"
+msgstr ""
+
+#: bp-groupblog-admin.php:203
+msgid "Change the default WordPress blog validation settings."
+msgstr ""
+
+#: bp-groupblog-admin.php:207
+msgid "Allow:"
+msgstr ""
+
+#: bp-groupblog-admin.php:210
+msgid "Dashes"
+msgstr ""
+
+#: bp-groupblog-admin.php:210 bp-groupblog-admin.php:218
+#: bp-groupblog-admin.php:226
+msgid "(Default: Not Allowed)"
+msgstr ""
+
+#: bp-groupblog-admin.php:218
+msgid "Underscores"
+msgstr ""
+
+#: bp-groupblog-admin.php:226
+msgid "All Numeric Names"
+msgstr ""
+
+#: bp-groupblog-admin.php:231
+msgid "Minimum Length:"
+msgstr ""
+
+#: bp-groupblog-admin.php:233
+msgid "(Default: 4)"
+msgstr ""
+
+#: bp-groupblog-admin.php:240
+msgid "Blog Defaults"
+msgstr ""
+
+#: bp-groupblog-admin.php:243
+msgid "Default Post Category:"
+msgstr ""
+
+#: bp-groupblog-admin.php:245
+msgid "(Overwrites \"Uncategorized\")"
+msgstr ""
+
+#: bp-groupblog-admin.php:249
+msgid "Default Link Category:"
+msgstr ""
+
+#: bp-groupblog-admin.php:251
+msgid "(Overwrites \"Blogroll\")"
+msgstr ""
+
+#: bp-groupblog-admin.php:255
+msgid "Set First Post to Draft"
+msgstr ""
+
+#: bp-groupblog-admin.php:258 bp-groupblog-admin.php:266
+#: bp-groupblog-admin.php:274
+msgid "Yes"
+msgstr ""
+
+#: bp-groupblog-admin.php:258
+msgid "(Default Post \"Hello World\")"
+msgstr ""
+
+#: bp-groupblog-admin.php:263
+msgid "Delete Initial Comment"
+msgstr ""
+
+#: bp-groupblog-admin.php:271
+msgid "Delete Blogroll Links"
+msgstr ""
+
+#: bp-groupblog-admin.php:301
+msgid "Save Changes"
+msgstr ""
+
+#: bp-groupblog-classes.php:14 bp-groupblog.php:622
+msgid "Group Blog"
+msgstr ""
+
+#: bp-groupblog.php:79 themes/bp-groupblog/attachment.php:25
+#: themes/bp-groupblog/functions.php:20 themes/bp-groupblog/search.php:25
+msgid "Blog"
+msgstr ""
+
+#: bp-groupblog.php:124 bp-groupblog.php:379
+msgid "Please choose one of your blogs from the drop-down menu."
+msgstr ""
+
+#: bp-groupblog.php:139 bp-groupblog.php:388
+msgid "There was an error creating your group blog, please try again."
+msgstr ""
+
+#: bp-groupblog.php:141
+msgid "Group details were successfully updated."
+msgstr ""
+
+#: bp-groupblog.php:410 bp-groupblog.php:460
+msgid "Blog Title:"
+msgstr ""
+
+#: bp-groupblog.php:417 bp-groupblog.php:469
+msgid "Blog Address:"
+msgstr ""
+
+#: bp-groupblog.php:442
+msgid ""
+"Choose either one of your existing blogs or create a new one all together "
+"with the details displayed below."
+msgstr ""
+
+#: bp-groupblog.php:442
+msgid ""
+"Take care as you can only choose once.  Later you may still disable or "
+"enable the blog, but your choice is set."
+msgstr ""
+
+#: bp-groupblog.php:444
+msgid "Use one of your own blogs:"
+msgstr ""
+
+#: bp-groupblog.php:446
+msgid "choose a blog"
+msgstr ""
+
+#: bp-groupblog.php:456
+msgid "Or, create a new blog"
+msgstr ""
+
+#: bp-groupblog.php:554
+msgid "Only lowercase letters and numbers allowed"
+msgstr ""
+
+#: bp-groupblog.php:560
+msgid "Blog name must be at least "
+msgstr ""
+
+#: bp-groupblog.php:564
+msgid "Sorry, blog names may not contain the character '_'!"
+msgstr ""
+
+#: bp-groupblog.php:569
+msgid "Sorry, blog names must have letters too!"
+msgstr ""
+
+#: bp-groupblog.php:630
+msgid "Enable group blog"
+msgstr ""
+
+#: bp-groupblog.php:637
+msgid "Member Options"
+msgstr ""
+
+#: bp-groupblog.php:639
+msgid ""
+"Enable blog posting to allow adding of group members to the blog with the "
+"roles set below."
+msgstr ""
+
+#: bp-groupblog.php:639
+msgid ""
+"When disabled, all members will temporarily be set to subscribers, disabling "
+"posting."
+msgstr ""
+
+#: bp-groupblog.php:642
+msgid "Enable member blog posting"
+msgstr ""
+
+#: bp-groupblog.php:659
+msgid "Default Administrator Role:"
+msgstr ""
+
+#: bp-groupblog.php:660 bp-groupblog.php:667 bp-groupblog.php:674
+#: bp-groupblog.php:683
+msgid "Administrator"
+msgstr ""
+
+#: bp-groupblog.php:661 bp-groupblog.php:668 bp-groupblog.php:675
+#: bp-groupblog.php:684
+msgid "Editor"
+msgstr ""
+
+#: bp-groupblog.php:662 bp-groupblog.php:669 bp-groupblog.php:676
+#: bp-groupblog.php:685
+msgid "Author"
+msgstr ""
+
+#: bp-groupblog.php:663 bp-groupblog.php:670 bp-groupblog.php:677
+#: bp-groupblog.php:686
+msgid "Contributor"
+msgstr ""
+
+#: bp-groupblog.php:664 bp-groupblog.php:671 bp-groupblog.php:678
+#: bp-groupblog.php:687
+msgid "Subscriber"
+msgstr ""
+
+#: bp-groupblog.php:666
+msgid "Default Moderator Role:"
+msgstr ""
+
+#: bp-groupblog.php:673
+msgid "Default Member Role:"
+msgstr ""
+
+#: bp-groupblog.php:681
+msgid "A bit about the WPMU member roles:"
+msgstr ""
+
+#: bp-groupblog.php:683
+msgid "Somebody who has access to all the administration features."
+msgstr ""
+
+#: bp-groupblog.php:684
+msgid ""
+"Somebody who can publish posts, manage posts as well as manage other "
+"people's posts, etc."
+msgstr ""
+
+#: bp-groupblog.php:685
+msgid "Somebody who can publish and manage their own posts."
+msgstr ""
+
+#: bp-groupblog.php:686
+msgid "Somebody who can write and manage their posts but not publish posts."
+msgstr ""
+
+#: bp-groupblog.php:687
+msgid "Somebody who can read comments/comment/receive news letters, etc."
+msgstr ""
+
+#: bp-groupblog.php:695
+msgid "Save Changes &raquo;"
+msgstr ""
+
+#: bp-groupblog.php:727
+msgid " However, you may continue with the blog address as listed below."
+msgstr ""
+
+#: bp-groupblog.php:728
+msgid ""
+" We suggest adjusting the group name in group details following these "
+"requirements."
+msgstr ""
+
+#: bp-groupblog.php:730
+msgid " &raquo; Only letters and numbers allowed."
+msgstr ""
+
+#: bp-groupblog.php:731
+#, php-format
+msgid " &raquo; Must be at least %s characters."
+msgstr ""
+
+#: bp-groupblog.php:733
+msgid " &raquo; Has to contain letters as well."
+msgstr ""
+
+#: groupblog/activity.php:3
+msgid "Blog Activity"
+msgstr ""
+
+#: groupblog/activity.php:29
+msgid "Sorry, there was no blog activity found."
+msgstr ""
+
+#: groupblog/posts.php:18 groupblog/posts.php:25
+#: themes/bp-groupblog/archive.php:44 themes/bp-groupblog/archive.php:50
+#: themes/bp-groupblog/index.php:35 themes/bp-groupblog/index.php:41
+#: themes/bp-groupblog/search.php:44 themes/bp-groupblog/search.php:50
+#: themes/bp-groupblog/single.php:38 themes/bp-groupblog/single.php:44
+#, php-format
+msgid "by %s"
+msgstr ""
+
+#: groupblog/posts.php:22 themes/bp-groupblog/archive.php:48
+#: themes/bp-groupblog/index.php:39 themes/bp-groupblog/search.php:48
+#: themes/bp-groupblog/single.php:42
+msgid "Permanent Link to"
+msgstr ""
+
+#: groupblog/posts.php:24 themes/bp-groupblog/archive.php:50
+#: themes/bp-groupblog/index.php:41 themes/bp-groupblog/search.php:50
+#: themes/bp-groupblog/single.php:44
+msgid "in"
+msgstr ""
+
+#: groupblog/posts.php:28 themes/bp-groupblog/archive.php:53
+#: themes/bp-groupblog/index.php:44 themes/bp-groupblog/search.php:53
+#: themes/bp-groupblog/single.php:47
+msgid "Read the rest of this entry &rarr;"
+msgstr ""
+
+#: groupblog/posts.php:31
+msgid "Tags:"
+msgstr ""
+
+#: groupblog/posts.php:31 themes/bp-groupblog/archive.php:56
+#: themes/bp-groupblog/index.php:47 themes/bp-groupblog/search.php:56
+#: themes/bp-groupblog/single.php:52
+msgid "No Comments &#187;"
+msgstr ""
+
+#: groupblog/posts.php:31 themes/bp-groupblog/archive.php:56
+#: themes/bp-groupblog/index.php:47 themes/bp-groupblog/search.php:56
+#: themes/bp-groupblog/single.php:52
+msgid "1 Comment &#187;"
+msgstr ""
+
+#: groupblog/posts.php:31 themes/bp-groupblog/archive.php:56
+#: themes/bp-groupblog/index.php:47 themes/bp-groupblog/search.php:56
+#: themes/bp-groupblog/single.php:52
+msgid "% Comments &#187;"
+msgstr ""
+
+#: groupblog/posts.php:42 themes/bp-groupblog/archive.php:74
+#: themes/bp-groupblog/index.php:65
+msgid "Not Found"
+msgstr ""
+
+#: groupblog/posts.php:43 themes/bp-groupblog/index.php:66
+msgid "Sorry, but you are looking for something that isn't here."
+msgstr ""
+
+#: themes/bp-groupblog/404.php:25
+msgid "Page Not Found"
+msgstr ""
+
+#: themes/bp-groupblog/404.php:29
+msgid "The page you were looking for was not found."
+msgstr ""
+
+#: themes/bp-groupblog/activity-loop.php:25
+msgid "Load More"
+msgstr ""
+
+#: themes/bp-groupblog/activity-loop.php:35
+msgid "Sorry, there was no activity found. Please try a different filter."
+msgstr ""
+
+#: themes/bp-groupblog/activity-post-form.php:12
+#, php-format
+msgid "What's new in %s, %s?"
+msgstr ""
+
+#: themes/bp-groupblog/activity-post-form.php:23
+msgid "Post Update"
+msgstr ""
+
+#: themes/bp-groupblog/activity.php:3
+msgid "RSS"
+msgstr ""
+
+#: themes/bp-groupblog/activity.php:9
+msgid "No Filter"
+msgstr ""
+
+#: themes/bp-groupblog/activity.php:10
+msgid "Show Updates"
+msgstr ""
+
+#: themes/bp-groupblog/activity.php:13
+msgid "Show New Forum Topics"
+msgstr ""
+
+#: themes/bp-groupblog/activity.php:14
+msgid "Show Forum Replies"
+msgstr ""
+
+#: themes/bp-groupblog/activity.php:17
+msgid "Show New Group Memberships"
+msgstr ""
+
+#: themes/bp-groupblog/archive.php:25
+#, php-format
+msgid "You are browsing the archive for %1$s."
+msgstr ""
+
+#: themes/bp-groupblog/archive.php:31 themes/bp-groupblog/archive.php:67
+#: themes/bp-groupblog/index.php:58 themes/bp-groupblog/search.php:32
+#: themes/bp-groupblog/search.php:66 themes/bp-groupblog/single.php:29
+msgid "&larr; Previous Entries"
+msgstr ""
+
+#: themes/bp-groupblog/archive.php:32 themes/bp-groupblog/archive.php:68
+#: themes/bp-groupblog/index.php:59 themes/bp-groupblog/search.php:33
+#: themes/bp-groupblog/search.php:67 themes/bp-groupblog/single.php:30
+msgid "Next Entries &rarr;"
+msgstr ""
+
+#: themes/bp-groupblog/archive.php:56 themes/bp-groupblog/index.php:47
+#: themes/bp-groupblog/search.php:56 themes/bp-groupblog/single.php:52
+msgid "Tags: "
+msgstr ""
+
+#: themes/bp-groupblog/attachment.php:41
+msgid "<p class=\"serif\">Read the rest of this entry &rarr;</p>"
+msgstr ""
+
+#: themes/bp-groupblog/attachment.php:43 themes/bp-groupblog/page.php:35
+#: themes/bp-groupblog/single.php:49
+msgid "<p><strong>Pages:</strong> "
+msgstr ""
+
+#: themes/bp-groupblog/attachment.php:54
+msgid "Sorry, no attachments matched your criteria."
+msgstr ""
+
+#: themes/bp-groupblog/functions.php:7 themes/bp-groupblog/header.php:40
+msgid "Home"
+msgstr ""
+
+#: themes/bp-groupblog/functions.php:12
+msgid "Admin"
+msgstr ""
+
+#: themes/bp-groupblog/functions.php:26
+msgid "Forum"
+msgstr ""
+
+#: themes/bp-groupblog/functions.php:31 themes/bp-groupblog/header.php:48
+msgid "Members"
+msgstr ""
+
+#: themes/bp-groupblog/functions.php:35
+msgid "Send Invites"
+msgstr ""
+
+#: themes/bp-groupblog/functions.php:41
+msgid "Request Membership"
+msgstr ""
+
+#: themes/bp-groupblog/header.php:18
+msgid "Group Activity RSS Feed"
+msgstr ""
+
+#: themes/bp-groupblog/header.php:21
+msgid "Blog Posts RSS Feed"
+msgstr ""
+
+#: themes/bp-groupblog/header.php:22
+msgid "Blog Posts Atom Feed"
+msgstr ""
+
+#: themes/bp-groupblog/header.php:44
+msgid "Activity"
+msgstr ""
+
+#: themes/bp-groupblog/header.php:53
+msgid "Groups"
+msgstr ""
+
+#: themes/bp-groupblog/header.php:58
+msgid "Forums"
+msgstr ""
+
+#: themes/bp-groupblog/header.php:65
+msgid "Blogs"
+msgstr ""
+
+#: themes/bp-groupblog/header.php:81
+msgid "Search"
+msgstr ""
+
+#: themes/bp-groupblog/links.php:31
+msgid "Links"
+msgstr ""
+
+#: themes/bp-groupblog/page.php:33
+msgid "<p class=\"serif\">Read the rest of this page &rarr;</p>"
+msgstr ""
+
+#: themes/bp-groupblog/page.php:36
+msgid "Edit this entry."
+msgstr ""
+
+#: themes/bp-groupblog/search.php:29
+msgid "Search Results"
+msgstr ""
+
+#: themes/bp-groupblog/search.php:72
+msgid "No posts found. Try a different search?"
+msgstr ""
+
+#: themes/bp-groupblog/single.php:61
+msgid "Sorry, no posts matched your criteria."
+msgstr ""
+
+#. Plugin Name of an extension
+msgid "BP Groupblog"
+msgstr ""
+
+#. Plugin URI of an extension
+msgid "http://wordpress.org/extend/plugins/search.php?q=buddypress+groupblog"
+msgstr ""
+
+#. Description of an extension
+msgid "Automates and links WPMU blogs groups controlled by the group creator."
+msgstr ""
+
+#. Author of an extension
+msgid "Rodney Blevins & Marius Ooms"
+msgstr ""
