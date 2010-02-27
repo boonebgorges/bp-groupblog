@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: buddypress,groups,blogs,content
 Requires at least: WPMU 2.9 / BP 1.2
 Tested up to: WPMU 2.9.1
-Stable tag: 1.3.1
+Stable tag: 1.4
 
 BuddyPress Groupblog extends the group functionality by enabling the group to have a single blog associated with it. Group members are automatically added to the blog and will have roles as set by the group admin.
 
@@ -29,10 +29,14 @@ The BuddyPress Groupblog plugin extends the group functionality by enabling each
 * Leaving the group will downgrade the member role to 'subscriber'.
 * Allow the group admin to select one of his/her existing blogs.
 
+**Known Issues:**
+* Group blog post do currently not show up in the group activity stream. Therefore as a short term solution we are including a custom activity loop on the blog page. This should be fixed in the future.
+
 **Roadmap:**
 
 * Allow the admin to let group admins choose the blog name, instead of following the group name.
-* Frontend posting from the blg home page.
+* Frontend posting from the blog home page.
+* Redirect options to integrate deeper with the blog.
 * Include an RSS icon for easy access to the Blog's RSS feed.
 
 == Installation ==
