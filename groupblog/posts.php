@@ -28,7 +28,7 @@
 						<?php the_content( __( 'Read the rest of this entry &rarr;', 'buddypress' ) ); ?>
 					</div>
 
-					<p class="postmetadata"><span class="tags"><?php _e( 'Tags:', 'buddypress' ); if ( $posttags ) { foreach ( $posttags as $tag ) { echo ' / ' . $tag->name; } } ?></span> <span class="comments"><?php comments_popup_link( __( 'No Comments &#187;', 'buddypress' ), __( '1 Comment &#187;', 'buddypress' ), __( '% Comments &#187;', 'buddypress' ) ); ?></span></p>
+					<p class="postmetadata"><span class="tags"><?php if ( $posttags ) : ?><?php _e( 'Tags:', 'buddypress' ); ?><?php foreach ( $posttags as $tag ) { echo ' / ' . $tag->name; } ?><?php endif; ?></span> <span class="comments"><?php comments_popup_link( __( 'No Comments &#187;', 'buddypress' ), __( '1 Comment &#187;', 'buddypress' ), __( '% Comments &#187;', 'buddypress' ) ); ?></span></p>
 				</div>
 
 			</div>
