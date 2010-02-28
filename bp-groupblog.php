@@ -4,7 +4,7 @@ Plugin Name: BP Groupblog
 Plugin URI: http://wordpress.org/extend/plugins/search.php?q=buddypress+groupblog
 Description: Automates and links WPMU blogs groups controlled by the group creator.
 Author: Rodney Blevins & Marius Ooms
-Version: 1.4
+Version: 1.4.1
 License: (Groupblog: GNU General Public License 2.0 (GPL) http://www.gnu.org/licenses/gpl.html)
 Site Wide Only: true
 */
@@ -20,7 +20,7 @@ if ( !function_exists( 'bp_core_install' ) ) {
 /*******************************************************************/
 
 define ( 'BP_GROUPBLOG_IS_INSTALLED', 1 );
-define ( 'BP_GROUPBLOG_VERSION', '1.4' );
+define ( 'BP_GROUPBLOG_VERSION', '1.4.1' );
 
 // Define default roles
 if ( !defined( 'BP_GROUPBLOG_DEFAULT_ADMIN_ROLE' ) )
@@ -742,16 +742,17 @@ function bp_groupblog_validate_blog_signup() {
 	}
 
 	$public = (int) $_POST['blog_public'];
-/*
-	$meta = apply_filters('signup_create_blog_meta', array ('lang_id' => 1, 'public' => $public)); // depreciated
-	$meta = apply_filters( "add_signup_meta", $meta );
 
-	$groupblog_blog_id = wpmu_create_blog( $domain, $path, $blog_title, $current_user->id, $meta, $wpdb->siteid );
-*/
+	if ( $bp->action_variables[0] == 'step' ) {
+		groups_update_groupmeta( $group_id, 'groupblog_public', $public);
+		groups_update_groupmeta( $group_id, 'groupblog_title', $blog_title);
+		groups_update_groupmeta( $group_id, 'groupblog_path', $path);
+	} else {
+		$meta = apply_filters('signup_create_blog_meta', array ('lang_id' => 1, 'public' => $public)); // depreciated
+		$meta = apply_filters( "add_signup_meta", $meta );
 
-	groups_update_groupmeta( $group_id, 'groupblog_public', $public);
-	groups_update_groupmeta( $group_id, 'groupblog_title', $blog_title);
-	groups_update_groupmeta( $group_id, 'groupblog_path', $path);
+		$groupblog_blog_id = wpmu_create_blog( $domain, $path, $blog_title, $current_user->id, $meta, $wpdb->siteid );
+	}
 	
 	$errors = $filtered_results['errors'];
 
