@@ -3,7 +3,7 @@ function bp_groupblog_options_nav() {
   global $bp;
   ?>
   
-	  <li id="home-personal-li"<?php if ( is_front_page() ) : ?> class="current selected"<?php endif; ?>>
+	  <li id="home-personal-li">
 			<a id="home" href="<?php bp_group_permalink() ?>"><?php _e( 'Home', 'groupblog' ); ?></a>
 		</li>
 
@@ -16,7 +16,7 @@ function bp_groupblog_options_nav() {
 		<?php if ( bp_group_is_visible() ) : ?>	
 				
 			<?php if ( bp_groupblog_is_blog_enabled ( bp_get_group_id() ) ) : ?>
-				<li id="<?php echo BP_GROUPBLOG_SLUG; ?>-personal-li"<?php if ( !is_front_page() ) : ?> class="current selected"<?php endif; ?>>
+				<li id="<?php echo BP_GROUPBLOG_SLUG; ?>-personal-li" class="current selected">
 					<a id="<?php echo BP_GROUPBLOG_SLUG; ?>" href="<?php bp_group_permalink() ?>blog/"><?php _e( 'Blog', 'groupblog' ); ?></a>
 				</li>
 		  <?php endif; ?>
