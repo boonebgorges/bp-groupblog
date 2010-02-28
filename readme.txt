@@ -64,6 +64,10 @@ Thanks to Boone for coming up with a solid solution to add users to the groupblo
 
 == Changelog == 
 
+= 1.4.2 =
+* Changed group template behavior and structure
+* Added admin option to redirect to Blog Home within the Group
+
 = 1.4.1 =
 * Groupblog were not created for existing groups, now fixed
 * Fixing the issue above also solved main blog posts within groups

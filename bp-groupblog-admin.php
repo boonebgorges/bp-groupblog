@@ -87,8 +87,7 @@ function bp_groupblog_update_defaults() {
 	else
 		$newoptions['delete_blogroll_links'] = 0;
 
-	// groupblog redirect options
-	$newoptions['redirecthome'] = ($_POST['bp_groupblog_redirect_home'] == 1) ? 1 : 0;
+	// groupblog redirect option
 	$newoptions['redirectblog'] = ($_POST['bp_groupblog_redirect_blog'] == 1) ? 1 : 0;
 		
 	// override the site option
@@ -198,6 +197,21 @@ function bp_groupblog_management_page() {
 	    
 			<br />
 			
+			<h3><?php _e( 'Redirect Option', 'groupblog' ) ?></h3>
+			
+			<div><?php _e( 'This setting is usefull in combination with the "BuddyPress Group Blog" theme.' ) ?></div>
+			<table class="form-table">
+				<tbody>
+				<tr> 
+					<th><?php _e( 'Blog Redirect:' ) ?></th> 
+					<td>	
+						<label><input name="bp_groupblog_redirect_blog" id="bp_groupblog_redirect_blog"  value="1" type="checkbox" <?php if ($opt['redirectblog']== 1) echo 'checked="checked"'; ?>> <?php _e( 'Redirect to Blog Front/Posts Page' ) ?></label><br /><?php _e( 'When checked the <b>Blog tab</b> will link to the home address of the group blog, giving you deeper integration with the blog. Leaving it unchecked will load the plugin template file instead.' ) ?>
+					</td> 
+				</tr> 
+			</tbody></table>	
+	    
+			<br />
+			
 			<h3><?php _e( 'Validation Settings', 'groupblog' ) ?></h3>
 
 			<div><?php _e( 'Change the default WordPress blog validation settings.' ) ?></div>
@@ -230,7 +244,7 @@ function bp_groupblog_management_page() {
 				<tr> 
 					<th><?php _e( 'Minimum Length:', 'groupblog' ) ?></th> 
 					<td>	
-						<input name="bp_groupblog_minlength" style="width: 10%;" id="bp_groupblog_minlenth" value="<?php echo $opt['minlength'];?>" size="10" type="text" /><br /><?php _e( '(Default: 4)', 'groupblog' ) ?>
+						<input name="bp_groupblog_minlength" style="width: 10%;" id="bp_groupblog_minlenth" value="<?php echo $opt['minlength'];?>" size="10" type="text" /><br /><?php _e( '(Default: 4 Characters)', 'groupblog' ) ?>
 					</td> 
 				</tr> 
 			</tbody></table>		
@@ -276,26 +290,7 @@ function bp_groupblog_management_page() {
 					</td>
 				</tr>
 			</table>
-<!--
-			<br />
-			
-			<h3><?php //_e( 'Redirect Options', 'groupblog' ) ?></h3>
-			<table class="form-table">
-				<tbody>
-				<tr> 
-					<th><?php //_e( 'Home Redirect:' ) ?></th> 
-					<td>	
-						<label><input name="bp_groupblog_redirect_home" id="bp_groupblog_redirect_home"  value="1" type="checkbox" <?php //if ($opt['redirecthome']== 1) echo 'checked="checked"'; ?>> <?php //_e( 'Redirect to Blog Front Page' ) ?></label><br /><?php //_e( 'By default the Group will display the original Group Home page. By checking this option the Group will redirect to the "Front page" as set in the "Reading Settins". This is especailly usefull when you use the BuddyPress Group Blog theme as it mimmicks the group home page, but includes frontend blog posting. (Implemented in the near future.)' ) ?>
-					</td> 
-				</tr>
-				<tr> 
-					<th><?php //_e( 'Blog Redirect:' ) ?></th> 
-					<td>	
-						<label><input name="bp_groupblog_redirect_blog" id="bp_groupblog_redirect_blog"  value="1" type="checkbox" <?php //if ($opt['redirectblog']== 1) echo 'checked="checked"'; ?>> <?php //_e( 'Redirect to Blog Posts Page' ) ?></label><br /><?php //_e( 'Set the behavior of the Blog link. By default it will fetch the group blog pages and latest posts within the group structure. By checking this option the Blog link will redirect to the "Posts page" as set in the "Reading Settins". This is especailly usefull if you wish the Blog link to load a blog template rather than a group template.)' ) ?>
-					</td> 
-				</tr> 
-			</tbody></table>	
--->				    
+				    
 	    <p class="submit">  
 	    	<input type="hidden" name="action" value="update" />
 	      <input type="submit" name="Submit" value="<?php _e( 'Save Changes', 'groupblog' ) ?>" />
@@ -326,7 +321,6 @@ function bp_groupblog_setup() {
 		'allowunderscores' => 0,
 		'allownumeric' => 0,
 		'minlength' => 4,
-		'redirecthome' => 0,
 		'redirectblog' => 0
 	);
  	// Add a site option so that we'll know set up ran

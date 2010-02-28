@@ -4,7 +4,7 @@ Plugin Name: BP Groupblog
 Plugin URI: http://wordpress.org/extend/plugins/search.php?q=buddypress+groupblog
 Description: Automates and links WPMU blogs groups controlled by the group creator.
 Author: Rodney Blevins & Marius Ooms
-Version: 1.4.1
+Version: 1.4.2
 License: (Groupblog: GNU General Public License 2.0 (GPL) http://www.gnu.org/licenses/gpl.html)
 Site Wide Only: true
 */
@@ -20,7 +20,7 @@ if ( !function_exists( 'bp_core_install' ) ) {
 /*******************************************************************/
 
 define ( 'BP_GROUPBLOG_IS_INSTALLED', 1 );
-define ( 'BP_GROUPBLOG_VERSION', '1.4.1' );
+define ( 'BP_GROUPBLOG_VERSION', '1.4.2' );
 
 // Define default roles
 if ( !defined( 'BP_GROUPBLOG_DEFAULT_ADMIN_ROLE' ) )
@@ -631,6 +631,8 @@ function bp_groupblog_signup_blog($blogname = '', $blog_title = '', $errors = ''
 		</div>
 		
 		<?php bp_groupblog_show_blog_form($blogname, $blog_title, $errors); ?>
+		
+		<br />
 						
 		<div id="groupblog-member-options">
 		
@@ -690,6 +692,8 @@ function bp_groupblog_signup_blog($blogname = '', $blog_title = '', $errors = ''
 			
 		</div>
 
+		<br />
+
 		<?php if ( !$groupblog_create_screen ) { ?>
 		<p>
 			<input id="save" type="submit" name="save" class="submit" value="<?php _e('Save Changes &raquo;', 'groupblog') ?>"/>
@@ -742,7 +746,8 @@ function bp_groupblog_validate_blog_signup() {
 	}
 
 	$public = (int) $_POST['blog_public'];
-
+	
+	
 	if ( $bp->action_variables[0] == 'step' ) {
 		groups_update_groupmeta( $group_id, 'groupblog_public', $public);
 		groups_update_groupmeta( $group_id, 'groupblog_title', $blog_title);
@@ -757,6 +762,7 @@ function bp_groupblog_validate_blog_signup() {
 	$errors = $filtered_results['errors'];
 
 	return true;
+	
 }
 
 function bp_groupblog_create_blog( $group_id ) {
@@ -791,6 +797,7 @@ add_action( 'groups_group_create_complete', 'bp_groupblog_create_blog' );
  *
  * Redirect the group home page to the blog front page or else load a template file.
  */
+/*
 function groupblog_screen_home() {
 	global $bp;
 	
@@ -805,11 +812,12 @@ function groupblog_screen_home() {
 	}
 }
 add_action( 'plugins_loaded', 'groupblog_screen_home' );
+*/
 
 /**
  * groupblog_screen_blog()
  *
- * Redirect the group blog page to the blog posts page or else load a template file.
+ * Redirect the group blog page to the blog front/posts page or else load a template file.
  */
 function groupblog_screen_blog() {
 	global $bp, $wp;
@@ -820,7 +828,7 @@ function groupblog_screen_blog() {
 		
 		if ( $checks['redirectblog'] == '1' ) {
 			$blog_details = get_blog_details( get_groupblog_blog_id(), true );
-			bp_core_redirect( $blog_details->siteurl . '/blog/' );
+			bp_core_redirect( $blog_details->siteurl );
 		} 
 		else {
 			add_action( 'bp_template_content', 'groupblog_screen_blog_content' );
