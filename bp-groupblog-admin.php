@@ -3,9 +3,11 @@
 /*** Wordpress Groupblog Admin Settings ********************************/
 /**
  * Acknowledgement:
- * Deanna Schneider's cets_blog_defaults plugin was a great help
- * in developing this feature for bp-groupblog. Her plugin can be
- * found at http://wpmudev.org/project/New-Blog-Defaults.
+ * Thanks goes out to Deanna Scheider!
+ * Deanna Schneider's plugins were a great help
+ * in developing these features for bp-groupblog. 
+ * http://deannaschneider.wordpress.com/
+ * http://wordpress.org/extend/plugins/profile/deannas
  */
 function bp_groupblog_blog_defaults( $blog_id ) {
 	global $bp, $wp_rewrite;
@@ -205,7 +207,7 @@ function bp_groupblog_management_page() {
 				<tr> 
 					<th><?php _e( 'Blog Redirect:' ) ?></th> 
 					<td>	
-						<label><input name="bp_groupblog_redirect_blog" id="bp_groupblog_redirect_blog"  value="1" type="checkbox" <?php if ($opt['redirectblog']== 1) echo 'checked="checked"'; ?>> <?php _e( 'Redirect to Blog Front/Posts Page' ) ?></label><br /><?php _e( 'When checked the <b>Blog tab</b> will link to the home address of the group blog. Leaving it unchecked will load the plugin template file instead.' ) ?>
+						<label><input name="bp_groupblog_redirect_blog" id="bp_groupblog_redirect_blog"  value="1" type="checkbox" <?php if ($opt['redirectblog']== 1) echo 'checked="checked"'; ?>> <?php _e( 'Redirect to Blog Front/Posts Page' ) ?></label><br /><?php _e( 'When checked the <b>Blog tab</b> will link to the home address of the group blog, giving you deeper integration with the blog. Leaving it unchecked will load the plugin template file instead.' ) ?>
 					</td> 
 				</tr> 
 			</tbody></table>	
@@ -295,7 +297,18 @@ function bp_groupblog_management_page() {
 	    	<input type="hidden" name="action" value="update" />
 	      <input type="submit" name="Submit" value="<?php _e( 'Save Changes', 'groupblog' ) ?>" />
 	    </p>
-	    
+
+			<br />
+
+			<table class="form-table">
+				<tr>
+	        <th><strong><?php _e( 'Acknowledgement', 'groupblog' ) ?></strong></th>
+	        <td>
+	        	<?php _e( 'Thanks goes out to <a href="http://deannaschneider.wordpress.com/">Deanna Scheinder</a> for her <a href="http://wordpress.org/extend/plugins/profile/deannas">plugins</a> which contributed much (if not all) the settings code.', 'groupblog' ) ?>
+	        </td>
+				</tr>
+			</table>
+				    
  		</form>
  		         
 	</div>
