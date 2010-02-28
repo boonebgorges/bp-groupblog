@@ -1,27 +1,33 @@
-<?php do_action( 'bp_before_group_blog_content' ) ?>
+<?php
+/**
+ * This is the plugin template that is loaded when visiting the 'blog tab' within the group.
+ * To modify you can either use the provided hooks. You may also copy the whole groupblog over
+ * to your active theme and completely re-theme the blog template.
+ *
+ * Includes: inc/pages.php, inc/posts.php, inc/activity.php
+ */
+?>
+
+<?php do_action( 'bp_before_group_blog_template' ) ?>
 
 	<?php if ( bp_group_is_visible() && bp_groupblog_is_blog_enabled ( bp_get_group_id() ) ) : ?>
 
 		<?php switch_to_blog( get_groupblog_blog_id() ); ?>			  
+
+		<?php do_action( 'bp_before_group_blog_content' ) ?>
+
+		<?php /********************* Start your custom content *********************/ ?>
 	
-		<?php 
-			if ( file_exists( locate_template( array( 'groupblog/pages.php' ) ) ) )
-    		locate_template( array( 'groupblog/pages.php' ), true );
-  		else
-    		load_template( WP_PLUGIN_DIR . '/bp-groupblog/groupblog/pages.php' ); 
-    		
-			if ( file_exists( locate_template( array( 'groupblog/posts.php' ) ) ) )
-    		locate_template( array( 'groupblog/posts.php' ), true );
-  		else
-    		load_template( WP_PLUGIN_DIR . '/bp-groupblog/groupblog/posts.php' );
-    		
-    	restore_current_blog();
+		<?php /* Uncomment to disable */ include( 'inc/pages.php' ); ?>
+    <?php /* Uncomment to disable */ include( 'inc/posts.php' ); ?>		
+
+		<?php /********************* End your custom content *********************/ ?>
+
+		<?php do_action( 'bp_after_group_blog_content' ) ?>
+
+    <?php	restore_current_blog(); ?>
     	
- 			if ( file_exists( locate_template( array( 'groupblog/activity.php' ) ) ) )
-    		locate_template( array( 'groupblog/activity.php' ), true );
-  		else
-    		load_template( WP_PLUGIN_DIR . '/bp-groupblog/groupblog/activity.php' );   	
-    ?>
+    <?php /* Uncomment to disable */ include( 'inc/activity.php' ); ?>
 
 	<?php elseif ( !bp_group_is_visible() ) : ?>
 		<?php /* The group is not visible, show the status message */ ?>
@@ -36,4 +42,4 @@
 									
 	<?php endif;?>
 			
-<?php do_action( 'bp_after_group_blog_content' ) ?>			
+<?php do_action( 'bp_after_group_blog_template' ) ?>			
