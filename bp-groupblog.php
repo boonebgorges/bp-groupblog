@@ -551,22 +551,22 @@ function bp_groupblog_validate_blog_form() {
 						if( $result['blogname'] != $maybe[0] ) {
 							
 							//still fails, so add an error to the object
-							$newerrors->add('blogname', __("Only lowercase letters and numbers allowed"));
+							$newerrors->add('blogname', __("Only lowercase letters and numbers allowed", 'groupblog'));
 													
 						}
 						continue;
 					case 'Blog name must be at least 4 characters':
 						if( strlen( $result['blogname'] ) < $checks[minlength] && !is_site_admin() )
-						$newerrors->add('blogname',  __("Blog name must be at least " . $checks[minlength] . " characters"));
+						$newerrors->add('blogname',  __("Blog name must be at least " . $checks[minlength] . " characters", 'groupblog'));
 						continue;
 					case "Sorry, blog names may not contain the character '_'!": 
 						if($checks['allowunderscores']!= 1) {
-							$newerrors->add('blogname', __("Sorry, blog names may not contain the character '_'!"));
+							$newerrors->add('blogname', __("Sorry, blog names may not contain the character '_'!", 'groupblog'));
 						}
 						continue;
 					case 'Sorry, blog names must have letters too!':
 						if($checks['allownumeric'] != 1){
-							$newerrors->add('blogname', __("Sorry, blog names must have letters too!"));
+							$newerrors->add('blogname', __("Sorry, blog names must have letters too!", 'groupblog'));
 						}
 						continue;	
 					default:

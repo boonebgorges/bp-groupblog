@@ -201,13 +201,13 @@ function bp_groupblog_management_page() {
 			
 			<h3><?php _e( 'Redirect Option', 'groupblog' ) ?></h3>
 			
-			<div><?php _e( 'This setting is usefull in combination with the "BuddyPress Group Blog" theme.' ) ?></div>
+			<div><?php _e( 'This setting is useful in combination with the "BuddyPress Group Blog" theme.', 'groupblog' ) ?></div>
 			<table class="form-table">
 				<tbody>
 				<tr> 
-					<th><?php _e( 'Blog Redirect:' ) ?></th> 
+					<th><?php _e( 'Blog Redirect:', 'groupblog' ) ?></th> 
 					<td>	
-						<label><input name="bp_groupblog_redirect_blog" id="bp_groupblog_redirect_blog"  value="1" type="checkbox" <?php if ($opt['redirectblog']== 1) echo 'checked="checked"'; ?>> <?php _e( 'Redirect to Blog Front/Posts Page' ) ?></label><br /><?php _e( 'When checked the <b>Blog tab</b> will link to the home address of the group blog. Leaving it unchecked will load the plugin template file instead.' ) ?>
+						<label><input name="bp_groupblog_redirect_blog" id="bp_groupblog_redirect_blog"  value="1" type="checkbox" <?php if ($opt['redirectblog']== 1) echo 'checked="checked"'; ?>> <?php _e( 'Redirect to Blog Front/Posts Page', 'groupblog' ) ?></label><br /><?php _e( 'When checked the <b>Blog tab</b> will link to the home address of the group blog. Leaving it unchecked will load the plugin template file instead.', 'groupblog' ) ?>
 					</td> 
 				</tr> 
 			</tbody></table>	
@@ -216,7 +216,7 @@ function bp_groupblog_management_page() {
 			
 			<h3><?php _e( 'Validation Settings', 'groupblog' ) ?></h3>
 
-			<div><?php _e( 'Change the default WordPress blog validation settings.' ) ?></div>
+			<div><?php _e( 'Change the default WordPress blog validation settings.', 'groupblog' ) ?></div>
 			<table class="form-table">
 				<tbody>
 				<tr>
