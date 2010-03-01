@@ -55,6 +55,22 @@ function bp_groupblog_blog_defaults( $blog_id ) {
 		 	wp_delete_link( 1 ); //delete Wordpress.com blogroll link
     	wp_delete_link( 2 ); //delete Wordpress.org blogroll link
 		}
+		if ( $options['redirectblog'] == 2 ) {
+			$blog_page = array(
+			  'comment_status' => 'closed', // 'closed' means no comments.
+			  'ping_status' => 'closed', // 'closed' means pingbacks or trackbacks turned off
+			  'post_status' => 'publish', //Set the status of the new post. 
+			  'post_name' => $options['pageslug'], // The name (slug) for your post
+			  'post_title' => $options['pagetitle'], //The title of your post.
+			  'post_type' => 'page', //Sometimes you want to post a page.
+			  'post_content' => __( '<p><strong>This page has been created automatically by the Group Blog plugin.</strong></p><p>Please contact the site admin if you see this message instead of your blog posts. Possible solution: please advise your site admin to create the <a href="http://codex.wordpress.org/Pages#Creating_Your_Own_Page_Templates">page template</a> needed for the group blog plugin.<p>', 'groupblog' ) //The full text of the post.
+
+			);
+			$blog_page_id = wp_insert_post( $blog_page );
+			
+			if ( $blog_page_id )
+				add_post_meta($blog_page_id, '_wp_page_template', 'blog.php');
+		}
 		
 	}
 	
@@ -90,7 +106,48 @@ function bp_groupblog_update_defaults() {
 		$newoptions['delete_blogroll_links'] = 0;
 
 	// groupblog redirect option
-	$newoptions['redirectblog'] = ($_POST['bp_groupblog_redirect_blog'] == 1) ? 1 : 0;
+	$newoptions['redirectblog'] = $_POST['bp_groupblog_redirect_blog'];
+	$newoptions['pagetitle'] = (isset($_POST['bp_groupblog_page_title'])) ?  $_POST['bp_groupblog_page_title'] : 'Blog';
+	$newoptions['pageslug'] = (isset($_POST['bp_groupblog_page_title'])) ?  sanitize_title($_POST['bp_groupblog_page_title']) : '';
+	if ( ($newoptions['redirectblog'] == 2) && isset($_POST['bp_groupblog_intialize_redirect']) ) {
+		
+		echo '<div id="message" class="updated fade">';
+		echo '<p><strong>The following blogs were updated:</strong></p>';
+			
+			if ( bp_has_groups( ) ) : while ( bp_groups() ) : bp_the_group();
+				if ( $blog_id = get_groupblog_blog_id( bp_get_group_id() ) ) {
+					switch_to_blog ( $blog_id );
+					query_posts('pagename=' . $newoptions['pageslug']);
+					
+					if (have_posts()) {
+						echo '<p class="error">Sorry, your specified page name already exists in the system. Please pick a different name and try again.</p>';
+						break;
+					} else {
+						$blog_page = array(
+						  'comment_status' => 'closed', // 'closed' means no comments.
+						  'ping_status' => 'closed', // 'closed' means pingbacks or trackbacks turned off
+						  'post_status' => 'publish', //Set the status of the new post. 
+						  'post_name' => $newoptions['pageslug'], // The name (slug) for your post
+						  'post_title' => $newoptions['pagetitle'], //The title of your post.
+						  'post_type' => 'page', //Sometimes you want to post a page.
+						  'post_content' => __( '<p><strong>This page has been created automatically by the Group Blog plugin.</strong></p><p>Please contact the site admin if you see this message instead of your blog posts. Possible solution: please advise your site admin to create the <a href="http://codex.wordpress.org/Pages#Creating_Your_Own_Page_Templates">page template</a> needed for the group blog plugin.<p>', 'groupblog' ) //The full text of the post.	
+						);
+						$blog_page_id = wp_insert_post( $blog_page );
+						
+						if ( $blog_page_id ) {
+							add_post_meta($blog_page_id, '_wp_page_template', 'blog.php');					  
+						  echo '<p>' . get_bloginfo('name') . '</p>';
+						}
+					}
+				} 
+				else {
+					echo '<p>Yeehaw! No Blogs needed updating.</p>';
+				}
+			endwhile; endif;
+
+		echo '</div>';
+						  		
+	}
 		
 	// override the site option
 	update_site_option ('bp_groupblog_blog_defaults_options', $newoptions); 
@@ -199,61 +256,39 @@ function bp_groupblog_management_page() {
 	    
 			<br />
 			
-			<h3><?php _e( 'Redirect Option', 'groupblog' ) ?></h3>
+			<h3><?php _e( 'Default Landing Page', 'groupblog' ) ?></h3>
 			
-			<div><?php _e( 'This setting is useful in combination with the "BuddyPress Group Blog" theme.', 'groupblog' ) ?></div>
 			<table class="form-table">
 				<tbody>
 				<tr> 
-					<th><?php _e( 'Blog Redirect:', 'groupblog' ) ?></th> 
+					<th><?php _e( 'Redirect Enabled:', 'groupblog' ) ?></th> 
 					<td>	
-						<label><input name="bp_groupblog_redirect_blog" id="bp_groupblog_redirect_blog"  value="1" type="checkbox" <?php if ($opt['redirectblog']== 1) echo 'checked="checked"'; ?>> <?php _e( 'Redirect to Blog Front/Posts Page', 'groupblog' ) ?></label><br /><?php _e( 'When checked the <b>Blog tab</b> will link to the home address of the group blog. Leaving it unchecked will load the plugin template file instead.', 'groupblog' ) ?>
-					</td> 
-				</tr> 
-			</tbody></table>	
-	    
-			<br />
-			
-			<h3><?php _e( 'Validation Settings', 'groupblog' ) ?></h3>
-
-			<div><?php _e( 'Change the default WordPress blog validation settings.', 'groupblog' ) ?></div>
-			<table class="form-table">
-				<tbody>
-				<tr>
-					<th><?php _e( 'Allow:', 'groupblog' ) ?></th>
-					<td>
-						<label for="bp_groupblog_allowdashes">
-		       		<input name="bp_groupblog_allowdashes" type="checkbox" id="bp_groupblog_allowdashes" value="1" <?php if ($opt['allowdashes']== 1) echo 'checked="checked"'; ?> /> <?php _e( 'Dashes', 'groupblog' ) ?> <?php _e( '(Default: Not Allowed)', 'groupblog' ) ?>
-		       	</label>
-					</td>
-				</tr>
-		    <tr>
-		    	<th></th>
-					<td>
-						<label for="bp_groupblog_allowunderscores">
-			        <input name="bp_groupblog_allowunderscores" type="checkbox" id="bp_groupblog_allowunderscores" value="1" <?php if ($opt['allowunderscores']== 1) echo 'checked="checked"'; ?> /> <?php _e( 'Underscores', 'groupblog' ) ?> <?php _e( '(Default: Not Allowed)', 'groupblog' ) ?>
-			       </label>
+						<label><input name="bp_groupblog_redirect_blog" id="bp_groupblog_redirect_blog"  value="0" type="radio" <?php if ($opt['redirectblog']== 0) echo 'checked="checked"'; ?> onClick="jQuery('.hide').hide()"> <?php _e( 'Disabled', 'groupblog' ) ?></label>
 					</td>
 				</tr>
 				<tr>
 					<th></th>
 					<td>
-						<label for="bp_groupblog_allownumeric">
-							<input name="bp_groupblog_allownumeric" type="checkbox" id="bp_groupblog_allownumeric" value="1" <?php if ($opt['allownumeric']== 1) echo 'checked="checked"'; ?> /> <?php _e( 'All Numeric Names', 'groupblog' ) ?> <?php _e( '(Default: Not Allowed)', 'groupblog' ) ?>
-						</label>
+						<label><input name="bp_groupblog_redirect_blog" id="bp_groupblog_redirect_blog"  value="1" type="radio" <?php if ($opt['redirectblog']== 1) echo 'checked="checked"'; ?> onClick="jQuery('.hide').hide()"> <?php _e( 'Home Page', 'groupblog' ) ?></label>
 					</td>
-				</tr>
-				<tr> 
-					<th><?php _e( 'Minimum Length:', 'groupblog' ) ?></th> 
-					<td>	
-						<input name="bp_groupblog_minlength" style="width: 10%;" id="bp_groupblog_minlenth" value="<?php echo $opt['minlength'];?>" size="10" type="text" /><br /><?php _e( '(Default: 4 Characters)', 'groupblog' ) ?>
+				<tr>
+					<th></th>
+					<td>
+						<label><input name="bp_groupblog_redirect_blog" id="bp_groupblog_redirect_blog"  value="2" type="radio" <?php if ($opt['redirectblog']== 2) echo 'checked="checked"'; ?> onClick="jQuery('.toggle').show()"> <?php _e( 'Template Page, named: ', 'groupblog' ) ?></label> <input name="bp_groupblog_page_title" style="width: 10%;" id="bp_groupblog_page_title" value="<?php echo $opt['pagetitle'];?>" size="10" type="text" onFocus="jQuery('.toggle-init').show()" /><div class="hide toggle" style="display:none;"><?php _e( 'The "Template Page" option will create a page on newly created group blogs with the name specified above and links to a template file from your theme. Don\'t worry about the name you choose, we\'ll make sure your page finds it way to the template file. Both themes packaged with this plugin already include this template. With this option the groups "Blog" tab will redirect to the page created above. This results in deeper blog integration, for example in combination with the P2 Group Blog theme it will enable posting from the group blog page. <strong>Important:</strong> If you use your own default group blog theme, you should <a href="http://codex.wordpress.org/Pages#Creating_Your_Own_Page_Templates">create this template file manually</a>.', 'groupblog' ) ?></div>
 					</td> 
-				</tr> 
-			</tbody></table>		
+				</tr>
+				<tr class="hide toggle-init" style="display:none;"> 
+					<th><?php _e( 'Initialize Existing Blogs:', 'groupblog' ) ?></th> 
+					<td>	
+						<label><input name="bp_groupblog_intialize_redirect" id="bp_groupblog_intialize_redirect"  value="1" type="checkbox"> <?php _e( 'Also create missing landing pages', 'groupblog' ) ?></label><div><?php _e( 'The "Template Page" option only affects newly created blogs, therefore we need to create the, potentially, missing landing pages for group blogs already existing. Previously created landing pages will be flushed from the system to keep things nice and tidy.', 'groupblog' ) ?></div>
+					</td> 
+				</tr>
+			</tbody></table>			
 
 			<br />
 			
-      <h3><?php _e( 'Blog Defaults', 'groupblog' ) ?></h3>
+      <h3><?php _e( 'Default Blog Settings', 'groupblog' ) ?></h3>
+      
 			<table class="form-table">
 				<tr valign="top">
 	        <th><?php _e( 'Default Post Category:', 'groupblog' ) ?></th>
@@ -292,7 +327,48 @@ function bp_groupblog_management_page() {
 					</td>
 				</tr>
 			</table>
-				    
+
+			<br />
+			
+			<h3><?php _e( 'Validation Settings', 'groupblog' ) ?></h3>
+
+			<div><?php _e( 'Change the default WordPress blog validation settings.', 'groupblog' ) ?></div>
+			<table class="form-table">
+				<tbody>
+				<tr>
+					<th><?php _e( 'Allow:', 'groupblog' ) ?></th>
+					<td>
+						<label for="bp_groupblog_allowdashes">
+		       		<input name="bp_groupblog_allowdashes" type="checkbox" id="bp_groupblog_allowdashes" value="1" <?php if ($opt['allowdashes']== 1) echo 'checked="checked"'; ?> /> <?php _e( 'Dashes', 'groupblog' ) ?> <?php _e( '(Default: Not Allowed)', 'groupblog' ) ?>
+		       	</label>
+					</td>
+				</tr>
+		    <tr>
+		    	<th></th>
+					<td>
+						<label for="bp_groupblog_allowunderscores">
+			        <input name="bp_groupblog_allowunderscores" type="checkbox" id="bp_groupblog_allowunderscores" value="1" <?php if ($opt['allowunderscores']== 1) echo 'checked="checked"'; ?> /> <?php _e( 'Underscores', 'groupblog' ) ?> <?php _e( '(Default: Not Allowed)', 'groupblog' ) ?>
+			       </label>
+					</td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>
+						<label for="bp_groupblog_allownumeric">
+							<input name="bp_groupblog_allownumeric" type="checkbox" id="bp_groupblog_allownumeric" value="1" <?php if ($opt['allownumeric']== 1) echo 'checked="checked"'; ?> /> <?php _e( 'All Numeric Names', 'groupblog' ) ?> <?php _e( '(Default: Not Allowed)', 'groupblog' ) ?>
+						</label>
+					</td>
+				</tr>
+				<tr> 
+					<th><?php _e( 'Minimum Length:', 'groupblog' ) ?></th> 
+					<td>	
+						<input name="bp_groupblog_minlength" style="width: 10%;" id="bp_groupblog_minlenth" value="<?php echo $opt['minlength'];?>" size="10" type="text" /> <?php _e( '(Default: 4 Characters)', 'groupblog' ) ?>
+					</td> 
+				</tr> 
+			</tbody></table>
+			
+			<br />
+							    
 	    <p class="submit">  
 	    	<input type="hidden" name="action" value="update" />
 	      <input type="submit" name="Submit" value="<?php _e( 'Save Changes', 'groupblog' ) ?>" />
@@ -304,7 +380,7 @@ function bp_groupblog_management_page() {
 				<tr>
 	        <th><strong><?php _e( 'Acknowledgement', 'groupblog' ) ?></strong></th>
 	        <td>
-	        	<?php _e( 'Thanks goes out to <a href="http://deannaschneider.wordpress.com/">Deanna Scheinder</a> for her <a href="http://wordpress.org/extend/plugins/profile/deannas">plugins</a> which contributed much (if not all) the settings code.', 'groupblog' ) ?>
+	        	<?php _e( 'Thanks goes out to <a href="http://deannaschneider.wordpress.com/">Deanna Scheinder</a> for her <a href="http://wordpress.org/extend/plugins/profile/deannas">plugins</a> which contributed much of the settings code.', 'groupblog' ) ?>
 	        </td>
 				</tr>
 			</table>
@@ -334,7 +410,9 @@ function bp_groupblog_setup() {
 		'allowunderscores' => 0,
 		'allownumeric' => 0,
 		'minlength' => 4,
-		'redirectblog' => 0
+		'redirectblog' => 0,
+		'pagetitle' => 'Blog',
+		'intialize_redirect' => 0
 	);
  	// Add a site option so that we'll know set up ran
 	add_site_option( 'bp_groupblog_blog_defaults_setup', 1 );

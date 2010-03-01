@@ -798,11 +798,15 @@ function groupblog_screen_blog() {
 	if ( $bp->current_component == $bp->groups->slug && 'blog' == $bp->current_action ) {
 
 		$checks = get_site_option('bp_groupblog_blog_defaults_options');
-		
-		if ( $checks['redirectblog'] == '1' ) {
+
+		if ( $checks['redirectblog'] == 1 ) {
 			$blog_details = get_blog_details( get_groupblog_blog_id(), true );
 			bp_core_redirect( $blog_details->siteurl );
 		} 
+		else if ( $checks['redirectblog'] == 2 ) {
+			$blog_details = get_blog_details( get_groupblog_blog_id(), true );
+			bp_core_redirect( $blog_details->siteurl . '/' . $checks['pageslug'] . '/' );
+		}
 		else {
 			if ( file_exists( locate_template( array( 'groupblog/blog.php' ) ) ) ) {
 				bp_core_load_template( apply_filters( 'groupblog_screen_blog', 'groupblog/blog' ) );
