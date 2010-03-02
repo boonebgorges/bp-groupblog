@@ -78,6 +78,9 @@ function bp_groupblog_blog_defaults( $blog_id ) {
 }
 
 function bp_groupblog_update_defaults() {
+
+	// retrieve the old landing page slug so we know which pages to delete
+	$oldoptions = get_site_option('bp_groupblog_blog_defaults_options');
 	
 	// create an array to hold the chosen options
 	$newoptions = array();
@@ -112,38 +115,67 @@ function bp_groupblog_update_defaults() {
 	if ( ($newoptions['redirectblog'] == 2) && isset($_POST['bp_groupblog_intialize_redirect']) ) {
 		
 		echo '<div id="message" class="updated fade">';
-		echo '<p><strong>The following blogs were updated:</strong></p>';
+		echo '<p><strong>The following blogs were updated</strong></p>';
 			
+			$get_lost = 0;
+			$exists_in = array();
+			$updated_blogs = array();
 			if ( bp_has_groups( ) ) : while ( bp_groups() ) : bp_the_group();
 				if ( $blog_id = get_groupblog_blog_id( bp_get_group_id() ) ) {
 					switch_to_blog ( $blog_id );
 					query_posts('pagename=' . $newoptions['pageslug']);
 					
 					if (have_posts()) {
-						echo '<p class="error">Sorry, your specified page name already exists in the system. Please pick a different name and try again.</p>';
-						break;
+						$get_lost = 1;
+						$exists_in[] = get_bloginfo('name');
 					} else {
-						$blog_page = array(
-						  'comment_status' => 'closed', // 'closed' means no comments.
-						  'ping_status' => 'closed', // 'closed' means pingbacks or trackbacks turned off
-						  'post_status' => 'publish', //Set the status of the new post. 
-						  'post_name' => $newoptions['pageslug'], // The name (slug) for your post
-						  'post_title' => $newoptions['pagetitle'], //The title of your post.
-						  'post_type' => 'page', //Sometimes you want to post a page.
-						  'post_content' => __( '<p><strong>This page has been created automatically by the Group Blog plugin.</strong></p><p>Please contact the site admin if you see this message instead of your blog posts. Possible solution: please advise your site admin to create the <a href="http://codex.wordpress.org/Pages#Creating_Your_Own_Page_Templates">page template</a> needed for the group blog plugin.<p>', 'groupblog' ) //The full text of the post.	
-						);
-						$blog_page_id = wp_insert_post( $blog_page );
-						
-						if ( $blog_page_id ) {
-							add_post_meta($blog_page_id, '_wp_page_template', 'blog.php');					  
-						  echo '<p>' . get_bloginfo('name') . '</p>';
+						if ( !$get_lost ) {
+							$blog_page = array(
+							  'comment_status' => 'closed', // 'closed' means no comments.
+							  'ping_status' => 'closed', // 'closed' means pingbacks or trackbacks turned off
+							  'post_status' => 'publish', //Set the status of the new post. 
+							  'post_name' => $newoptions['pageslug'], // The name (slug) for your post
+							  'post_title' => $newoptions['pagetitle'], //The title of your post.
+							  'post_type' => 'page', //Sometimes you want to post a page.
+							  'post_content' => __( '<p><strong>This page has been created automatically by the Group Blog plugin.</strong></p><p>Please contact the site admin if you see this message instead of your blog posts. Possible solution: please advise your site admin to create the <a href="http://codex.wordpress.org/Pages#Creating_Your_Own_Page_Templates">page template</a> needed for the group blog plugin.<p>', 'groupblog' ) //The full text of the post.	
+							);
+							$blog_page_id = wp_insert_post( $blog_page );
+							
+							if ( $blog_page_id ) {
+								add_post_meta($blog_page_id, '_wp_page_template', 'blog.php');
+								// add a special meta key so if we have to clean it up later we know the difference between pages
+								// created by us and ones created by the user so we don't delete their pages.
+								add_post_meta($blog_page_id, 'created_by_groupblog_dont_change', '1');					  
+							  $updated_blogs[] = get_bloginfo('name');
+							}
 						}
+						
+						// find the page created previously and delete it, checking first to see if it was one we created or not
+						$cleanup = new WP_Query( 'pagename=' . $oldoptions['pageslug'] );
+						if ( $cleanup->have_posts() ) :	while ( $cleanup->have_posts() ) : $cleanup->the_post();
+							if ( get_post_meta( get_the_ID(), 'created_by_groupblog_dont_change' ) ) {
+								wp_delete_post( get_the_ID() );
+							}
+						endwhile; endif;
 					}
 				} 
 				else {
 					echo '<p>Yeehaw! No Blogs needed updating.</p>';
 				}
 			endwhile; endif;
+
+			if ( !$get_lost ) {
+				foreach ( $updated_blogs as $blog ) {
+					echo '<p>- ' . $blog . '</p>';
+				}
+			} else {
+				echo '<div class="error">';
+				echo '<p style="line-height: 16px;"><strong>Sorry, your specified page name already exists on the following blog(s):</strong></p>';
+				foreach ( $exists_in as $blog ) {
+					echo '<p>- ' . $blog . '</p>';
+				}
+				echo '<p></p><p><em>Please pick a different name and try again or continue with this name without initializing the existing blogs. Note that if you do continue, some group blogs could be missing the needed landing page.</em></p></div>';
+			}
 
 		echo '</div>';
 						  		
@@ -263,24 +295,24 @@ function bp_groupblog_management_page() {
 				<tr> 
 					<th><?php _e( 'Redirect Enabled:', 'groupblog' ) ?></th> 
 					<td>	
-						<label><input name="bp_groupblog_redirect_blog" id="bp_groupblog_redirect_blog"  value="0" type="radio" <?php if ($opt['redirectblog']== 0) echo 'checked="checked"'; ?> onClick="jQuery('.hide').hide()"> <?php _e( 'Disabled', 'groupblog' ) ?></label>
+						<label><input name="bp_groupblog_redirect_blog" id="bp_groupblog_redirect_blog"  value="0" type="radio" <?php if ($opt['redirectblog']== 0) echo 'checked="checked"'; ?> onClick="jQuery('.info').hide()"> <?php _e( 'Disabled', 'groupblog' ) ?></label>
 					</td>
 				</tr>
 				<tr>
 					<th></th>
 					<td>
-						<label><input name="bp_groupblog_redirect_blog" id="bp_groupblog_redirect_blog"  value="1" type="radio" <?php if ($opt['redirectblog']== 1) echo 'checked="checked"'; ?> onClick="jQuery('.hide').hide()"> <?php _e( 'Home Page', 'groupblog' ) ?></label>
+						<label><input name="bp_groupblog_redirect_blog" id="bp_groupblog_redirect_blog"  value="1" type="radio" <?php if ($opt['redirectblog']== 1) echo 'checked="checked"'; ?> onClick="jQuery('.info').hide()"> <?php _e( 'Home Page', 'groupblog' ) ?></label>
 					</td>
 				<tr>
 					<th></th>
 					<td>
-						<label><input name="bp_groupblog_redirect_blog" id="bp_groupblog_redirect_blog"  value="2" type="radio" <?php if ($opt['redirectblog']== 2) echo 'checked="checked"'; ?> onClick="jQuery('.toggle').show()"> <?php _e( 'Template Page, named: ', 'groupblog' ) ?></label> <input name="bp_groupblog_page_title" style="width: 10%;" id="bp_groupblog_page_title" value="<?php echo $opt['pagetitle'];?>" size="10" type="text" onFocus="jQuery('.toggle-init').show()" /><div class="hide toggle" style="display:none;"><?php _e( 'The "Template Page" option will create a page on newly created group blogs with the name specified above and links to a template file from your theme. Don\'t worry about the name you choose, we\'ll make sure your page finds it way to the template file. Both themes packaged with this plugin already include this template. With this option the groups "Blog" tab will redirect to the page created above. This results in deeper blog integration, for example in combination with the P2 Group Blog theme it will enable posting from the group blog page. <strong>Important:</strong> If you use your own default group blog theme, you should <a href="http://codex.wordpress.org/Pages#Creating_Your_Own_Page_Templates">create this template file manually</a>.', 'groupblog' ) ?></div>
+						<label><input name="bp_groupblog_redirect_blog" id="bp_groupblog_redirect_blog"  value="2" type="radio" <?php if ($opt['redirectblog']== 2) echo 'checked="checked"'; ?> onClick="jQuery('.info').show()"> <?php _e( 'Template Page, named: ', 'groupblog' ) ?></label> <input name="bp_groupblog_page_title" style="width: 10%;" id="bp_groupblog_page_title" value="<?php echo $opt['pagetitle'];?>" size="10" type="text" onFocus="jQuery('.toggle-init').show().attr('checked', true)" /><div class="info toggle" style="display:none;"><?php _e( 'The "Template Page" option will create a page on newly created group blogs with the name specified above and links to a template file from your theme. Don\'t worry about the name you choose, we\'ll make sure your page finds it way to the template file. Both themes packaged with this plugin already include this template. With this option the groups "Blog" tab will redirect to the page created above. This results in deeper blog integration, for example in combination with the P2 Group Blog theme it will enable posting from the group blog page. <strong>Important:</strong> If you use your own default group blog theme, you should <a href="http://codex.wordpress.org/Pages#Creating_Your_Own_Page_Templates">create this template file manually</a>.', 'groupblog' ) ?></div>
 					</td> 
 				</tr>
-				<tr class="hide toggle-init" style="display:none;"> 
+				<tr class="info toggle toggle-init" style="display:none;"> 
 					<th><?php _e( 'Initialize Existing Blogs:', 'groupblog' ) ?></th> 
 					<td>	
-						<label><input name="bp_groupblog_intialize_redirect" id="bp_groupblog_intialize_redirect"  value="1" type="checkbox"> <?php _e( 'Also create missing landing pages', 'groupblog' ) ?></label><div><?php _e( 'The "Template Page" option only affects newly created blogs, therefore we need to create the, potentially, missing landing pages for group blogs already existing. Previously created landing pages will be flushed from the system to keep things nice and tidy.', 'groupblog' ) ?></div>
+						<label><input name="bp_groupblog_intialize_redirect" class="toggle-init" id="bp_groupblog_intialize_redirect"  value="1" type="checkbox"> <?php _e( 'Also create missing landing pages', 'groupblog' ) ?></label><div><?php _e( 'The "Template Page" option only affects newly created blogs, therefore we need to create the, potentially, missing landing pages for group blogs already existing. Previously created landing pages will be flushed from the system to keep things nice and tidy.', 'groupblog' ) ?></div>
 					</td> 
 				</tr>
 			</tbody></table>			
@@ -388,7 +420,7 @@ function bp_groupblog_management_page() {
  		</form>
  		         
 	</div>
-
+	
 <?php
 }
 
