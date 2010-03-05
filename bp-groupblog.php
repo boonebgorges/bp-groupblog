@@ -441,15 +441,17 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 
     <p><?php _e( 'Choose either one of your existing blogs or create a new one all together with the details displayed below.', 'groupblog' ); ?><br /><?php _e('Take care as you can only choose once.  Later you may still disable or enable the blog, but your choice is set.', 'groupblog' ); ?></p>
         
-		<p><input<?php if ( !bp_groupblog_is_blog_enabled( bp_get_group_id() ) ) { ?> disabled="true"<?php } ?> type="radio" value="no" name="groupblog-create-new" /><span>&nbsp;<?php _e( 'Use one of your own blogs:', 'groupblog' ); ?>&nbsp;</span>
+		<p><input<?php if ( !bp_groupblog_is_blog_enabled( bp_get_group_id() ) ) { ?> disabled="true"<?php } ?> type="radio" value="no" name="groupblog-create-new" /><span>&nbsp;<?php _e( 'Use one of your own available blogs:', 'groupblog' ); ?>&nbsp;</span>
 	    <select<?php if ( !bp_groupblog_is_blog_enabled( bp_get_group_id() ) ) { ?> disabled="true"<?php } ?> name="groupblog-blogid" id="groupblog-blogid">
 	      <option value="0"><?php _e( 'choose a blog', 'groupblog' ) ?></option>
 				  <?php 
 				  $user_blogs = get_blogs_of_user( get_current_user_id() );
 	        //print_r ($user_blogs);
-	          foreach ($user_blogs AS $user_blog) { ?>
-	            <option value="<?php echo $user_blog->userblog_id; ?>"><?php echo $user_blog->blogname; ?></option>
-	          <?php } ?>
+	          foreach ($user_blogs AS $user_blog) {
+		          if ( !get_groupblog_group_id( $user_blog->userblog_id ) ) { ?>
+		            <option value="<?php echo $user_blog->userblog_id; ?>"><?php echo $user_blog->blogname; ?></option>
+	          <?php }
+	          	} ?>
 	   	</select>
     </p>
     		
@@ -768,7 +770,7 @@ function bp_groupblog_validate_blog_signup() {
 function bp_groupblog_create_blog( $group_id ) {
 	global $wpdb, $domain;
 
-	if ( groups_get_groupmeta ( $group_id, 'groupblog_enable_blog' ) != 1 )
+	if ( ( groups_get_groupmeta ( $group_id, 'groupblog_enable_blog' ) != 1 ) || ( groups_get_groupmeta ( $group_id, 'groupblog_blog_id' ) != '' ) )
 		return;
 
 	$current_user = wp_get_current_user();
@@ -825,6 +827,22 @@ function groupblog_screen_blog_content() {
 	
 	load_template( WP_PLUGIN_DIR . '/bp-groupblog/bp-groupblog-blog.php' );
 }
+
+function bp_groupblog_delete_meta( $blog_id, $drop = false ) {
+
+	$group_id = get_groupblog_group_id( $blog_id );
+
+	groups_update_groupmeta ( $group_id, 'groupblog_enable_blog', '' );
+	groups_update_groupmeta ( $group_id, 'groupblog_blog_id', '' );
+	groups_update_groupmeta ( $group_id, 'groupblog_silent_add', '' );
+
+  groups_update_groupmeta ( $group_id, 'groupblog_default_admin_role', '' );
+	groups_update_groupmeta ( $group_id, 'groupblog_default_mod_role', '' );
+	groups_update_groupmeta ( $group_id, 'groupblog_default_member_role', '' );	
+		
+}
+
+add_action('delete_blog', 'bp_groupblog_delete_meta', 10, 1);
 
 /* Add a filter option to the filter select box on group activity pages */
 /*
