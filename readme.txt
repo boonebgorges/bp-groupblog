@@ -1,5 +1,5 @@
 === BuddyPress Groupblog ===
-Contributors: Rodney Blevins & Marius Ooms
+Contributors: mariusooms
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7374704
 Tags: buddypress,groups,blogs,content
 Requires at least: WPMU 2.9 / BP 1.2
