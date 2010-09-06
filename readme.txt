@@ -32,7 +32,27 @@ The BuddyPress Groupblog plugin extends the group functionality by enabling each
 * Allow the group admin to select one of his/her existing blogs.
 * A new ajax backend.
 
+**Roadmap:**
+
+* Allow the admin to let group admins choose the blog name, instead of following the group name.
+* Include an RSS icon for easy access to the Blog's RSS feed.
+
+== Installation ==
+
+1) unzip the bp-groupblog.zip file into `/wp-contents/plugins/bp-groupblog`
+
+2) move the `/themes/...` to your WP themes folder
+
+3) activate the plugin
+
+4) You are done!
+
+**NOTE: Please deactivate the plugin before running automatic upgrade or you will get a big fat 'Cannot redeclare' fatal error. Regardless, if you do activate while the plugin is active it will still work fine. It is just that nobody likes errors, even when they are not real.**
+
+== Other Notes ==
+
 **Known Issues:**
+
 * In order for Group Avatars to show on blogs please adjust the bp-core-avatars.php file. I realize this is a nono, but I don't see another way. Patches and ideas are welcome. For know adjust the last two functions for plugins/buddypress/bp-core/bp-core-avatars.php to the following:
 
 `
@@ -80,27 +100,6 @@ function bp_core_avatar_url() {
 	return apply_filters( 'bp_core_avatar_url', $upload_dir['baseurl'] );
 }
 `
-* As this version has a lot of changes, please use carefully and expect bugs. Test it out on a test install if neccassary.
-
-**Roadmap:**
-
-* Allow the admin to let group admins choose the blog name, instead of following the group name.
-* Include an RSS icon for easy access to the Blog's RSS feed.
-
-== Installation ==
-
-1) unzip the bp-groupblog.zip file into `/wp-contents/plugins/bp-groupblog`
-
-2) move the `/themes/...` to your WP themes folder
-
-3) activate the plugin
-
-4) You are done!
-
-**NOTE: Please deactivate the plugin before running automatic upgrade or you will get a big fat 'Cannot redeclare' fatal error. Regardless, if you do activate while the plugin is active it will still work fine. It is just that nobody likes errors, even when they are not real.**
-
-== Other Notes ==
-
 
 == Screenshots ==
 
