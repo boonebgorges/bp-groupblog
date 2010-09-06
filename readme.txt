@@ -14,6 +14,8 @@ The BuddyPress Groupblog plugin extends the group functionality by enabling each
 
 **Features:**
 
+* P2 integration and frontend posting.
+* Admin can set Template specific groupblogs.
 * Full blog theme integration. The included bp-groupblog theme mimics the group pages.
 * WP Admin option to set default blog for groups plus bonus options.
 * Automated blog registration at group creation stage.
@@ -28,6 +30,7 @@ The BuddyPress Groupblog plugin extends the group functionality by enabling each
 * Blog themes will have the ability to pull in group info and create a theme that could resemble the group exactly.
 * Leaving the group will downgrade the member role to 'subscriber'.
 * Allow the group admin to select one of his/her existing blogs.
+* A new ajax backend.
 
 **Known Issues:**
 * In order for Group Avatars to show on blogs please adjust the bp-core-avatars.php file. I realize this is a nono, but I don't see another way. Patches and ideas are welcome. For know adjust the last two functions for plugins/buddypress/bp-core/bp-core-avatars.php to the following:
