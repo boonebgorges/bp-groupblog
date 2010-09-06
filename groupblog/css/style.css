@@ -58,3 +58,7 @@ ul#groupblog-page-list li a:hover {
 #blog-latest {
 	padding: 5px 0;
 }
+
+div.entry {
+	margin: 0;
+}

@@ -1,10 +1,10 @@
 === BuddyPress Groupblog ===
-Contributors: reblevins, mariusooms
+Contributors: MariusOoms
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7374704
 Tags: buddypress,groups,blogs,content
 Requires at least: WPMU 2.9 / BP 1.2
 Tested up to: WP 3.0.1
-Stable tag: 1.4.4
+Stable tag: 1.4.5
 
 BuddyPress Groupblog extends the group functionality by enabling the group to have a single blog associated with it. Group members are automatically added to the blog and will have roles as set by the group admin.
 
@@ -30,32 +30,74 @@ The BuddyPress Groupblog plugin extends the group functionality by enabling each
 * Allow the group admin to select one of his/her existing blogs.
 
 **Known Issues:**
-* Group blog post do currently not show up in the group activity stream. Therefore as a short term solution we are including a custom activity loop on the blog page. This should be fixed in the future.
+* In order for Group Avatars to show on blogs please adjust the bp-core-avatars.php file. I realize this is a nono, but I don't see another way. Patches and ideas are welcome. For know adjust the last two functions for plugins/buddypress/bp-core/bp-core-avatars.php to the following:
+
+`
+/**
+ * bp_core_avatar_upload_path()
+ *
+ * Returns the absolute upload path for the WP installation
+ *
+ * @global object $current_blog Current blog information
+ * @uses wp_upload_dir To get upload directory info
+ * @return string Absolute path to WP upload directory
+ */
+function bp_core_avatar_upload_path() {
+	global $current_blog;
+
+	// Get upload directory information from current site
+	$upload_dir = wp_upload_dir();
+
+	// If multisite, and current blog does not match root blog, make adjustments
+	if ( bp_core_is_multisite() && BP_ROOT_BLOG != $current_blog->blog_id )
+		$upload_dir['basedir'] = WP_CONTENT_DIR . '/uploads/';
+
+	return apply_filters( 'bp_core_avatar_upload_path', $upload_dir['basedir'] );
+}
+
+/**
+ * bp_core_avatar_url()
+ *
+ * Returns the raw base URL for root site upload location
+ *
+ * @global object $current_blog Current blog information
+ * @uses wp_upload_dir To get upload directory info
+ * @return string Full URL to current upload location
+ */
+function bp_core_avatar_url() {
+	global $current_blog;
+
+	// Get upload directory information from current site
+	$upload_dir = wp_upload_dir();
+
+	// If multisite, and current blog does not match root blog, make adjustments
+	if ( bp_core_is_multisite() && BP_ROOT_BLOG != $current_blog->blog_id )
+		$upload_dir['baseurl'] = WP_CONTENT_URL . '/uploads';
+
+	return apply_filters( 'bp_core_avatar_url', $upload_dir['baseurl'] );
+}
+`
+* As this version has a lot of changes, please use carefully and expect bugs. Test it out on a test install if neccassary.
 
 **Roadmap:**
 
 * Allow the admin to let group admins choose the blog name, instead of following the group name.
-* Frontend posting from the blog home page.
-* Redirect options to integrate deeper with the blog.
 * Include an RSS icon for easy access to the Blog's RSS feed.
 
 == Installation ==
 
 1) unzip the bp-groupblog.zip file into `/wp-contents/plugins/bp-groupblog`
 
-2) move the `/themes/bp-groupblog` folder to your WPMU themes folder
+2) move the `/themes/...` to your WP themes folder
 
 3) activate the plugin
 
 4) You are done!
 
-5) Optionally, if you would like the sidebar to reflect the blog of the group, move the bp-groupblog/groupblog folder to buddypress/bp-themes/bp-default/.
-
 **NOTE: Please deactivate the plugin before running automatic upgrade or you will get a big fat 'Cannot redeclare' fatal error. Regardless, if you do activate while the plugin is active it will still work fine. It is just that nobody likes errors, even when they are not real.**
 
 == Other Notes ==
 
-Thanks to Boone for coming up with a solid solution to add users to the groupblog immediately after joining the group. Also his implementation of updating the member permissions of the groupblog when saving the settings is a solid bonus!
 
 == Screenshots ==
 
@@ -64,8 +106,14 @@ Thanks to Boone for coming up with a solid solution to add users to the groupblo
 
 == Changelog == 
 
+= 1.4.5 =
+* Overhaul of the admin section
+* Inclusion for P2 support
+* Variety of new options, including template control
+* Made compatible with 3.0 asaik
+
 = 1.4.4 =
-* Bug fix release: Assigning existing blogs to groups would create faulty blogs. Blog dropdown now filters to show only available blogs for groups. Clean up groupmeta after a blog gets deleted.
+* Sorry I neglected this plugin for a while and did not transcribe the changes.
 
 = 1.4.3 =
 * Restructed templating. To control the sidebar of your group, you will need to move the bp-groupblog/groupblog folder to buddypress/bp-themes/bp-default/.

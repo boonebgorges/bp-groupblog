@@ -4,7 +4,7 @@ Plugin Name: BP Groupblog
 Plugin URI: http://wordpress.org/extend/plugins/search.php?q=buddypress+groupblog
 Description: Automates and links WPMU blogs groups controlled by the group creator.
 Author: Rodney Blevins & Marius Ooms
-Version: 1.4.3
+Version: 1.4.5
 License: (Groupblog: GNU General Public License 2.0 (GPL) http://www.gnu.org/licenses/gpl.html)
 Site Wide Only: true
 */
@@ -20,7 +20,7 @@ if ( !function_exists( 'bp_core_install' ) ) {
 /*******************************************************************/
 
 define ( 'BP_GROUPBLOG_IS_INSTALLED', 1 );
-define ( 'BP_GROUPBLOG_VERSION', '1.4.3' );
+define ( 'BP_GROUPBLOG_VERSION', '1.4.5' );
 
 // Define default roles
 if ( !defined( 'BP_GROUPBLOG_DEFAULT_ADMIN_ROLE' ) )
@@ -34,6 +34,32 @@ if ( !defined( 'BP_GROUPBLOG_DEFAULT_MEMBER_ROLE' ) )
 if ( !defined( 'BP_GROUPBLOG_SLUG' ) )
 define ( 'BP_GROUPBLOG_SLUG', 'group-blog' );
 
+function bp_groupblog_setup() {
+	global $wpdb;
+
+	// Set up the array of potential defaults
+	$groupblog_blogdefaults = array(
+		'theme' => 'bp-default|bp-groupblog',
+		'page_template_layout' => 'magazine',
+		'delete_blogroll_links' => '1',
+		'default_cat_name' => 'Uncategorized',
+		'default_link_cat' => 'Links',
+		'delete_first_post' => 0,
+		'delete_first_comment' => 0,
+		'allowdashes'=>0,
+		'allowunderscores' => 0,
+		'allownumeric' => 0,
+		'minlength' => 4,
+		'redirectblog' => 0,
+		'deep_group_integration' => 0,
+		'pagetitle' => 'Blog'
+	);
+ 	// Add a site option so that we'll know set up ran
+	add_site_option( 'bp_groupblog_blog_defaults_setup', 1 );
+	add_site_option( 'bp_groupblog_blog_defaults_options', $groupblog_blogdefaults);   		
+}
+
+register_activation_hook( __FILE__, 'bp_groupblog_setup' );
 require ( WP_PLUGIN_DIR . '/bp-groupblog/bp-groupblog-admin.php' );
 require ( WP_PLUGIN_DIR . '/bp-groupblog/bp-groupblog-cssjs.php' );
 require ( WP_PLUGIN_DIR . '/bp-groupblog/bp-groupblog-classes.php' );
@@ -58,7 +84,7 @@ function bp_groupblog_setup_globals() {
 	$bp->groupblog->default_member_role = BP_GROUPBLOG_DEFAULT_MEMBER_ROLE;
 
 }
-add_action( 'plugins_loaded', 'bp_groupblog_setup_globals', 5 );	
+add_action( 'bp_init', 'bp_groupblog_setup_globals', 5 );	
 add_action( 'admin_menu', 'bp_groupblog_setup_globals', 2 );
 
 /**
@@ -72,19 +98,25 @@ function bp_groupblog_setup_nav() {
 		$bp->groups->current_group->is_group_visible_to_member = ( 'public' == $bp->groups->current_group->status || $is_member ) ? true : false;
 	
 		$group_link = $bp->root_domain . '/' . $bp->groups->slug . '/' . $bp->groups->current_group->slug . '/';
-		
-		if ( bp_groupblog_is_blog_enabled( $bp->groups->current_group->id ) )
-			bp_core_new_subnav_item(
-				array(
-					'name' => __( 'Blog', 'groupblog' ),
-					'slug' => 'blog',
-					'parent_url' => $group_link,
-					'parent_slug' => $bp->groups->slug,
-					'screen_function' => 'groupblog_screen_blog',
-					'position' => 32,
-					'item_css_id' => 'group-blog'
-				)
-			);
+
+		$checks = get_site_option('bp_groupblog_blog_defaults_options');
+	
+		if ( $checks['redirectblog'] != 1 ) {
+				
+			if ( bp_groupblog_is_blog_enabled( $bp->groups->current_group->id ) )
+				bp_core_new_subnav_item(
+					array(
+						'name' => __( 'Blog', 'groupblog' ),
+						'slug' => 'blog',
+						'parent_url' => $group_link,
+						'parent_slug' => $bp->groups->slug,
+						'screen_function' => 'groupblog_screen_blog',
+						'position' => 32,
+						'item_css_id' => 'group-blog'
+					)
+				);
+
+		}
 	}
 }
 add_action( 'wp', 'bp_groupblog_setup_nav', 2 );
@@ -223,7 +255,11 @@ function bp_groupblog_upgrade_user( $blog_id, $user_id, $group_id ) {
   global $blog_id;
 	
 	$blog_id = groups_get_groupmeta ( $group_id, 'groupblog_blog_id' );
-				
+	
+	// If the group has no blog linked, get the heck out of here!
+	if ( !$blog_id )
+		return;
+					
 	// Setup some variables
 	$groupblog_silent_add = groups_get_groupmeta ( $group_id, 'groupblog_silent_add' );
 	$groupblog_default_member_role = groups_get_groupmeta ( $group_id, 'groupblog_default_member_role' );
@@ -767,6 +803,11 @@ function bp_groupblog_validate_blog_signup() {
 	
 }
 
+/**
+ * bp_groupblog_create_blog( $group_id )
+ *
+ * We know everything is final and now are ready to create the blog at group complete stage.
+ */
 function bp_groupblog_create_blog( $group_id ) {
 	global $wpdb, $domain;
 
@@ -794,19 +835,82 @@ function bp_groupblog_create_blog( $group_id ) {
 }
 add_action( 'groups_group_create_complete', 'bp_groupblog_create_blog' );
 
+/**
+ * bp_groupblog_set_group_to_post_activity ( $activity )
+ *
+ * Record the blog activity for the group - by Luiz Armesto
+ */
+function bp_groupblog_set_group_to_post_activity( $activity ) {
+
+	if ( ( $activity->type != 'new_blog_post' ) ) return;
+
+	$blog_id = $activity->item_id;
+	$post_id = $activity->secondary_item_id;
+	$post = get_post( $post_id );
+
+	$group_id = get_groupblog_group_id( $blog_id );
+	if ( !$group_id ) return;
+	$group = new BP_Groups_Group( $group_id, true );
+
+	// Verify if we already have the modified activity for this blog post
+	$id = bp_activity_get_activity_id( array(
+		'user_id' => $activity->user_id,
+		'type' => $activity->type,
+		'item_id' => $group_id,
+		'secondary_item_id' => $activity->secondary_item_id
+	) );
+
+	// if we don't have, verify if we have an original activity
+	if ( !$id ) {
+		$id = bp_activity_get_activity_id( array(
+			'user_id' => $activity->user_id,
+			'type' => $activity->type,
+			'item_id' => $activity->item_id,
+			'secondary_item_id' => $activity->secondary_item_id
+		) );
+	}
+
+	// If we found an activity for this blog post then overwrite that to avoid have multiple activities for every blog post edit
+	if ( $id ) $activity->id = $id;
+
+	// Replace the necessary values to display in group activity stream
+	$activity->action = sprintf( __( '%s wrote a new blog post %s in the group %s:', 'groupblog'), bp_core_get_userlink( $post->post_author ), '<a href="' . get_permalink( $post->ID ) .'">' . attribute_escape( $post->post_title ) . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . attribute_escape( $group->name ) . '</a>' );
+	$activity->item_id = $group_id;
+	$activity->component = 'groups';
+	$activity->hide_sitewide = 0;
+	
+}
+add_action( 'bp_activity_before_save', 'bp_groupblog_set_group_to_post_activity');
+
+/**
+ * bp_groupblog_posts()
+ *
+ * Add a filter option to the filter select box on group activity pages.
+ */
+function bp_groupblog_posts() { ?>
+
+	<option value="new_groupblog_post"><?php _e( 'Show Blog Posts', 'groupblog' ) ?></option><?php
+	
+}
+add_action( 'bp_group_activity_filter_options', 'bp_groupblog_posts' );
+
+/**
+ * groupblog_screen_blog()
+ *
+ * This screen gets called when the 'group blog' link is clicked.
+ */
 function groupblog_screen_blog() {
 	global $bp;
 		
 	if ( $bp->current_component == $bp->groups->slug && 'blog' == $bp->current_action ) {
 
 		$checks = get_site_option('bp_groupblog_blog_defaults_options');
-
+		$blog_details = get_blog_details( get_groupblog_blog_id(), true );
+		
 		if ( $checks['redirectblog'] == 1 ) {
-			$blog_details = get_blog_details( get_groupblog_blog_id(), true );
 			bp_core_redirect( $blog_details->siteurl );
 		} 
 		else if ( $checks['redirectblog'] == 2 ) {
-			$blog_details = get_blog_details( get_groupblog_blog_id(), true );
 			bp_core_redirect( $blog_details->siteurl . '/' . $checks['pageslug'] . '/' );
 		}
 		else {
@@ -822,12 +926,42 @@ function groupblog_screen_blog() {
 	}
 }
 
+/**
+ * groupblog_screen_blog_content()
+ *
+ * Depending on the groupblog admin setup we load the correct template.
+ */
 function groupblog_screen_blog_content() {
 	global $bp, $wp;
 	
 	load_template( WP_PLUGIN_DIR . '/bp-groupblog/bp-groupblog-blog.php' );
 }
 
+/**
+ * groupblog_redirect_group_home()
+ *
+ * Redirect Group Home page to Blog Home page if set in admin settings.
+ */
+function groupblog_redirect_group_home() {
+	global $bp;
+	
+	if ( $bp->current_component == $bp->groups->slug && $bp->is_single_item && 'home' == $bp->current_action ) {	
+	
+		$checks = get_site_option('bp_groupblog_blog_defaults_options');
+	
+		if ( $checks['deep_group_integration'] ) {
+			$blog_details = get_blog_details( get_groupblog_blog_id(), true );
+			bp_core_redirect( $blog_details->siteurl );
+		}
+	}
+}
+add_action( 'bp_init', 'groupblog_redirect_group_home' );
+
+/**
+ * bp_groupblog_delete_meta( $blog_id, $drop = false )
+ *
+ * Clean up groupmeta after a blog gets deleted.
+ */
 function bp_groupblog_delete_meta( $blog_id, $drop = false ) {
 
 	$group_id = get_groupblog_group_id( $blog_id );
@@ -843,28 +977,5 @@ function bp_groupblog_delete_meta( $blog_id, $drop = false ) {
 }
 
 add_action('delete_blog', 'bp_groupblog_delete_meta', 10, 1);
-
-/* Add a filter option to the filter select box on group activity pages */
-/*
-function bp_groupblog_posts() { ?>
-
-	<option value="new_groupblog_post"><?php _e( 'Show Group Blog Posts', 'groupblog' ) ?></option><?php
-	
-}
-add_action( 'bp_group_activity_filter_options', 'bp_groupblog_posts' );
-
-function bp_groupblog_register_activity_actions() {
-	global $bp;
-
-	if ( !function_exists( 'bp_activity_set_action' ) )
-		return false;
-
-	bp_activity_set_action( $bp->blogs->id, 'new_groupblog', __( 'New group blog created', 'groupblog' ) );
-	bp_activity_set_action( $bp->blogs->id, 'new_groupblog_post', __( 'New group blog post published', 'groupblog' ) );
-	bp_activity_set_action( $bp->blogs->id, 'new_groupblog_comment', __( 'New group blog post comment posted', 'groupblog' ) );
-	
-}
-add_action( 'bp_blogs_register_activity_actions', 'bp_groupblog_register_activity_actions' );
-*/
 
 ?>

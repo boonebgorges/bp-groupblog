@@ -150,6 +150,30 @@ function bp_groupblog_forum() {
  * bp_groupblog_admin_form_action()
  *
  */
+function groupblog_current_layout() {
+	
+	$checks = get_site_option('bp_groupblog_blog_defaults_options');
+	$template_name = $checks['page_template_layout'];
+	
+	return $template_name;
+}
+
+/*
+ * bp_groupblog_admin_form_action()
+ *
+ */
+function groupblog_locate_layout() {
+	
+	$checks = get_site_option('bp_groupblog_blog_defaults_options');
+	$template_name = $checks['page_template_layout'];
+	
+	locate_template( array( 'groupblog/layouts/' . $template_name . '.php' ), true );
+}
+
+/*
+ * bp_groupblog_admin_form_action()
+ *
+ */
 function bp_groupblog_admin_form_action( $page, $group = false ) {
 	global $bp, $groups_template;
 
