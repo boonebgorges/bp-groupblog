@@ -1,6 +1,23 @@
 <?php
 
 /**
+ * bp_groupblog_add_admin_js()
+ */
+function bp_groupblog_add_admin_js() {  
+	wp_enqueue_script( 'bp-groupblog-admin-js', WP_PLUGIN_URL . '/bp-groupblog/inc/js/admin.js' );
+	wp_enqueue_script('jquery-ui-core');
+	wp_enqueue_script('jquery-ui-tabs');
+	wp_enqueue_script('effects.core', WP_PLUGIN_URL .'/inc/js/effects.core.js', array('jquery-ui-core'));
+}
+add_action( 'admin_menu', 'bp_groupblog_add_admin_js', 1 );
+
+function bp_groupblog_add_admin_style() {
+	wp_enqueue_style('bp-groupblog-admin-style', WP_PLUGIN_URL . '/bp-groupblog/inc/css/admin.css');
+	wp_enqueue_style('jQueryUISmoothness', WP_PLUGIN_URL . '/bp-groupblog/inc/smoothness/jquery-ui-smoothness.css');
+}
+add_action( 'admin_print_styles', 'bp_groupblog_add_admin_style' );
+
+/**
  * bp_groupblog_add_js()
  */
 function bp_groupblog_add_js() {
