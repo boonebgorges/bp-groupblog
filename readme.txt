@@ -6,7 +6,7 @@ Requires at least: WP 3.0 / BP 1.2
 Tested up to: WP 3.0.1
 Stable tag: 1.4.6
 
-BuddyPress Groupblog extends the group functionality by enabling the group to have a single blog associated with it. Group members are automatically added to the blog and will have roles as set by the group admin.
+BuddyPress Groupblog extends the group functionality by enabling the group to have a single blog associated with it.
 
 == Description ==
 
