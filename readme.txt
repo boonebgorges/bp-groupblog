@@ -2,9 +2,9 @@
 Contributors: MariusOoms
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7374704
 Tags: buddypress,groups,blogs,content
-Requires at least: WPMU 2.9 / BP 1.2
+Requires at least: WP 3.0 / BP 1.2
 Tested up to: WP 3.0.1
-Stable tag: 1.4.5
+Stable tag: 1.4.6
 
 BuddyPress Groupblog extends the group functionality by enabling the group to have a single blog associated with it. Group members are automatically added to the blog and will have roles as set by the group admin.
 
@@ -107,6 +107,11 @@ function bp_core_avatar_url() {
 2. Screenshot of the group blog page.
 
 == Changelog == 
+
+= 1.4.6 =
+* Fixed users being added properly to the group blog.
+* Fixed user rights applied to correct blog. The main blog is no longer affected.
+* Fixed hidden and private groups to allow member joining.
 
 = 1.4.5 =
 * Overhaul of the admin section

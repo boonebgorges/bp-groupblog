@@ -4,7 +4,7 @@ Plugin Name: BP Groupblog
 Plugin URI: http://wordpress.org/extend/plugins/search.php?q=buddypress+groupblog
 Description: Automates and links WPMU blogs groups controlled by the group creator.
 Author: Rodney Blevins & Marius Ooms
-Version: 1.4.5
+Version: 1.4.6
 License: (Groupblog: GNU General Public License 2.0 (GPL) http://www.gnu.org/licenses/gpl.html)
 Site Wide Only: true
 */
@@ -20,7 +20,7 @@ if ( !function_exists( 'bp_core_install' ) ) {
 /*******************************************************************/
 
 define ( 'BP_GROUPBLOG_IS_INSTALLED', 1 );
-define ( 'BP_GROUPBLOG_VERSION', '1.4.5' );
+define ( 'BP_GROUPBLOG_VERSION', '1.4.6' );
 
 // Define default roles
 if ( !defined( 'BP_GROUPBLOG_DEFAULT_ADMIN_ROLE' ) )
@@ -239,6 +239,7 @@ function bp_groupblog_member_join( $group_id ) {
 		while ( bp_group_members() ) {
 			bp_group_the_member();
 			$user_id = bp_get_group_member_id();
+			if ( !is_user_member_of_blog($user_id, $blog_id) ) return false;
 			if ( $group->creator_id != $user_id )
   			bp_groupblog_upgrade_user( $blog_id, $user_id, $group_id );
 		}
@@ -252,10 +253,11 @@ function bp_groupblog_member_join( $group_id ) {
  * This code was initially inspired by Burt Adsit re-interpreted by Boone
  */
 function bp_groupblog_upgrade_user( $blog_id, $user_id, $group_id ) {
-  global $blog_id;
-	
+  	
 	$blog_id = groups_get_groupmeta ( $group_id, 'groupblog_blog_id' );
 	
+	//echo "<script language='JavaScript'>alert( 'Group ID: " . $group_id . " Blog ID: " . $blog_id . " User ID: " . $user_id . "');</script>";
+
 	// If the group has no blog linked, get the heck out of here!
 	if ( !$blog_id )
 		return;
@@ -281,21 +283,23 @@ function bp_groupblog_upgrade_user( $blog_id, $user_id, $group_id ) {
 
 	if ($user_role == $default_role && $groupblog_silent_add == true) return false;
 						
-	if ( !is_user_member_of_blog($user_id, $blog_id) && $groupblog_silent_add == true ){
-		add_user_to_blog($blog_id, $user_id, $default_role);
-  	}
-	else if ( $groupblog_silent_add == true ) {
+	if ( ($user_role == 'norole') && $groupblog_silent_add == true ){
+		$did_it_add = add_user_to_blog($blog_id, $user_id, $default_role);
+
+  }
+	else if ( is_user_member_of_blog($user_id, $blog_id) && $groupblog_silent_add == true ) {
   	$user = new WP_User($user_id);
+  	$user->for_blog($blog_id);
   	$user->set_role($default_role);
   	wp_cache_delete($user_id, 'users' );
  	}
- 	else if ( $groupblog_silent_add != true ) {
+ 	else if ( is_user_member_of_blog($user_id, $blog_id) && $groupblog_silent_add != true ) {
   	$user = new WP_User($user_id);
+  	$user->for_blog($blog_id);
   	$user->set_role('subscriber');
   	wp_cache_delete($user_id, 'users' );
   }
   		
-  do_action('bp_groupblog_upgrade_user',$user_id, $user_role, $default_role);	
 }
 
 /**
@@ -322,6 +326,9 @@ function bp_groupblog_changed_status_group( $user_id, $group_id ) {
 add_action( 'groups_promoted_member', 'bp_groupblog_changed_status_group', 10, 2 );
 add_action( 'groups_demoted_member', 'bp_groupblog_changed_status_group', 10, 2 );
 add_action( 'groups_unbanned_member', 'bp_groupblog_changed_status_group', 10, 2 );
+add_action( 'groups_membership_accepted', 'bp_groupblog_changed_status_group', 10, 2 );
+add_action( 'groups_accept_invite', 'bp_groupblog_changed_status_group', 10, 2 );
+
 
 /**
  * bp_groupblog_remove_user( $group_id, $user_id = false )
@@ -340,6 +347,7 @@ function bp_groupblog_remove_user( $group_id, $user_id = false ) {
 	  return;
 
   $user = new WP_User( $user_id );
+  $user->for_blog($blog_id);
   $user->set_role('subscriber');
   wp_cache_delete($user_id, 'users' );	
 }
