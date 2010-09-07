@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: buddypress,groups,blogs,content
 Requires at least: WP 3.0 / BP 1.2
 Tested up to: WP 3.0.1
-Stable tag: 1.4.6
+Stable tag: 1.4.7
 
 BuddyPress Groupblog extends the group functionality by enabling the group to have a single blog associated with it.
 
@@ -41,13 +41,13 @@ The BuddyPress Groupblog plugin extends the group functionality by enabling each
 
 1) unzip the bp-groupblog.zip file into `/wp-contents/plugins/bp-groupblog`
 
-2) move the `/themes/...` to your WP themes folder
+2) move all the themes in `bp-groupblog/themes/` to your WP themes folder
 
 3) activate the plugin
 
-4) You are done!
+4) run through the admin setup options
 
-**NOTE: Please deactivate the plugin before running automatic upgrade or you will get a big fat 'Cannot redeclare' fatal error. Regardless, if you do activate while the plugin is active it will still work fine. It is just that nobody likes errors, even when they are not real.**
+5) You are done!
 
 == Other Notes ==
 
@@ -78,6 +78,8 @@ function bp_core_avatar_upload_path() {
 	return apply_filters( 'bp_core_avatar_upload_path', $upload_dir['basedir'] );
 }
 
+* Creating template pages on existing blogs requires changing the template name in the groupblog admin settings. This is cumbersome as you might have to save twice in order to get all blogs set up with the template name you desire. We are looking for a fix in a future release. Most likely an 'Initialize existing blogs with missing template files' button should do the trick.
+
 /**
  * bp_core_avatar_url()
  *
@@ -107,6 +109,11 @@ function bp_core_avatar_url() {
 2. Screenshot of the group blog page.
 
 == Changelog == 
+
+= 1.4.7 =
+* Fixed Blog tab visibility based on redirect
+* Added code to set front page under 'reading' admin setting when template layout is used.
+* Changed the descriptions a bit under the settings menu.
 
 = 1.4.6 =
 * Fixed users being added properly to the group blog.

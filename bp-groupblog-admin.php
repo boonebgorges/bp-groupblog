@@ -389,13 +389,15 @@ function bp_groupblog_management_page() {
 								<label><input class="info-on" name="bp_groupblog_redirect_blog" id="bp_groupblog_redirect_blog"  value="2" type="radio" <?php if ($opt['redirectblog']== 2) echo 'checked="checked"'; ?> > <?php _e( 'Template Page, named: ', 'groupblog' ) ?></label> 
 								<input name="bp_groupblog_page_title" id="bp_groupblog_page_title" value="<?php echo $opt['pagetitle'];?>" size="10" type="text" />
 								<span class="notice" id="redirect_notice" style="display:none;"> <?php _e( 'All existing Group Blogs will be automatically updated on each change.', 'groupblog' ) ?></span>
-								<p class="info"><?php _e( 'The "Template Page" option will create a page on group blogs with the name specified above which links to a template file within your theme. Don\'t worry about the name you choose, we\'ll make sure your page finds it way to the template file. With this option the groups "Blog" tab will redirect to the page created above. This results in deeper blog integration, for example in combination with the P2 GroupBlog theme it will enable posting from the group blog page. <strong>Important:</strong> If you use your own default group blog theme, you should <a href="http://codex.wordpress.org/Pages#Creating_Your_Own_Page_Templates">create this template file manually</a>.', 'groupblog' ) ?></p>
+								<p class="info"><?php _e( 'The "Template Page" option will create a page on group blogs and links to a template file within your theme. Don\'t worry about the name you choose, we\'ll make sure your page finds it way to the template file. For custom themes make sure to <a href="http://codex.wordpress.org/Pages#Creating_Your_Own_Page_Templates">create</a> this template file manually.', 'groupblog' ) ?>
+								</p>
+								<p class="info"><?php _e( '<strong>IMPORTANT:</strong> In order for us to safely create the template pages on all blogs, you need to temporarily change the slug above to initialize the creation process. If you fail to to do so, some blogs could be missing the template page. Feel free to change it back to what you initially specified and save again.', 'groupblog' ) ?></p>
 							</td> 
 						</tr>
 						<tr> 
 							<th><?php _e( 'Redirect Group Home:', 'groupblog' ) ?></th>
 							<td> 
-								<label for="deep_group_integration"><input name="deep_group_integration" type="checkbox" id="deep_group_integration" value="1" <?php if ($opt['deep_group_integration'] == 1) echo('checked="checked"'); ?> /> <?php _e( 'Yes, redirect Group Home to Blog Home', 'groupblog' ) ?></label><p><?php _e( 'This option will take control of the Group "Home" page and redirects it to the Blog "index" page. We recommend this setting especially when using the <strong>P2 BuddyPress</strong> theme. This will enable posting from the group Home using P2 instead of the BuddyPress form.', 'groupblog' ) ?></p>
+								<label for="deep_group_integration"><input name="deep_group_integration" type="checkbox" id="deep_group_integration" value="1" <?php if ($opt['deep_group_integration'] == 1) echo('checked="checked"'); ?> /> <?php _e( 'Yes, redirect Group Home to Blog Home', 'groupblog' ) ?></label><p><?php _e( 'This option will take control of the GROUP home page and redirects it to the BLOG home page. This will enable posting from the group Home using P2 instead of the BuddyPress form.', 'groupblog' ) ?></p>
 					  	</td>
 						</tr>
 						</tbody>
