@@ -20,6 +20,9 @@ span.heading {
 	margin: 10px 20px 0 0;
 }
 
+.align-left { float: left; padding-right: 15px; }
+.align-right { float: right; padding-left: 15px; }
+
 /* > Featured section
 -------------------------------------------------------------- */
 

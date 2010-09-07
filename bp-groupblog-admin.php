@@ -416,17 +416,22 @@ function bp_groupblog_management_page() {
 						<tbody>
 						<tr class="alt">
 							<td class="available-theme top left">
-								<a href="" class="thickbox thickbox-preview screenshot"></a>
+								<a href="<?php echo WP_CONTENT_URL ?>/themes/p2-buddypress/groupblog/_inc/i/screenshot-mag.jpg" class="thickbox thickbox-preview screenshot">
+									<?php echo '<img src="' . WP_CONTENT_URL . '/themes/p2-buddypress/groupblog/_inc/i/screenshot-mag.jpg">';?>
+								</a>
+								<div class="clear"></div>
 								<input name="page_template_layout" id="page_template_layout"  value="magazine" type="radio" <?php if ($opt['page_template_layout'] == 'magazine') echo 'checked="checked"'; ?> onFocus="jQuery('.toggle-init').attr('checked', true)" /><h3 style="display:inline;"> <?php _e( 'Magazine', 'groupblog' ) ?></h3>
 								<p class="description"><?php _e( 'Balanced template for groups with diverse postings.', 'groupblog' ) ?></p>
 							</td>
-							<td class="available-theme top right">
-								<a href="" class="thickbox thickbox-preview screenshot"></a>
+							<td class="available-theme top">
+								<a href="<?php echo WP_CONTENT_URL ?>/themes/p2-buddypress/groupblog/_inc/i/screenshot-micro.jpg" class="thickbox thickbox-preview screenshot">
+									<?php echo '<img src="' . WP_CONTENT_URL . '/themes/p2-buddypress/groupblog/_inc/i/screenshot-micro.jpg">';?>
+								</a>
 								<input name="page_template_layout" id="page_template_layout"  value="microblog" type="radio" <?php if ($opt['page_template_layout'] == 'microblog') echo 'checked="checked"'; ?> onFocus="jQuery('.toggle-init').attr('checked', true)" /><h3 style="display:inline;"> <?php _e( 'Microblog', 'groupblog' ) ?></h3>
 								<p class="description"><?php _e( 'Great for simple listing of posts in a chronological order.', 'groupblog' ) ?></p>
 							</td>
-							<td class="available-theme top">
-								<a href="" class="thickbox thickbox-preview screenshot"></a>
+							<td class="available-theme top right">
+								<a href="#" class="thickbox thickbox-preview screenshot"></a>
 								<input disabled name="page_template_layout" id="page_template_layout"  value="news" type="radio" <?php if ($opt['page_template_layout'] == 'news') echo 'checked="checked"'; ?> onFocus="jQuery('.toggle-init').attr('checked', true)" /><h3 style="display:inline;"> <?php _e( '(TBD)', 'groupblog' ) ?></h3>
 								<p class="description"><?php _e( 'Get in touch with me to vote what third layout is desired.', 'groupblog' ) ?></p>
 							</td>
