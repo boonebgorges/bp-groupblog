@@ -146,7 +146,7 @@ function bp_groupblog_options_nav() {
   $checks = get_site_option('bp_groupblog_blog_defaults_options');
   ?>
   
-	  <li id="home-personal-li"<?php if ( $checks['deep_group_integration'] && is_home() ) : ?> class="current selected"<?php endif; ?>>
+	  <li id="home-personal-li"<?php if ( $checks['deep_group_integration'] ) : ?> class="current selected"<?php endif; ?>>
 			<a id="home" href="<?php bp_group_permalink() ?>"><?php _e( 'Home', 'groupblog' ); ?></a>
 		</li>
 
@@ -159,8 +159,8 @@ function bp_groupblog_options_nav() {
 		<?php if ( bp_group_is_visible() ) : ?>	
 			
 			<?php if ( bp_groupblog_is_blog_enabled ( bp_get_group_id() ) ) : ?>
-				<?php if ( $checks['redirectblog'] != 1 ) : ?>
-					<li id="<?php echo BP_GROUPBLOG_SLUG; ?>-personal-li"<?php if ( is_page() ) : ?> class="current selected"<?php endif; ?>>
+				<?php if ( !$checks['deep_group_integration'] ) : ?>
+					<li id="<?php echo BP_GROUPBLOG_SLUG; ?>-personal-li"<?php //if ( is_page() ) : ?> class="current selected"<?php //endif; ?>>
 						<a id="<?php echo BP_GROUPBLOG_SLUG; ?>" href="<?php bp_group_permalink() ?>blog/"><?php _e( 'Blog', 'groupblog' ); ?></a>
 					</li>
 				<?php endif; ?>
