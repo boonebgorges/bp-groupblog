@@ -211,6 +211,10 @@ div.item-list-tabs ul li.current a {
 /* > Activity Links / Buttons
 -------------------------------------------------------------- */
 
+ul.activity-list > li.mini:first-child {
+	padding-top: 20px !important;
+}
+
 #bp-default .activity-list .activity-header a:first-child, 
 #bp-default span.highlight {
 	color: #059AE7;
