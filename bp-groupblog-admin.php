@@ -66,12 +66,10 @@ function bp_groupblog_blog_defaults( $blog_id ) {
 				add_post_meta($blog_page_id, 'created_by_groupblog_dont_change', '1');	
 				
 			// Set the Blog Reading Settings to load the template page as front page
-/*
 			if ( $options['deep_group_integration'] == 1 ) {
 				update_option('show_on_front', 'page');
 				update_option('page_on_front', $blog_page_id);
-			}
-*/	
+			}	
 		}	
 	}	
 }
@@ -120,7 +118,6 @@ function bp_groupblog_update_defaults() {
 	$newoptions['page_template_layout'] = (isset($_POST['page_template_layout'])) ?  $_POST['page_template_layout'] : 'magazine';
 	if ( ($newoptions['redirectblog'] == 2) ) {
 		
-/*
 		if ( bp_has_groups( ) ) : while ( bp_groups() ) : bp_the_group();
 			if ( $blog_id = get_groupblog_blog_id( bp_get_group_id() ) ) {
 				switch_to_blog ( $blog_id );
@@ -137,7 +134,6 @@ function bp_groupblog_update_defaults() {
 				update_option('show_on_front', $page_or_posts);
 			}
 		endwhile; endif;
-*/
 		
 		if ( $oldoptions['pageslug'] == $newoptions['pageslug'] ) {
 			update_site_option ('bp_groupblog_blog_defaults_options', $newoptions); 
@@ -209,7 +205,6 @@ function bp_groupblog_update_defaults() {
 		echo '</div>';
 						  		
 	} 
-/*
 	elseif ( $newoptions['redirectblog'] != 2 ) {
 		if ( bp_has_groups( ) ) : while ( bp_groups() ) : bp_the_group();
 			if ( $blog_id = get_groupblog_blog_id( bp_get_group_id() ) ) {
@@ -218,7 +213,6 @@ function bp_groupblog_update_defaults() {
 			}
 		endwhile; endif;		
 	}
-*/
 			
 	// override the site option
 	update_site_option ('bp_groupblog_blog_defaults_options', $newoptions); 
@@ -398,7 +392,7 @@ function bp_groupblog_management_page() {
 								<p class="info"><?php _e( 'The "Template Page" option will create a page on group blogs with the name specified above which links to a template file within your theme. Don\'t worry about the name you choose, we\'ll make sure your page finds it way to the template file. With this option the groups "Blog" tab will redirect to the page created above. This results in deeper blog integration, for example in combination with the P2 GroupBlog theme it will enable posting from the group blog page. <strong>Important:</strong> If you use your own default group blog theme, you should <a href="http://codex.wordpress.org/Pages#Creating_Your_Own_Page_Templates">create this template file manually</a>.', 'groupblog' ) ?></p>
 							</td> 
 						</tr>
-						<tr class="info"> 
+						<tr> 
 							<th><?php _e( 'Redirect Group Home:', 'groupblog' ) ?></th>
 							<td> 
 								<label for="deep_group_integration"><input name="deep_group_integration" type="checkbox" id="deep_group_integration" value="1" <?php if ($opt['deep_group_integration'] == 1) echo('checked="checked"'); ?> /> <?php _e( 'Yes, redirect Group Home to Blog Home', 'groupblog' ) ?></label><p><?php _e( 'This option will take control of the Group "Home" page and redirects it to the Blog "index" page. We recommend this setting especially when using the <strong>P2 BuddyPress</strong> theme. This will enable posting from the group Home using P2 instead of the BuddyPress form.', 'groupblog' ) ?></p>
