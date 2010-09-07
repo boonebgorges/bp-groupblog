@@ -391,7 +391,7 @@ function bp_groupblog_management_page() {
 								<span class="notice" id="redirect_notice" style="display:none;"> <?php _e( 'All existing Group Blogs will be automatically updated on each change.', 'groupblog' ) ?></span>
 								<p class="info"><?php _e( 'The "Template Page" option will create a page on group blogs and links to a template file within your theme. Don\'t worry about the name you choose, we\'ll make sure your page finds it way to the template file. For custom themes make sure to <a href="http://codex.wordpress.org/Pages#Creating_Your_Own_Page_Templates">create</a> this template file manually.', 'groupblog' ) ?>
 								</p>
-								<p class="info"><?php _e( '<strong>IMPORTANT:</strong> In order for us to safely create the template pages on all blogs, you need to temporarily change the slug above to initialize the creation process. If you fail to to do so, some blogs could be missing the template page. Feel free to change it back to what you initially specified and save again.', 'groupblog' ) ?></p>
+								<p class="info"><?php _e( '<strong>IMPORTANT:</strong> In order for us to create the template pages on all blogs, you need to temporarily change the slug above to initialize the creation process. If you fail to to do so, some blogs could be missing the template page. Feel free to change it back to what you initially specified and save again.', 'groupblog' ) ?></p>
 							</td> 
 						</tr>
 						<tr> 
