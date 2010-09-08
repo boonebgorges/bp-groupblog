@@ -116,6 +116,8 @@ function bp_groupblog_update_defaults() {
 	$newoptions['pagetitle'] = (isset($_POST['bp_groupblog_page_title'])) ?  $_POST['bp_groupblog_page_title'] : 'Blog';
 	$newoptions['pageslug'] = (isset($_POST['bp_groupblog_page_title'])) ?  sanitize_title($_POST['bp_groupblog_page_title']) : '';
 	$newoptions['page_template_layout'] = (isset($_POST['page_template_layout'])) ?  $_POST['page_template_layout'] : 'magazine';
+	$newoptions['rerun'] = 0;
+	
 	if ( ($newoptions['redirectblog'] == 2) ) {
 		
 		if ( bp_has_groups( ) ) : while ( bp_groups() ) : bp_the_group();
@@ -134,16 +136,26 @@ function bp_groupblog_update_defaults() {
 				update_option('show_on_front', $page_or_posts);
 			}
 		endwhile; endif;
+
+		update_site_option ('bp_groupblog_blog_defaults_options', $newoptions);
 		
-		if ( $oldoptions['pageslug'] == $newoptions['pageslug'] ) {
-			update_site_option ('bp_groupblog_blog_defaults_options', $newoptions); 
+		$get_out = false;
+		
+		if ( $newoptions['redirectblog'] != 2 ) {
+			$get_out = true;
+		}
+		
+		if ( ( $oldoptions['pageslug'] == $newoptions['pageslug'] ) && ( $oldoptions['redirectblog'] == 2 ) ) {
+			$get_out = true;
+		}
+				
+		if ( $get_out && ( $oldoptions['rerun'] == 0 ) ) {
 			return false;
 		}
 							
 		echo '<div id="message" class="updated fade">';
 		echo '<p><strong>The following blogs were updated</strong></p>';
 			
-			$get_lost = 0;
 			$exists_in = array();
 			$updated_blogs = array();
 			if ( bp_has_groups( ) ) : while ( bp_groups() ) : bp_the_group();
@@ -153,7 +165,13 @@ function bp_groupblog_update_defaults() {
 					
 					if ( $create->have_posts()) {
 						$get_lost = 1;
-						$exists_in[] = get_bloginfo('name');
+						while ( $create->have_posts() ) : $create->the_post();								
+							if ( !get_post_meta( get_the_ID(), 'created_by_groupblog_dont_change' ) ) {
+								$exists_in[] = get_bloginfo('name');
+								$page_found = 1;
+								$newoptions['rerun'] = 1;
+							}
+						endwhile;
 					} else {
 								
 						if ( !$get_lost ) {
@@ -177,29 +195,33 @@ function bp_groupblog_update_defaults() {
 							}
 						}
 						
-						// find the page created previously and delete it, checking first to see if it was one we created or not	
-						$cleanup = new WP_Query( 'pagename=' . $oldoptions['pageslug'] );		
-						if ( $cleanup->have_posts() ) :	while ( $cleanup->have_posts() ) : $cleanup->the_post();								
+						// find the page created previously and delete it, checking first to see if it was one we created or not
+						if ( $oldoptions['pageslug'] != $newoptions['pageslug'] ) {
+							$cleanup = new WP_Query( 'pagename=' . $oldoptions['pageslug'] );		
+						
+							if ( $cleanup->have_posts() ) :	while ( $cleanup->have_posts() ) : $cleanup->the_post();								
 							if ( get_post_meta( get_the_ID(), 'created_by_groupblog_dont_change' ) ) {
 								wp_delete_post( get_the_ID(), $force_delete = true );
 							}
-							
-						endwhile; endif;
+						endwhile; endif; //cleanup
+						}
 					}
 				}
+			$get_lost = 0;
+
 			endwhile; endif;
 
-			if ( !$get_lost ) {
-				foreach ( $updated_blogs as $blog ) {
-					echo '<p>- ' . $blog . '</p>';
-				}
-			} else {
+			foreach ( $updated_blogs as $blog ) {
+				echo '<p>- ' . $blog . '</p>';
+			}
+
+			if ( $page_found ) {
 				echo '<div class="error">';
-				echo '<p style="line-height: 16px;"><strong>Sorry, your specified page name already exists on the following blog(s):</strong></p>';
+				echo '<p style="line-height: 16px;"><strong>We skipped the following blogs</strong></p>';
 				foreach ( $exists_in as $blog ) {
 					echo '<p>- ' . $blog . '</p>';
 				}
-				echo '<p></p><p><em>Please pick a different name and try again or continue with this name without initializing the existing blogs. Note that if you do continue, some group blogs could be missing the needed landing page.</em></p></div>';
+				echo '<p><em>These blogs already had a page named <strong>"'. $newoptions["pagetitle"] .'"</strong> which was not created by us. Please check and delete that page permanently after which you should return here and click save once more to finalize the process. Alternatively you can choose another template page name.</em></p></div>';
 			}
 
 		echo '</div>';
@@ -386,12 +408,11 @@ function bp_groupblog_management_page() {
 						<tr>
 							<th></th>
 							<td>
-								<label><input class="info-on" name="bp_groupblog_redirect_blog" id="bp_groupblog_redirect_blog"  value="2" type="radio" <?php if ($opt['redirectblog']== 2) echo 'checked="checked"'; ?> > <?php _e( 'Template Page, named: ', 'groupblog' ) ?></label> 
+								<label><input class="info-on" name="bp_groupblog_redirect_blog" id="bp_groupblog_redirect_blog"  value="2" type="radio" <?php if ($opt['redirectblog']== 2) echo 'checked="checked"'; ?> > <?php _e( 'Page Template Title: ', 'groupblog' ) ?></label> 
 								<input name="bp_groupblog_page_title" id="bp_groupblog_page_title" value="<?php echo $opt['pagetitle'];?>" size="10" type="text" />
 								<span class="notice" id="redirect_notice" style="display:none;"> <?php _e( 'All existing Group Blogs will be automatically updated on each change.', 'groupblog' ) ?></span>
 								<p class="info"><?php _e( 'The "Template Page" option will create a page on group blogs and links to a template file within your theme. Don\'t worry about the name you choose, we\'ll make sure your page finds it way to the template file. For custom themes make sure to <a href="http://codex.wordpress.org/Pages#Creating_Your_Own_Page_Templates">create</a> this template file manually.', 'groupblog' ) ?>
 								</p>
-								<p class="info"><?php _e( '<strong>IMPORTANT:</strong> In order for us to create the template pages on all blogs, you need to temporarily change the slug above to initialize the creation process. If you fail to to do so, some blogs could be missing the template page. Feel free to change it back to what you initially specified and save again.', 'groupblog' ) ?></p>
 							</td> 
 						</tr>
 						<tr> 

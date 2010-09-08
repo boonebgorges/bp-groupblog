@@ -1,10 +1,10 @@
 === BuddyPress Groupblog ===
-Contributors: MariusOoms
+Contributors: MariusOoms, reblevins
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7374704
 Tags: buddypress,groups,blogs,content
 Requires at least: WP 3.0 / BP 1.2
 Tested up to: WP 3.0.1
-Stable tag: 1.4.7
+Stable tag: 1.4.8
 
 BuddyPress Groupblog extends the group functionality by enabling the group to have a single blog associated with it.
 
@@ -17,7 +17,6 @@ The BuddyPress Groupblog plugin extends the group functionality by enabling each
 * P2 integration and frontend posting.
 * Admin can set Template specific groupblogs.
 * Full blog theme integration. The included bp-groupblog theme mimics the group pages.
-* WP Admin option to set default blog for groups plus bonus options.
 * Automated blog registration at group creation stage.
 * Bypass default blog validation to allow dashes, underscores, numeral only and minimum character count.
 * Blog privacy settings are initially inherited from group privacy settings.
@@ -25,8 +24,6 @@ The BuddyPress Groupblog plugin extends the group functionality by enabling each
 * Blog roles match group roles as set by the group admin.
 * Solid error checking that the blog follows validation.
 * Group admin tab to access the group-blog settings.
-* Recent posts are displayed on the group home page, much like the forum topics.
-* A menu tab is added to display the latest blog activity and blog page links.
 * Blog themes will have the ability to pull in group info and create a theme that could resemble the group exactly.
 * Leaving the group will downgrade the member role to 'subscriber'.
 * Allow the group admin to select one of his/her existing blogs.
@@ -35,6 +32,7 @@ The BuddyPress Groupblog plugin extends the group functionality by enabling each
 **Roadmap:**
 
 * Allow the admin to let group admins choose the blog name, instead of following the group name.
+* Allow group admins choose the desired template page themselves.
 * Include an RSS icon for easy access to the Blog's RSS feed.
 
 == Installation ==
@@ -78,8 +76,6 @@ function bp_core_avatar_upload_path() {
 	return apply_filters( 'bp_core_avatar_upload_path', $upload_dir['basedir'] );
 }
 
-* Creating template pages on existing blogs requires changing the template name in the groupblog admin settings. This is cumbersome as you might have to save twice in order to get all blogs set up with the template name you desire. We are looking for a fix in a future release. Most likely an 'Initialize existing blogs with missing template files' button should do the trick.
-
 /**
  * bp_core_avatar_url()
  *
@@ -109,6 +105,10 @@ function bp_core_avatar_url() {
 2. Screenshot of the group blog page.
 
 == Changelog == 
+
+= 1.4.8 =
+* Fixed readme
+* Fixed template page creation on existent blogs with missing template pages or matching page titles.
 
 = 1.4.7 =
 * Fixed Blog tab visibility based on redirect
