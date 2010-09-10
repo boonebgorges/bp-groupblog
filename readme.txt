@@ -12,6 +12,9 @@ BuddyPress Groupblog extends the group functionality by enabling the group to ha
 
 The BuddyPress Groupblog plugin extends the group functionality by enabling each group to have a single blog associated with it. Group members are automatically added to the blog and will have blog roles as set by the groupblog admin settings.
 
+**NOTE:**
+At the moment we are having issues with WP multisites that use a subdomain setup. For now WP with subdomains is unsupported, subdirectories work fine however.
+
 **Features:**
 
 * P2 integration and frontend posting.
