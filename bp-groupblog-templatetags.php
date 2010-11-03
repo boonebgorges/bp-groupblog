@@ -192,9 +192,8 @@ function groupblog_locate_layout() {
 
 	$opt = get_site_option( 'bp_groupblog_blog_defaults_options' );
 
-	if ( $opt['group_admin_layout'] == 1 )	{
-		$template_name = groups_get_groupmeta( bp_get_groupblog_id(), 'page_template_layout' );
-	} else { $template_name = $opt['page_template_layout']; }
+	if ( ( $opt['group_admin_layout'] != 1 ) || !( $template_name = groups_get_groupmeta( bp_get_groupblog_id(), 'page_template_layout' ) ) )
+		$template_name = $opt['page_template_layout'];
 	
 	locate_template( array( 'groupblog/layouts/' . $template_name . '.php' ), true );
 }
