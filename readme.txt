@@ -105,6 +105,9 @@ function bp_core_avatar_url() {
 
 == Changelog == 
 
+= Trunk =
+* Cosmetic changes to the P2 BuddyPress to match the default BuddyPress 
+
 = 1.5 =
 * Added support for subdomains, big thanks to Lemmy
 * Added the ability to select layout for group admins

@@ -202,17 +202,6 @@ wp_enqueue_script( 'p2theme-ajax-js', get_stylesheet_directory_uri() . '/groupbl
 if ( !class_exists( 'BP_Core_User' ) )
 	return false;
 
-/* Register the widget columns */
-register_sidebars( 1,
-	array(
-		'name' => 'BuddyPress Sidebar',
-		'before_widget' => '<div id="%1$s" class="widget %2$s">',
-		'after_widget' => '</div>',
-		'before_title' => '<h3 class="widgettitle">',
-		'after_title' => '</h3>'
-	)
-);
-
 /* Load the AJAX functions for the theme */
 require_once( WP_PLUGIN_DIR . '/buddypress/bp-themes/bp-default/_inc/ajax.php' );
 
