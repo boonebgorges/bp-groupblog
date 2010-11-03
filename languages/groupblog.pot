@@ -1,4 +1,4 @@
-# Translation of the WordPress plugin BP Groupblog 1.4.8 by Rodney Blevins & Marius Ooms.
+# Translation of the WordPress plugin BP Groupblog 1.5 by Rodney Blevins & Marius Ooms.
 # Copyright (C) 2010 Rodney Blevins & Marius Ooms
 # This file is distributed under the same license as the BP Groupblog package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: BP Groupblog 1.4.8\n"
+"Project-Id-Version: BP Groupblog 1.5\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/bp-groupblog\n"
-"POT-Creation-Date: 2010-09-11 11:43+0000\n"
+"POT-Creation-Date: 2010-11-03 14:13+0000\n"
 "PO-Revision-Date: 2010-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: bp-groupblog-admin.php:59 bp-groupblog-admin.php:185
+#: bp-groupblog-admin.php:59 bp-groupblog-admin.php:191
 msgid ""
 "<p><strong>This page has been created automatically by the BuddyPress "
 "GroupBlog plugin.</strong></p><p>Please contact the site admin if you see "
@@ -26,81 +26,81 @@ msgid ""
 "BuddyPress GroupBlog plugin.<p>"
 msgstr ""
 
-#: bp-groupblog-admin.php:255
+#: bp-groupblog-admin.php:261
 msgid "GroupBlog Setup"
 msgstr ""
 
-#: bp-groupblog-admin.php:265
+#: bp-groupblog-admin.php:271
 msgid "You do not have permission to access this page."
 msgstr ""
 
-#: bp-groupblog-admin.php:279 themes/p2/inc/options-page.php:82
+#: bp-groupblog-admin.php:285 themes/p2/inc/options-page.php:82
 msgid "Options saved."
 msgstr ""
 
-#: bp-groupblog-admin.php:284
+#: bp-groupblog-admin.php:290
 msgid "BuddyPress GroupBlog Settings"
 msgstr ""
 
-#: bp-groupblog-admin.php:291
+#: bp-groupblog-admin.php:297
 msgid "Theme"
 msgstr ""
 
-#: bp-groupblog-admin.php:292
+#: bp-groupblog-admin.php:298
 msgid "Redirect"
 msgstr ""
 
-#: bp-groupblog-admin.php:293
+#: bp-groupblog-admin.php:299
 msgid "Layout"
 msgstr ""
 
-#: bp-groupblog-admin.php:294
+#: bp-groupblog-admin.php:300
 msgid "Defaults"
 msgstr ""
 
-#: bp-groupblog-admin.php:295
+#: bp-groupblog-admin.php:301
 msgid "Validation"
 msgstr ""
 
-#: bp-groupblog-admin.php:296
+#: bp-groupblog-admin.php:302
 msgid "About"
 msgstr ""
 
-#: bp-groupblog-admin.php:331
+#: bp-groupblog-admin.php:337
 msgid "Default Theme"
 msgstr ""
 
-#: bp-groupblog-admin.php:333
+#: bp-groupblog-admin.php:339
 msgid "Select the default theme:"
 msgstr ""
 
-#: bp-groupblog-admin.php:335
+#: bp-groupblog-admin.php:341
 msgid "GroupBlog Themes:"
 msgstr ""
 
-#: bp-groupblog-admin.php:354
+#: bp-groupblog-admin.php:360
 msgid "Regular Themes:"
 msgstr ""
 
-#: bp-groupblog-admin.php:375
+#: bp-groupblog-admin.php:381
 msgid "Current Theme"
 msgstr ""
 
-#: bp-groupblog-admin.php:378
+#: bp-groupblog-admin.php:384
 msgid "Current theme preview"
 msgstr ""
 
 #. translators: 1: theme title, 2: theme version, 3: theme author
-#: bp-groupblog-admin.php:382
+#: bp-groupblog-admin.php:388
 #, php-format
 msgid "%1$s %2$s by %3$s"
 msgstr ""
 
-#: bp-groupblog-admin.php:392
+#: bp-groupblog-admin.php:398
 msgid "Default Landing Page"
 msgstr ""
 
-#: bp-groupblog-admin.php:394
+#: bp-groupblog-admin.php:400
 msgid ""
 "The page that is linked to from the \"Blog\" tab of the Group navigation. "
 "Selecting \"Disabled\" will use the buddypress template included in the "
@@ -110,27 +110,27 @@ msgid ""
 "can choose a specific page template layout in the next tab."
 msgstr ""
 
-#: bp-groupblog-admin.php:398
+#: bp-groupblog-admin.php:404
 msgid "Redirect Enabled to:"
 msgstr ""
 
-#: bp-groupblog-admin.php:400
+#: bp-groupblog-admin.php:406
 msgid "Disabled"
 msgstr ""
 
-#: bp-groupblog-admin.php:406
+#: bp-groupblog-admin.php:412
 msgid "Home Page"
 msgstr ""
 
-#: bp-groupblog-admin.php:411
+#: bp-groupblog-admin.php:417
 msgid "Page Template Title: "
 msgstr ""
 
-#: bp-groupblog-admin.php:413
+#: bp-groupblog-admin.php:419
 msgid "All existing Group Blogs will be automatically updated on each change."
 msgstr ""
 
-#: bp-groupblog-admin.php:414
+#: bp-groupblog-admin.php:420
 msgid ""
 "The \"Template Page\" option will create a page on group blogs and links to "
 "a template file within your theme. Don't worry about the name you choose, "
@@ -140,201 +140,209 @@ msgid ""
 "manually."
 msgstr ""
 
-#: bp-groupblog-admin.php:419
+#: bp-groupblog-admin.php:425
 msgid "Redirect Group Home:"
 msgstr ""
 
-#: bp-groupblog-admin.php:421
+#: bp-groupblog-admin.php:427
 msgid "Yes, redirect Group Home to Blog Home"
 msgstr ""
 
-#: bp-groupblog-admin.php:421
+#: bp-groupblog-admin.php:427
 msgid ""
 "This option will take control of the GROUP home page and redirects it to the "
 "BLOG home page. This will enable posting from the group Home using P2 "
 "instead of the BuddyPress form."
 msgstr ""
 
-#: bp-groupblog-admin.php:430
+#: bp-groupblog-admin.php:437 bp-groupblog-admin.php:473
 msgid "Template Page Layout"
 msgstr ""
 
-#: bp-groupblog-admin.php:432
+#: bp-groupblog-admin.php:439
 msgid ""
 "Please select the option \"Template Page\" on the Redirect tab in order to "
 "choose a layout."
 msgstr ""
 
-#: bp-groupblog-admin.php:434
+#: bp-groupblog-admin.php:441
 msgid ""
 "Please select a Layout which you would like to use for your Group Blog. "
 "Additionally, incombination with \"Redirect Group Home\" setting you can set "
 "this as your Group Home page."
 msgstr ""
 
-#: bp-groupblog-admin.php:444
+#: bp-groupblog-admin.php:449 bp-groupblog.php:769
 msgid "Magazine"
 msgstr ""
 
-#: bp-groupblog-admin.php:445
+#: bp-groupblog-admin.php:450 bp-groupblog.php:770
 msgid "Balanced template for groups with diverse postings."
 msgstr ""
 
-#: bp-groupblog-admin.php:451
+#: bp-groupblog-admin.php:455 bp-groupblog.php:775
 msgid "Microblog"
 msgstr ""
 
-#: bp-groupblog-admin.php:452
+#: bp-groupblog-admin.php:456 bp-groupblog.php:776
 msgid "Great for simple listing of posts in a chronological order."
 msgstr ""
 
-#: bp-groupblog-admin.php:456
-msgid "(TBD)"
+#: bp-groupblog-admin.php:465
+msgid "Group admin layout control:"
 msgstr ""
 
-#: bp-groupblog-admin.php:457
-msgid "Get in touch with me to vote what third layout is desired."
+#: bp-groupblog-admin.php:467
+msgid "Allow group admins to select the layout for their group themselves."
 msgstr ""
 
-#: bp-groupblog-admin.php:466
+#: bp-groupblog-admin.php:475
+msgid ""
+"Layout options are only available for the \"P2 BuddyPress\" Theme. Please "
+"select the \"P2 Buddypress\" theme on the \"Theme\" tab in order to choose a "
+"layout. Additionally the Redirect option needs to be set to \"Template Page"
+"\"."
+msgstr ""
+
+#: bp-groupblog-admin.php:480
 msgid "Default Blog Settings"
 msgstr ""
 
-#: bp-groupblog-admin.php:471
+#: bp-groupblog-admin.php:485
 msgid "Default Post Category:"
 msgstr ""
 
-#: bp-groupblog-admin.php:473
+#: bp-groupblog-admin.php:487
 msgid "(Overwrites \"Uncategorized\")"
 msgstr ""
 
-#: bp-groupblog-admin.php:477
+#: bp-groupblog-admin.php:491
 msgid "Default Link Category:"
 msgstr ""
 
-#: bp-groupblog-admin.php:479
+#: bp-groupblog-admin.php:493
 msgid "(Overwrites \"Blogroll\")"
 msgstr ""
 
-#: bp-groupblog-admin.php:483
+#: bp-groupblog-admin.php:497
 msgid "Set First Post to Draft"
 msgstr ""
 
-#: bp-groupblog-admin.php:486 bp-groupblog-admin.php:494
-#: bp-groupblog-admin.php:502
+#: bp-groupblog-admin.php:500 bp-groupblog-admin.php:508
+#: bp-groupblog-admin.php:516
 msgid "Yes"
 msgstr ""
 
-#: bp-groupblog-admin.php:486
+#: bp-groupblog-admin.php:500
 msgid "(Default Post \"Hello World\")"
 msgstr ""
 
-#: bp-groupblog-admin.php:491
+#: bp-groupblog-admin.php:505
 msgid "Delete Initial Comment"
 msgstr ""
 
-#: bp-groupblog-admin.php:499
+#: bp-groupblog-admin.php:513
 msgid "Delete Blogroll Links"
 msgstr ""
 
-#: bp-groupblog-admin.php:512
+#: bp-groupblog-admin.php:526
 msgid "Validation Settings"
 msgstr ""
 
-#: bp-groupblog-admin.php:514
+#: bp-groupblog-admin.php:528
 msgid "Change the default WordPress blog validation settings."
 msgstr ""
 
-#: bp-groupblog-admin.php:518
+#: bp-groupblog-admin.php:532
 msgid "Allow:"
 msgstr ""
 
-#: bp-groupblog-admin.php:521
+#: bp-groupblog-admin.php:535
 msgid "Dashes"
 msgstr ""
 
-#: bp-groupblog-admin.php:521 bp-groupblog-admin.php:529
-#: bp-groupblog-admin.php:537
+#: bp-groupblog-admin.php:535 bp-groupblog-admin.php:543
+#: bp-groupblog-admin.php:551
 msgid "(Default: Not Allowed)"
 msgstr ""
 
-#: bp-groupblog-admin.php:529
+#: bp-groupblog-admin.php:543
 msgid "Underscores"
 msgstr ""
 
-#: bp-groupblog-admin.php:537
+#: bp-groupblog-admin.php:551
 msgid "All Numeric Names"
 msgstr ""
 
-#: bp-groupblog-admin.php:542
+#: bp-groupblog-admin.php:556
 msgid "Minimum Length:"
 msgstr ""
 
-#: bp-groupblog-admin.php:544
+#: bp-groupblog-admin.php:558
 msgid "(Default: 4 Characters)"
 msgstr ""
 
-#: bp-groupblog-admin.php:553
+#: bp-groupblog-admin.php:567
 msgid "About This PLugin"
 msgstr ""
 
-#: bp-groupblog-admin.php:556
+#: bp-groupblog-admin.php:570
 msgid "Authors"
 msgstr ""
 
-#: bp-groupblog-admin.php:560
+#: bp-groupblog-admin.php:574
 msgid "Donate"
 msgstr ""
 
-#: bp-groupblog-admin.php:561
+#: bp-groupblog-admin.php:575
 msgid "PayPal"
 msgstr ""
 
-#: bp-groupblog-admin.php:564
+#: bp-groupblog-admin.php:578
 msgid "Support"
 msgstr ""
 
-#: bp-groupblog-admin.php:565
+#: bp-groupblog-admin.php:579
 msgid "BuddyPress Forums"
 msgstr ""
 
-#: bp-groupblog-admin.php:566
+#: bp-groupblog-admin.php:580
 msgid "WordPress Forums"
 msgstr ""
 
-#: bp-groupblog-admin.php:569
+#: bp-groupblog-admin.php:583
 msgid "Trac"
 msgstr ""
 
-#: bp-groupblog-admin.php:570
+#: bp-groupblog-admin.php:584
 msgid "Revision Log"
 msgstr ""
 
-#: bp-groupblog-admin.php:570
+#: bp-groupblog-admin.php:584
 msgid "Trac Browser"
 msgstr ""
 
-#: bp-groupblog-admin.php:573
+#: bp-groupblog-admin.php:587
 msgid "Rate"
 msgstr ""
 
-#: bp-groupblog-admin.php:574
+#: bp-groupblog-admin.php:588
 msgid "Let everyone know! Only if you like it :)"
 msgstr ""
 
-#: bp-groupblog-admin.php:578
+#: bp-groupblog-admin.php:592
 msgid "Acknowledgement"
 msgstr ""
 
-#: bp-groupblog-admin.php:579
+#: bp-groupblog-admin.php:593
 msgid "Thanks goes out to the following people:"
 msgstr ""
 
-#: bp-groupblog-admin.php:596
+#: bp-groupblog-admin.php:610
 msgid "Save Changes"
 msgstr ""
 
-#: bp-groupblog-classes.php:14 bp-groupblog.php:668
+#: bp-groupblog-classes.php:14 bp-groupblog.php:675
 msgid "Group Blog"
 msgstr ""
 
@@ -345,11 +353,11 @@ msgstr ""
 msgid "Blog"
 msgstr ""
 
-#: bp-groupblog.php:156 bp-groupblog.php:423
+#: bp-groupblog.php:156 bp-groupblog.php:426
 msgid "Please choose one of your blogs from the drop-down menu."
 msgstr ""
 
-#: bp-groupblog.php:171 bp-groupblog.php:432
+#: bp-groupblog.php:171 bp-groupblog.php:435
 msgid "There was an error creating your group blog, please try again."
 msgstr ""
 
@@ -357,174 +365,182 @@ msgstr ""
 msgid "Group details were successfully updated."
 msgstr ""
 
-#: bp-groupblog.php:454 bp-groupblog.php:506
+#: bp-groupblog.php:457 bp-groupblog.php:509
 msgid "Blog Title:"
 msgstr ""
 
-#: bp-groupblog.php:461 bp-groupblog.php:515
+#: bp-groupblog.php:464 bp-groupblog.php:518
 msgid "Blog Address:"
 msgstr ""
 
-#: bp-groupblog.php:486
+#: bp-groupblog.php:489
 msgid ""
 "Choose either one of your existing blogs or create a new one all together "
 "with the details displayed below."
 msgstr ""
 
-#: bp-groupblog.php:486
+#: bp-groupblog.php:489
 msgid ""
 "Take care as you can only choose once.  Later you may still disable or "
 "enable the blog, but your choice is set."
 msgstr ""
 
-#: bp-groupblog.php:488
+#: bp-groupblog.php:491
 msgid "Use one of your own available blogs:"
 msgstr ""
 
-#: bp-groupblog.php:490
+#: bp-groupblog.php:493
 msgid "choose a blog"
 msgstr ""
 
-#: bp-groupblog.php:502
+#: bp-groupblog.php:505
 msgid "Or, create a new blog"
 msgstr ""
 
-#: bp-groupblog.php:600
+#: bp-groupblog.php:607
 msgid "Only lowercase letters and numbers allowed"
 msgstr ""
 
-#: bp-groupblog.php:606
+#: bp-groupblog.php:613
 msgid "Blog name must be at least "
 msgstr ""
 
-#: bp-groupblog.php:610
+#: bp-groupblog.php:617
 msgid "Sorry, blog names may not contain the character '_'!"
 msgstr ""
 
-#: bp-groupblog.php:615
+#: bp-groupblog.php:622
 msgid "Sorry, blog names must have letters too!"
 msgstr ""
 
-#: bp-groupblog.php:676
+#: bp-groupblog.php:683
 msgid "Enable group blog"
 msgstr ""
 
-#: bp-groupblog.php:685
+#: bp-groupblog.php:692
 msgid "Member Options"
 msgstr ""
 
-#: bp-groupblog.php:687
+#: bp-groupblog.php:694
 msgid ""
 "Enable blog posting to allow adding of group members to the blog with the "
 "roles set below."
 msgstr ""
 
-#: bp-groupblog.php:687
+#: bp-groupblog.php:694
 msgid ""
 "When disabled, all members will temporarily be set to subscribers, disabling "
 "posting."
 msgstr ""
 
-#: bp-groupblog.php:690
+#: bp-groupblog.php:697
 msgid "Enable member blog posting"
 msgstr ""
 
-#: bp-groupblog.php:707
+#: bp-groupblog.php:714
 msgid "Default Administrator Role:"
 msgstr ""
 
-#: bp-groupblog.php:708 bp-groupblog.php:715 bp-groupblog.php:722
-#: bp-groupblog.php:731
+#: bp-groupblog.php:715 bp-groupblog.php:722 bp-groupblog.php:729
+#: bp-groupblog.php:738
 msgid "Administrator"
 msgstr ""
 
-#: bp-groupblog.php:709 bp-groupblog.php:716 bp-groupblog.php:723
-#: bp-groupblog.php:732
+#: bp-groupblog.php:716 bp-groupblog.php:723 bp-groupblog.php:730
+#: bp-groupblog.php:739
 msgid "Editor"
 msgstr ""
 
-#: bp-groupblog.php:710 bp-groupblog.php:717 bp-groupblog.php:724
-#: bp-groupblog.php:733
+#: bp-groupblog.php:717 bp-groupblog.php:724 bp-groupblog.php:731
+#: bp-groupblog.php:740
 msgid "Author"
 msgstr ""
 
-#: bp-groupblog.php:711 bp-groupblog.php:718 bp-groupblog.php:725
-#: bp-groupblog.php:734
+#: bp-groupblog.php:718 bp-groupblog.php:725 bp-groupblog.php:732
+#: bp-groupblog.php:741
 msgid "Contributor"
 msgstr ""
 
-#: bp-groupblog.php:712 bp-groupblog.php:719 bp-groupblog.php:726
-#: bp-groupblog.php:735
+#: bp-groupblog.php:719 bp-groupblog.php:726 bp-groupblog.php:733
+#: bp-groupblog.php:742
 msgid "Subscriber"
 msgstr ""
 
-#: bp-groupblog.php:714
+#: bp-groupblog.php:721
 msgid "Default Moderator Role:"
 msgstr ""
 
-#: bp-groupblog.php:721
+#: bp-groupblog.php:728
 msgid "Default Member Role:"
 msgstr ""
 
-#: bp-groupblog.php:729
+#: bp-groupblog.php:736
 msgid "A bit about the WPMU member roles:"
 msgstr ""
 
-#: bp-groupblog.php:731
+#: bp-groupblog.php:738
 msgid "Somebody who has access to all the administration features."
 msgstr ""
 
-#: bp-groupblog.php:732
+#: bp-groupblog.php:739
 msgid ""
 "Somebody who can publish posts, manage posts as well as manage other "
 "people's posts, etc."
 msgstr ""
 
-#: bp-groupblog.php:733
+#: bp-groupblog.php:740
 msgid "Somebody who can publish and manage their own posts."
 msgstr ""
 
-#: bp-groupblog.php:734
+#: bp-groupblog.php:741
 msgid "Somebody who can write and manage their posts but not publish posts."
 msgstr ""
 
-#: bp-groupblog.php:735
+#: bp-groupblog.php:742
 msgid "Somebody who can read comments/comment/receive news letters, etc."
 msgstr ""
 
-#: bp-groupblog.php:745
+#: bp-groupblog.php:759
+msgid "Select Layout"
+msgstr ""
+
+#: bp-groupblog.php:761
+msgid "Please select a Layout which you would like to use for your Group Blog."
+msgstr ""
+
+#: bp-groupblog.php:790
 msgid "Save Changes &raquo;"
 msgstr ""
 
-#: bp-groupblog.php:777
+#: bp-groupblog.php:822
 msgid " However, you may continue with the blog address as listed below."
 msgstr ""
 
-#: bp-groupblog.php:778
+#: bp-groupblog.php:823
 msgid ""
 " We suggest adjusting the group name in group details following these "
 "requirements."
 msgstr ""
 
-#: bp-groupblog.php:780
+#: bp-groupblog.php:825
 msgid " &raquo; Only letters and numbers allowed."
 msgstr ""
 
-#: bp-groupblog.php:781
+#: bp-groupblog.php:826
 #, php-format
 msgid " &raquo; Must be at least %s characters."
 msgstr ""
 
-#: bp-groupblog.php:783
+#: bp-groupblog.php:828
 msgid " &raquo; Has to contain letters as well."
 msgstr ""
 
-#: bp-groupblog.php:885
+#: bp-groupblog.php:933
 #, php-format
 msgid "%s wrote a new blog post %s in the group %s:"
 msgstr ""
 
-#: bp-groupblog.php:900
+#: bp-groupblog.php:948
 msgid "Show Blog Posts"
 msgstr ""
 
@@ -538,6 +554,7 @@ msgstr ""
 
 #: groupblog/inc/posts.php:18 groupblog/inc/posts.php:25
 #: themes/bp-groupblog/archive.php:44 themes/bp-groupblog/archive.php:50
+#: themes/bp-groupblog/blog.php:43 themes/bp-groupblog/blog.php:49
 #: themes/bp-groupblog/index.php:35 themes/bp-groupblog/index.php:41
 #: themes/bp-groupblog/search.php:44 themes/bp-groupblog/search.php:50
 #: themes/bp-groupblog/single.php:38 themes/bp-groupblog/single.php:44
@@ -559,8 +576,9 @@ msgid "by %s"
 msgstr ""
 
 #: groupblog/inc/posts.php:22 themes/bp-groupblog/archive.php:48
-#: themes/bp-groupblog/index.php:39 themes/bp-groupblog/search.php:48
-#: themes/bp-groupblog/single.php:42 themes/p2-buddypress/archive.php:33
+#: themes/bp-groupblog/blog.php:47 themes/bp-groupblog/index.php:39
+#: themes/bp-groupblog/search.php:48 themes/bp-groupblog/single.php:42
+#: themes/p2-buddypress/archive.php:33
 #: themes/p2-buddypress/groupblog/layouts/magazine.php:9
 #: themes/p2-buddypress/groupblog/layouts/magazine.php:21
 #: themes/p2-buddypress/groupblog/layouts/magazine.php:33
@@ -572,8 +590,9 @@ msgid "Permanent Link to"
 msgstr ""
 
 #: groupblog/inc/posts.php:24 themes/bp-groupblog/archive.php:50
-#: themes/bp-groupblog/index.php:41 themes/bp-groupblog/search.php:50
-#: themes/bp-groupblog/single.php:44 themes/p2-buddypress/archive.php:35
+#: themes/bp-groupblog/blog.php:49 themes/bp-groupblog/index.php:41
+#: themes/bp-groupblog/search.php:50 themes/bp-groupblog/single.php:44
+#: themes/p2-buddypress/archive.php:35
 #: themes/p2-buddypress/groupblog/layouts/magazine.php:10
 #: themes/p2-buddypress/groupblog/layouts/magazine.php:22
 #: themes/p2-buddypress/groupblog/layouts/magazine.php:34
@@ -585,8 +604,9 @@ msgid "in"
 msgstr ""
 
 #: groupblog/inc/posts.php:28 themes/bp-groupblog/archive.php:53
-#: themes/bp-groupblog/index.php:44 themes/bp-groupblog/search.php:53
-#: themes/bp-groupblog/single.php:47 themes/p2-buddypress/archive.php:38
+#: themes/bp-groupblog/blog.php:52 themes/bp-groupblog/index.php:44
+#: themes/bp-groupblog/search.php:53 themes/bp-groupblog/single.php:47
+#: themes/p2-buddypress/archive.php:38
 #: themes/p2-buddypress/groupblog/layouts/magazine.php:12
 #: themes/p2-buddypress/groupblog/layouts/magazine.php:24
 #: themes/p2-buddypress/groupblog/layouts/magazine.php:36
@@ -601,37 +621,42 @@ msgid "Tags:"
 msgstr ""
 
 #: groupblog/inc/posts.php:31 themes/bp-groupblog/archive.php:56
-#: themes/bp-groupblog/index.php:47 themes/bp-groupblog/search.php:56
-#: themes/bp-groupblog/single.php:52 themes/p2-buddypress/archive.php:41
+#: themes/bp-groupblog/blog.php:55 themes/bp-groupblog/index.php:47
+#: themes/bp-groupblog/search.php:56 themes/bp-groupblog/single.php:52
+#: themes/p2-buddypress/archive.php:41
 #: themes/p2-buddypress/groupblog/layouts/news.php:34
 #: themes/p2-buddypress/search.php:41
 msgid "No Comments &#187;"
 msgstr ""
 
 #: groupblog/inc/posts.php:31 themes/bp-groupblog/archive.php:56
-#: themes/bp-groupblog/index.php:47 themes/bp-groupblog/search.php:56
-#: themes/bp-groupblog/single.php:52 themes/p2-buddypress/archive.php:41
+#: themes/bp-groupblog/blog.php:55 themes/bp-groupblog/index.php:47
+#: themes/bp-groupblog/search.php:56 themes/bp-groupblog/single.php:52
+#: themes/p2-buddypress/archive.php:41
 #: themes/p2-buddypress/groupblog/layouts/news.php:34
 #: themes/p2-buddypress/search.php:41
 msgid "1 Comment &#187;"
 msgstr ""
 
 #: groupblog/inc/posts.php:31 themes/bp-groupblog/archive.php:56
-#: themes/bp-groupblog/index.php:47 themes/bp-groupblog/search.php:56
-#: themes/bp-groupblog/single.php:52 themes/p2-buddypress/archive.php:41
+#: themes/bp-groupblog/blog.php:55 themes/bp-groupblog/index.php:47
+#: themes/bp-groupblog/search.php:56 themes/bp-groupblog/single.php:52
+#: themes/p2-buddypress/archive.php:41
 #: themes/p2-buddypress/groupblog/layouts/news.php:34
 #: themes/p2-buddypress/search.php:41
 msgid "% Comments &#187;"
 msgstr ""
 
 #: groupblog/inc/posts.php:42 themes/bp-groupblog/archive.php:74
-#: themes/bp-groupblog/index.php:65 themes/p2-buddypress/archive.php:59
+#: themes/bp-groupblog/blog.php:73 themes/bp-groupblog/index.php:65
+#: themes/p2-buddypress/archive.php:59
 #: themes/p2-buddypress/groupblog/layouts/magazine.php:42
 #: themes/p2-buddypress/groupblog/layouts/news.php:52 themes/p2/404.php:13
 msgid "Not Found"
 msgstr ""
 
-#: groupblog/inc/posts.php:43 themes/bp-groupblog/index.php:66
+#: groupblog/inc/posts.php:43 themes/bp-groupblog/blog.php:74
+#: themes/bp-groupblog/index.php:66
 #: themes/p2-buddypress/groupblog/layouts/magazine.php:43
 #: themes/p2-buddypress/groupblog/layouts/news.php:53
 msgid "Sorry, but you are looking for something that isn't here."
@@ -699,9 +724,10 @@ msgid "You are browsing the archive for %1$s."
 msgstr ""
 
 #: themes/bp-groupblog/archive.php:31 themes/bp-groupblog/archive.php:67
-#: themes/bp-groupblog/index.php:58 themes/bp-groupblog/search.php:32
-#: themes/bp-groupblog/search.php:66 themes/bp-groupblog/single.php:29
-#: themes/p2-buddypress/archive.php:16 themes/p2-buddypress/archive.php:52
+#: themes/bp-groupblog/blog.php:66 themes/bp-groupblog/index.php:58
+#: themes/bp-groupblog/search.php:32 themes/bp-groupblog/search.php:66
+#: themes/bp-groupblog/single.php:29 themes/p2-buddypress/archive.php:16
+#: themes/p2-buddypress/archive.php:52
 #: themes/p2-buddypress/groupblog/layouts/news.php:45
 #: themes/p2-buddypress/search.php:17 themes/p2-buddypress/search.php:51
 #: themes/p2-buddypress/single.php:21
@@ -709,9 +735,10 @@ msgid "&larr; Previous Entries"
 msgstr ""
 
 #: themes/bp-groupblog/archive.php:32 themes/bp-groupblog/archive.php:68
-#: themes/bp-groupblog/index.php:59 themes/bp-groupblog/search.php:33
-#: themes/bp-groupblog/search.php:67 themes/bp-groupblog/single.php:30
-#: themes/p2-buddypress/archive.php:17 themes/p2-buddypress/archive.php:53
+#: themes/bp-groupblog/blog.php:67 themes/bp-groupblog/index.php:59
+#: themes/bp-groupblog/search.php:33 themes/bp-groupblog/search.php:67
+#: themes/bp-groupblog/single.php:30 themes/p2-buddypress/archive.php:17
+#: themes/p2-buddypress/archive.php:53
 #: themes/p2-buddypress/groupblog/layouts/news.php:46
 #: themes/p2-buddypress/search.php:18 themes/p2-buddypress/search.php:52
 #: themes/p2-buddypress/single.php:22
@@ -723,9 +750,9 @@ msgstr ""
 msgid "F j, Y"
 msgstr ""
 
-#: themes/bp-groupblog/archive.php:56 themes/bp-groupblog/index.php:47
-#: themes/bp-groupblog/search.php:56 themes/bp-groupblog/single.php:52
-#: themes/p2-buddypress/archive.php:41
+#: themes/bp-groupblog/archive.php:56 themes/bp-groupblog/blog.php:55
+#: themes/bp-groupblog/index.php:47 themes/bp-groupblog/search.php:56
+#: themes/bp-groupblog/single.php:52 themes/p2-buddypress/archive.php:41
 #: themes/p2-buddypress/groupblog/comments.php:43
 #: themes/p2-buddypress/groupblog/layouts/microblog-entry.php:49
 #: themes/p2-buddypress/groupblog/layouts/news.php:34
@@ -738,26 +765,15 @@ msgstr ""
 msgid "<p class=\"serif\">Read the rest of this entry &rarr;</p>"
 msgstr ""
 
-#: themes/bp-groupblog/attachment.php:43 themes/bp-groupblog/blog.php:41
-#: themes/bp-groupblog/page.php:35 themes/bp-groupblog/single.php:49
-#: themes/p2-buddypress/attachment.php:27 themes/p2-buddypress/page.php:20
-#: themes/p2-buddypress/single.php:41
+#: themes/bp-groupblog/attachment.php:43 themes/bp-groupblog/page.php:35
+#: themes/bp-groupblog/single.php:49 themes/p2-buddypress/attachment.php:27
+#: themes/p2-buddypress/page.php:20 themes/p2-buddypress/single.php:41
 msgid "<p><strong>Pages:</strong> "
 msgstr ""
 
 #: themes/bp-groupblog/attachment.php:54
 #: themes/p2-buddypress/attachment.php:38
 msgid "Sorry, no attachments matched your criteria."
-msgstr ""
-
-#: themes/bp-groupblog/blog.php:39 themes/bp-groupblog/page.php:33
-#: themes/p2-buddypress/page.php:18
-msgid "<p class=\"serif\">Read the rest of this page &rarr;</p>"
-msgstr ""
-
-#: themes/bp-groupblog/blog.php:42 themes/bp-groupblog/page.php:36
-#: themes/p2-buddypress/page.php:21
-msgid "Edit this entry."
 msgstr ""
 
 #: themes/bp-groupblog/functions.php:7 themes/bp-groupblog/header.php:40
@@ -822,6 +838,14 @@ msgstr ""
 
 #: themes/bp-groupblog/links.php:31 themes/p2-buddypress/links.php:16
 msgid "Links"
+msgstr ""
+
+#: themes/bp-groupblog/page.php:33 themes/p2-buddypress/page.php:18
+msgid "<p class=\"serif\">Read the rest of this page &rarr;</p>"
+msgstr ""
+
+#: themes/bp-groupblog/page.php:36 themes/p2-buddypress/page.php:21
+msgid "Edit this entry."
 msgstr ""
 
 #: themes/bp-groupblog/search.php:29 themes/p2-buddypress/search.php:14
