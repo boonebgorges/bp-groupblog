@@ -12,13 +12,11 @@ BuddyPress Groupblog extends the group functionality by enabling the group to ha
 
 The BuddyPress Groupblog plugin extends the group functionality by enabling each group to have a single blog associated with it. Group members are automatically added to the blog and will have blog roles as set by the groupblog admin settings.
 
-**NOTE:**
-At the moment we are having issues with WP multisites that use a subdomain setup. For now WP with subdomains is unsupported, subdirectories work fine however.
-
 **Features:**
 
 * P2 integration and frontend posting.
 * Admin can set Template specific groupblogs.
+* Allow group admins choose the desired template page themselves.
 * Full blog theme integration. The included bp-groupblog theme mimics the group pages.
 * Automated blog registration at group creation stage.
 * Bypass default blog validation to allow dashes, underscores, numeral only and minimum character count.
@@ -30,7 +28,6 @@ At the moment we are having issues with WP multisites that use a subdomain setup
 * Blog themes will have the ability to pull in group info and create a theme that could resemble the group exactly.
 * Leaving the group will downgrade the member role to 'subscriber'.
 * Allow the group admin to select one of his/her existing blogs.
-* Allow group admins choose the desired template page themselves.
 * A new ajax backend.
 
 **Roadmap:**
