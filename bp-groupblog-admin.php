@@ -105,6 +105,12 @@ function bp_groupblog_update_defaults() {
 	else
 		$newoptions['delete_blogroll_links'] = 0;
 
+	// groupblog layout settings
+	if ( $_POST['group_admin_layout'] == 1 )
+		$newoptions['group_admin_layout'] = 1;
+	else
+		$newoptions['group_admin_layout'] = 0;
+		
 	// redirect group home to blog home
 	if ( $_POST['deep_group_integration'] == 1 )
 		$newoptions['deep_group_integration'] = 1;
@@ -426,6 +432,7 @@ function bp_groupblog_management_page() {
 		
 				</div>
 				<div id='groupblog_template_layout'>
+				<?php if ( $opt['theme'] == 'p2|p2-buddypress' )	{ ?>
 		
 					<h3><?php _e( 'Template Page Layout', 'groupblog' ) ?></h3>
 					
@@ -437,29 +444,36 @@ function bp_groupblog_management_page() {
 						<tbody>
 						<tr class="alt">
 							<td class="available-theme top left">
-								<a href="<?php echo WP_CONTENT_URL ?>/themes/p2-buddypress/groupblog/_inc/i/screenshot-mag.jpg" class="thickbox thickbox-preview screenshot">
-									<?php echo '<img src="' . WP_CONTENT_URL . '/themes/p2-buddypress/groupblog/_inc/i/screenshot-mag.jpg">';?>
-								</a>
+								<?php echo '<img src="' . WP_PLUGIN_URL . '/bp-groupblog/inc/i/screenshot-mag.png">';?>
 								<div class="clear"></div>
-								<input name="page_template_layout" id="page_template_layout"  value="magazine" type="radio" <?php if ($opt['page_template_layout'] == 'magazine') echo 'checked="checked"'; ?> onFocus="jQuery('.toggle-init').attr('checked', true)" /><h3 style="display:inline;"> <?php _e( 'Magazine', 'groupblog' ) ?></h3>
+								<input name="page_template_layout" id="page_template_layout"  value="magazine" type="radio" <?php if ($opt['page_template_layout'] == 'magazine') echo 'checked="checked"'; ?>  /><h3 style="display:inline;"> <?php _e( 'Magazine', 'groupblog' ) ?></h3>
 								<p class="description"><?php _e( 'Balanced template for groups with diverse postings.', 'groupblog' ) ?></p>
 							</td>
 							<td class="available-theme top">
-								<a href="<?php echo WP_CONTENT_URL ?>/themes/p2-buddypress/groupblog/_inc/i/screenshot-micro.jpg" class="thickbox thickbox-preview screenshot">
-									<?php echo '<img src="' . WP_CONTENT_URL . '/themes/p2-buddypress/groupblog/_inc/i/screenshot-micro.jpg">';?>
-								</a>
-								<input name="page_template_layout" id="page_template_layout"  value="microblog" type="radio" <?php if ($opt['page_template_layout'] == 'microblog') echo 'checked="checked"'; ?> onFocus="jQuery('.toggle-init').attr('checked', true)" /><h3 style="display:inline;"> <?php _e( 'Microblog', 'groupblog' ) ?></h3>
+								<?php echo '<img src="' . WP_PLUGIN_URL . '/bp-groupblog/inc/i/screenshot-micro.png">';?>
+								<div class="clear"></div>
+								<input name="page_template_layout" id="page_template_layout"  value="microblog" type="radio" <?php if ($opt['page_template_layout'] == 'microblog') echo 'checked="checked"'; ?> /><h3 style="display:inline;"> <?php _e( 'Microblog', 'groupblog' ) ?></h3>
 								<p class="description"><?php _e( 'Great for simple listing of posts in a chronological order.', 'groupblog' ) ?></p>
-							</td>
-							<td class="available-theme top right">
-								<a href="#" class="thickbox thickbox-preview screenshot"></a>
-								<input disabled name="page_template_layout" id="page_template_layout"  value="news" type="radio" <?php if ($opt['page_template_layout'] == 'news') echo 'checked="checked"'; ?> onFocus="jQuery('.toggle-init').attr('checked', true)" /><h3 style="display:inline;"> <?php _e( '(TBD)', 'groupblog' ) ?></h3>
-								<p class="description"><?php _e( 'Get in touch with me to vote what third layout is desired.', 'groupblog' ) ?></p>
 							</td>
 						</tr>
 						</tbody>
 					</table>
-								
+					
+					<table class="form-table enabled">
+					<tbody>
+						<tr> 
+							<th><?php _e( 'Group admin layout control:', 'groupblog' ) ?></th>
+							<td> 
+								<label for="group_admin_layout"><input name="group_admin_layout" type="checkbox" id="group_admin_layout" value="1" <?php if ($opt['group_admin_layout'] == 1) echo('checked="checked"'); ?> /> <?php _e( 'Allow group admins to select the layout for their group themselves.', 'groupblog' ) ?></label>
+					  	</td>
+						</tr>
+						</tbody>
+					</table>
+				<?php } else { ?>
+					<h3><?php _e( 'Template Page Layout', 'groupblog' ) ?></h3>
+					
+					<p><?php _e( 'Layout options are only available for the "P2 BuddyPress" Theme. Please select the "P2 Buddypress" theme on the "Theme" tab in order to choose a layout. Additionally the Redirect option needs to be set to "Template Page".', 'groupblog' ) ?></p>
+				<?php } ?>				
 				</div>
 				<div id='groupblog_default_blog_settings'>
 					

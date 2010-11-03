@@ -5,6 +5,7 @@ jQuery(document).ready( function() {
 	    jQuery('input[name=groupblog-create-new]').removeAttr('disabled');
 	    jQuery('select[name=groupblog-blogid]').removeAttr('disabled');
 	    jQuery('input[name=groupblog-silent-add]').removeAttr('disabled');
+	    jQuery('#groupblog-layout-options input[type=radio]').removeAttr('disabled');
 	    if (jQuery('input[name=groupblog-silent-add]').is(':checked')) {
 	      jQuery('#groupblog-member-options input[type=radio]').removeAttr('disabled');
 	    } else {
@@ -15,6 +16,7 @@ jQuery(document).ready( function() {
 	    jQuery('select[name=groupblog-blogid]').attr('disabled','true');
 	    jQuery('input[name=groupblog-silent-add]').attr('disabled','true');
 	    jQuery('#groupblog-member-options input[type=radio]').attr('disabled','true');
+	    jQuery('#groupblog-layout-options input[type=radio]').attr('disabled','true');
 		}
 	});
  

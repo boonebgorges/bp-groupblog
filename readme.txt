@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: buddypress,groups,blogs,content
 Requires at least: WP 3.0 / BP 1.2
 Tested up to: WP 3.0.1
-Stable tag: 1.4.9
+Stable tag: 1.5
 
 BuddyPress Groupblog extends the group functionality by enabling the group to have a single blog associated with it.
 
@@ -30,13 +30,12 @@ At the moment we are having issues with WP multisites that use a subdomain setup
 * Blog themes will have the ability to pull in group info and create a theme that could resemble the group exactly.
 * Leaving the group will downgrade the member role to 'subscriber'.
 * Allow the group admin to select one of his/her existing blogs.
+* Allow group admins choose the desired template page themselves.
 * A new ajax backend.
 
 **Roadmap:**
 
 * Allow the admin to let group admins choose the blog name, instead of following the group name.
-* Allow group admins choose the desired template page themselves.
-* Include an RSS icon for easy access to the Blog's RSS feed.
 
 == Installation ==
 
@@ -108,6 +107,12 @@ function bp_core_avatar_url() {
 2. Screenshot of the group blog page.
 
 == Changelog == 
+
+= 1.5 =
+* Added support for subdomains, big thanks to Lemmy
+* Added the ability to select layout for group admins
+* Added check to make sure Layout options are only available to P2 BuddyPress theme
+* Generated a new pot file
 
 = 1.4.9 =
 * Generated a new pot file

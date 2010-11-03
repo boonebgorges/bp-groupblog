@@ -4,7 +4,7 @@ Plugin Name: BP Groupblog
 Plugin URI: http://wordpress.org/extend/plugins/search.php?q=buddypress+groupblog
 Description: Automates and links WPMU blogs groups controlled by the group creator.
 Author: Rodney Blevins & Marius Ooms
-Version: 1.4.9
+Version: 1.5
 License: (Groupblog: GNU General Public License 2.0 (GPL) http://www.gnu.org/licenses/gpl.html)
 Site Wide Only: true
 */
@@ -20,7 +20,7 @@ if ( !function_exists( 'bp_core_install' ) ) {
 /*******************************************************************/
 
 define ( 'BP_GROUPBLOG_IS_INSTALLED', 1 );
-define ( 'BP_GROUPBLOG_VERSION', '1.4.9' );
+define ( 'BP_GROUPBLOG_VERSION', '1.5' );
 
 // Define default roles
 if ( !defined( 'BP_GROUPBLOG_DEFAULT_ADMIN_ROLE' ) )
@@ -167,7 +167,7 @@ function groupblog_edit_settings() {
 					$groupblog_blog_id = groups_get_groupmeta ( $bp->groups->current_group->id, 'groupblog_blog_id' );
 				}
 
-				if ( !groupblog_edit_base_settings( $_POST['groupblog-enable-blog'], $_POST['groupblog-silent-add'], $_POST['default-administrator'], $_POST['default-moderator'], $_POST['default-member'], $bp->groups->current_group->id, $groupblog_blog_id ) ) {
+				if ( !groupblog_edit_base_settings( $_POST['groupblog-enable-blog'], $_POST['groupblog-silent-add'], $_POST['default-administrator'], $_POST['default-moderator'], $_POST['default-member'], $_POST['page_template_layout'], $bp->groups->current_group->id, $groupblog_blog_id ) ) {
 					bp_core_add_message( __( 'There was an error creating your group blog, please try again.', 'groupblog' ), 'error' );
 				} else {
 					bp_core_add_message( __( 'Group details were successfully updated.', 'groupblog' ) );
@@ -188,7 +188,7 @@ add_action( 'wp', 'groupblog_edit_settings', 4 );
  * Updates the groupmeta with the blog_id, default roles and if it is enabled or not.
  * Initiating member permissions loop on save - by Boone
  */
-function groupblog_edit_base_settings( $groupblog_enable_blog, $groupblog_silent_add = NULL, $groupblog_default_admin_role, $groupblog_default_mod_role, $groupblog_default_member_role, $group_id, $groupblog_blog_id = NULL ) {
+function groupblog_edit_base_settings( $groupblog_enable_blog, $groupblog_silent_add = NULL, $groupblog_default_admin_role, $groupblog_default_mod_role, $groupblog_default_member_role, $page_template_layout, $group_id, $groupblog_blog_id = NULL ) {
 	global $bp;
 	
 	if ( empty( $group_id ) )
@@ -213,6 +213,8 @@ function groupblog_edit_base_settings( $groupblog_enable_blog, $groupblog_silent
   groups_update_groupmeta ( $group_id, 'groupblog_default_admin_role', $groupblog_default_admin_role );
 	groups_update_groupmeta ( $group_id, 'groupblog_default_mod_role', $groupblog_default_mod_role );
 	groups_update_groupmeta ( $group_id, 'groupblog_default_member_role', $groupblog_default_member_role );	
+
+	groups_update_groupmeta ( $group_id, 'page_template_layout', $page_template_layout );
 		
 	if ( $update_users ) {
 		bp_groupblog_member_join( $group_id );
@@ -407,6 +409,7 @@ function bp_groupblog_create_screen_save() {
 	$groupblog_default_member_role = $_POST['default-member'];
 	$groupblog_group_id = $_POST['group_id'];
 	$silent_add = $_POST['groupblog-silent-add'];
+	$page_template_layout = $_POST['page_template_layout'];
 	
 	if ( isset ($_POST['save'] ) && isset ($_POST['groupblog-create-save']) && isset($_POST['groupblog-enable-blog']) ) {
 	    if ( $_POST['groupblog-create-new'] == 'yes' ) {
@@ -428,7 +431,7 @@ function bp_groupblog_create_screen_save() {
 			$groupblog_blog_id = groups_get_groupmeta ( $bp->groups->current_group->id, 'groupblog_blog_id' );
 		}
 	
-		if ( !groupblog_edit_base_settings( $_POST['groupblog-enable-blog'], $_POST['groupblog-silent-add'], $_POST['default-administrator'], $_POST['default-moderator'], $_POST['default-member'], $groupblog_group_id, $groupblog_blog_id ) ) {
+		if ( !groupblog_edit_base_settings( $_POST['groupblog-enable-blog'], $_POST['groupblog-silent-add'], $_POST['default-administrator'], $_POST['default-moderator'], $_POST['default-member'], $_POST['page_template_layout'], $groupblog_group_id, $groupblog_blog_id ) ) {
 			bp_core_add_message( __( 'There was an error creating your group blog, please try again.', 'groupblog' ), 'error' );
 			bp_core_redirect( $bp->loggedin_user->domain . $bp->groups->slug . '/create/step/' . $bp->action_variables[1] );
 		}
@@ -535,8 +538,12 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 					$blog_address .= 'blog';
 				}
 				?>
-		
-				<span><em><?php echo 'http://' . $current_site->domain . $current_site->path . $blog_address ?></em></span>
+				
+				<?php if (is_subdomain_install()) { ?>
+					<span><em><?php echo 'http://' . $blog_address. '.' . $current_site->domain . $current_site->path ?></em></span>
+				<?php } else { ?>
+					<span><em><?php echo 'http://' . $current_site->domain . $current_site->path . $blog_address ?></em></span>
+				<?php } ?>
 				<input name="blogname" type="hidden" id="blogname" value="<?php echo $blog_address; ?>" maxlength="50" />
 			</li>
     </ul>
@@ -679,7 +686,7 @@ function bp_groupblog_signup_blog($blogname = '', $blog_title = '', $errors = ''
 		<?php bp_groupblog_show_blog_form($blogname, $blog_title, $errors); ?>
 		
 		<br />
-						
+									
 		<div id="groupblog-member-options">
 		
 			<h3><?php _e( 'Member Options', 'groupblog' ) ?></h3>
@@ -740,6 +747,44 @@ function bp_groupblog_signup_blog($blogname = '', $blog_title = '', $errors = ''
 
 		<br />
 
+		<?php if ( bp_groupblog_allow_group_admin_layout() )	: ?>
+			
+			<?php	
+				if ( !( $page_template_layout = groups_get_groupmeta ( $bp->groups->current_group->id, 'page_template_layout' ) ) )
+					$page_template_layout = groupblog_get_page_template_layout(); 
+			?>
+
+			<div id="groupblog-layout-options">
+			
+				<h3><?php _e( 'Select Layout', 'groupblog' ) ?></h3>
+												
+				<p class="enabled"><?php _e( 'Please select a Layout which you would like to use for your Group Blog.', 'groupblog' ) ?></p>
+							
+				<table class="enabled" id="availablethemes" cellspacing="0" cellpadding="0">
+					<tbody>
+					<tr>
+						<td class="available-theme top left">
+							<?php echo '<img src="' . WP_PLUGIN_URL . '/bp-groupblog/inc/i/screenshot-mag.png">';?>
+							<br /><br />
+							<input<?php if ( !bp_groupblog_is_blog_enabled( bp_get_group_id() ) ) { ?> disabled="true"<?php } ?> name="page_template_layout" id="page_template_layout"  value="magazine" type="radio" <?php if ($page_template_layout == 'magazine') echo 'checked="checked"'; ?> /><label style="display:inline;"> <?php _e( 'Magazine', 'groupblog' ) ?></label>
+							<p class="description"><?php _e( 'Balanced template for groups with diverse postings.', 'groupblog' ) ?></p>
+						</td>
+						<td class="available-theme top">
+							<?php echo '<img src="' . WP_PLUGIN_URL . '/bp-groupblog/inc/i/screenshot-micro.png">';?>
+							<br /><br />
+							<input<?php if ( !bp_groupblog_is_blog_enabled( bp_get_group_id() ) ) { ?> disabled="true"<?php } ?> name="page_template_layout" id="page_template_layout"  value="microblog" type="radio" <?php if ($page_template_layout == 'microblog') echo 'checked="checked"'; ?> /><label style="display:inline;"> <?php _e( 'Microblog', 'groupblog' ) ?></label>
+							<p class="description"><?php _e( 'Great for simple listing of posts in a chronological order.', 'groupblog' ) ?></p>
+						</td>
+					</tr>
+					</tbody>
+				</table>
+				
+			</div>
+			
+			<br />
+		
+		<?php endif; ?>
+		
 		<?php if ( !$groupblog_create_screen ) { ?>
 		<p>
 			<input id="save" type="submit" name="save" class="submit" value="<?php _e('Save Changes &raquo;', 'groupblog') ?>"/>
@@ -798,6 +843,7 @@ function bp_groupblog_validate_blog_signup() {
 		groups_update_groupmeta( $group_id, 'groupblog_public', $public);
 		groups_update_groupmeta( $group_id, 'groupblog_title', $blog_title);
 		groups_update_groupmeta( $group_id, 'groupblog_path', $path);
+		groups_update_groupmeta( $group_id, 'groupblog_domain', $domain);
 	} else {
 		$meta = apply_filters('signup_create_blog_meta', array ('lang_id' => 1, 'public' => $public)); // depreciated
 		$meta = apply_filters( "add_signup_meta", $meta );
@@ -829,16 +875,18 @@ function bp_groupblog_create_blog( $group_id ) {
 	$public = groups_get_groupmeta( $group_id, 'groupblog_public');
 	$blog_title = groups_get_groupmeta( $group_id, 'groupblog_title');
 	$path = groups_get_groupmeta( $group_id, 'groupblog_path');
+	$domain = groups_get_groupmeta( $group_id, 'groupblog_domain');
 
 	$meta = apply_filters('signup_create_blog_meta', array ('lang_id' => 1, 'public' => $public)); // depreciated
 	$meta = apply_filters( "add_signup_meta", $meta );
 	
 	$groupblog_blog_id = wpmu_create_blog( $domain, $path, $blog_title, $current_user->id, $meta, $wpdb->siteid );
 
-	groups_update_groupmeta ( $group_id, 'groupblog_blog_id', $groupblog_blog_id );
+	groups_update_groupmeta( $group_id, 'groupblog_blog_id', $groupblog_blog_id );
 	groups_update_groupmeta( $group_id, 'groupblog_public', '');
 	groups_update_groupmeta( $group_id, 'groupblog_title', '');
 	groups_update_groupmeta( $group_id, 'groupblog_path', '');
+	groups_update_groupmeta( $group_id, 'groupblog_domain', '');
 	
 }
 add_action( 'groups_group_create_complete', 'bp_groupblog_create_blog' );

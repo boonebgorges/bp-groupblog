@@ -159,13 +159,42 @@ function groupblog_current_layout() {
 }
 
 /*
+ * bp_groupblog_allow_group_admin_layout()
+ *
+ */
+function bp_groupblog_allow_group_admin_layout() {
+
+	$opt = get_site_option( 'bp_groupblog_blog_defaults_options' );
+
+	if ( ($opt['group_admin_layout'] == 1) && ($opt['theme'] == 'p2|p2-buddypress') )	{
+		return true;
+	} else {
+		return false;
+	}
+}
+
+/*
+ * bp_groupblog_admin_form_action()
+ *
+ */
+function groupblog_get_page_template_layout() {
+
+	$opt = get_site_option( 'bp_groupblog_blog_defaults_options' );
+
+	return $opt['page_template_layout'];
+}
+
+/*
  * bp_groupblog_admin_form_action()
  *
  */
 function groupblog_locate_layout() {
-	
-	$checks = get_site_option('bp_groupblog_blog_defaults_options');
-	$template_name = $checks['page_template_layout'];
+
+	$opt = get_site_option( 'bp_groupblog_blog_defaults_options' );
+
+	if ( $opt['group_admin_layout'] == 1 )	{
+		$template_name = groups_get_groupmeta( bp_get_groupblog_id(), 'page_template_layout' );
+	} else { $template_name = $opt['page_template_layout']; }
 	
 	locate_template( array( 'groupblog/layouts/' . $template_name . '.php' ), true );
 }
