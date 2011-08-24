@@ -13,7 +13,7 @@ function bp_groupblog_blog_defaults( $blog_id ) {
 		// get the site options
 		$options = get_site_option( 'bp_groupblog_blog_defaults_options' );
 
-		foreach( $options as $key => $value )
+		foreach( (array)$options as $key => $value )
 			update_option( $key, $value );
 
 		// override default themes

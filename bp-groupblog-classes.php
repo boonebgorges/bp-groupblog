@@ -55,6 +55,7 @@ class BP_Groupblog_Extension extends BP_Group_Extension {
 	}
 
 	function edit_screen_save() {
+		groupblog_edit_settings();
 	}
 
 	function display() {
