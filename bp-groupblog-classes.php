@@ -6,23 +6,21 @@
  */
 class BP_Groupblog_Extension extends BP_Group_Extension {
 
-	//var $enable_nav_item = $this->enable_nav_item();
-
 	function bp_groupblog_extension() {
 		global $bp;
 
 		$this->name = __( 'Group Blog', 'groupblog' );
 		$this->slug = 'group-blog';
 
-		$this->enable_create_step = true;
+		$this->enable_create_step   = true;
 		$this->create_step_position = 15;
 
 		$this->enable_edit_item = true;
 
-		$this->nav_item_name = 'Blog';
+		$this->nav_item_name     = 'Blog';
 		$this->nav_item_position = 30;
-		$this->enable_nav_item = false;
-		$this->template_file = 'groupblog/blog';
+		$this->enable_nav_item   = $this->enable_nav_item();
+		$this->template_file     = 'groupblog/blog';
 	}
 
 	function create_screen() {
@@ -42,6 +40,9 @@ class BP_Groupblog_Extension extends BP_Group_Extension {
 	}
 
 	function create_screen_save() {
+		if ( isset( $_POST['save'] ) ) {
+			groupblog_edit_settings();
+		}
 	}
 
 	function edit_screen() {
@@ -55,7 +56,9 @@ class BP_Groupblog_Extension extends BP_Group_Extension {
 	}
 
 	function edit_screen_save() {
-		groupblog_edit_settings();
+		if ( isset( $_POST['save'] ) ) {
+			groupblog_edit_settings();
+		}
 	}
 
 	function display() {
@@ -64,7 +67,6 @@ class BP_Groupblog_Extension extends BP_Group_Extension {
 	function widget_display() {
 	}
 
-	/*
 	function enable_nav_item() {
 		global $bp;
 
@@ -73,7 +75,6 @@ class BP_Groupblog_Extension extends BP_Group_Extension {
 		else
 			return false;
 	}
-	*/
 
 }
 bp_register_group_extension( 'BP_Groupblog_Extension' );
