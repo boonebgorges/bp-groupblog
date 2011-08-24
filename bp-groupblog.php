@@ -13,7 +13,10 @@ if ( !defined( 'BP_GROUPBLOG_DEFAULT_MEMBER_ROLE' ) )
 
 // Base groupblog component slug
 if ( !defined( 'BP_GROUPBLOG_SLUG' ) )
-define ( 'BP_GROUPBLOG_SLUG', 'group-blog' );
+	define ( 'BP_GROUPBLOG_SLUG', 'group-blog' );
+
+// Setup the groupblog theme directory
+register_theme_directory( WP_PLUGIN_DIR . '/bp-groupblog/themes' );
 
 function bp_groupblog_setup() {
 	global $wpdb;
