@@ -57,7 +57,16 @@ function bp_groupblog_includes() {
 	require ( WP_PLUGIN_DIR . '/bp-groupblog/bp-groupblog-classes.php' );
 	require ( WP_PLUGIN_DIR . '/bp-groupblog/bp-groupblog-templatetags.php' );
 }
-add_action( 'bp_loaded', 'bp_groupblog_includes' );
+
+// This file is needed earlier in BP 1.2.x, so we load it in the global scope (ugh)
+// Require the abstraction file for earlier versions of BP
+$bp_version = defined( BP_VERSION ) ? BP_VERSION : '1.2';
+if ( version_compare( $bp_version, '1.3', '<' ) ) {
+	require_once( WP_PLUGIN_DIR . '/bp-groupblog/1.5-abstraction.php' );
+	bp_groupblog_includes();
+} else {
+	add_action( 'bp_loaded', 'bp_groupblog_includes' );
+}
 
 /**
  * Add language support.
