@@ -83,7 +83,7 @@ add_action( 'bp_setup_globals', 'bp_groupblog_setup_globals' );
 function bp_groupblog_setup_nav() {
 	global $bp, $current_blog;
 
-	if ( $bp->current_component == $bp->groups->slug && $bp->is_single_item ) {
+	if ( bp_is_group() ) {
 
 		$bp->groups->current_group->is_group_visible_to_member = ( 'public' == $bp->groups->current_group->status || $is_member ) ? true : false;
 
@@ -93,13 +93,15 @@ function bp_groupblog_setup_nav() {
 
 		if ( !$checks['deep_group_integration'] ) {
 
+			$parent_slug = isset( $bp->bp_nav[$bp->groups->current_group->slug] ) ? $bp->groups->current_group->slug : $bp->groups->slug;
+
 			if ( bp_groupblog_is_blog_enabled( $bp->groups->current_group->id ) )
 				bp_core_new_subnav_item(
 					array(
 						'name' => __( 'Blog', 'groupblog' ),
 						'slug' => 'blog',
 						'parent_url' => $group_link,
-						'parent_slug' => $bp->groups->slug,
+						'parent_slug' => $parent_slug,
 						'screen_function' => 'groupblog_screen_blog',
 						'position' => 32,
 						'item_css_id' => 'group-blog'
@@ -978,7 +980,7 @@ function groupblog_screen_blog() {
 		else {
 			if ( file_exists( locate_template( array( 'groupblog/blog.php' ) ) ) ) {
 				bp_core_load_template( apply_filters( 'groupblog_screen_blog', 'groupblog/blog' ) );
-				add_action( 'wp', 'groupblog_screen_blog', 4 );
+				add_action( 'bp_screens', 'groupblog_screen_blog' );
 			}
 			else {
 				bp_core_load_template( apply_filters( 'bp_core_template_plugin', 'groups/single/plugins' ) );

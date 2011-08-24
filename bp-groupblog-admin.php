@@ -84,35 +84,38 @@ function bp_groupblog_update_defaults() {
 	$newoptions['theme'] = $_POST['theme'];
 
 	// groupblog validation settings
-	$newoptions['allowdashes'] = ($_POST['bp_groupblog_allowdashes'] == 1) ? 1 : 0;
-	$newoptions['allowunderscores'] = ($_POST['bp_groupblog_allowunderscores'] == 1) ? 1 : 0;
-	$newoptions['allownumeric'] = ($_POST['bp_groupblog_allownumeric'] == 1) ? 1 : 0;
-	$newoptions['minlength'] = (is_numeric($_POST['bp_groupblog_minlength']) == true) ?  $_POST['bp_groupblog_minlength'] : 4;
+	$newoptions['allowdashes']      = !empty( $_POST['bp_groupblog_allowdashes'] ) ? 1 : 0;
+	$newoptions['allowunderscores'] = !empty( $_POST['bp_groupblog_allowunderscores'] ) ? 1 : 0;
+	$newoptions['allownumeric']     = !empty( $_POST['bp_groupblog_allownumeric'] ) ? 1 : 0;
+	$newoptions['minlength']        = isset( $_POST['bp_groupblog_minlength'] ) && is_numeric( $_POST['bp_groupblog_minlength'] ) == true ?  $_POST['bp_groupblog_minlength'] : 4;
 
 	// groupblog default settings
-	$newoptions['default_cat_name'] = $_POST['default_cat_name'];
-	$newoptions['default_link_cat'] = $_POST['default_link_cat'];
-	if ( $_POST['delete_first_post'] == 1 )
+	$newoptions['default_cat_name'] = isset( $_POST['default_cat_name'] ) ? $_POST['default_cat_name'] : '';
+	$newoptions['default_link_cat'] = isset( $_POST['default_link_cat'] ) ? $_POST['default_link_cat'] : '';
+
+	if ( !empty( $_POST['delete_first_post'] ) )
 		$newoptions['delete_first_post'] = 1;
 	else
 		$newoptions['delete_first_post'] = 0;
-	if ( $_POST['delete_first_comment'] == 1 )
+
+	if ( !empty( $_POST['delete_first_comment'] ) )
 		$newoptions['delete_first_comment'] = 1;
 	else
 		$newoptions['delete_first_comment'] = 0;
-	if ( $_POST['delete_blogroll_links'] == 1 )
+
+	if ( !empty( $_POST['delete_blogroll_links'] ) )
 		$newoptions['delete_blogroll_links'] = 1;
 	else
 		$newoptions['delete_blogroll_links'] = 0;
 
 	// groupblog layout settings
-	if ( $_POST['group_admin_layout'] == 1 )
+	if ( !empty( $_POST['group_admin_layout'] ) )
 		$newoptions['group_admin_layout'] = 1;
 	else
 		$newoptions['group_admin_layout'] = 0;
 
 	// redirect group home to blog home
-	if ( $_POST['deep_group_integration'] == 1 )
+	if ( !empty( $_POST['deep_group_integration'] ) )
 		$newoptions['deep_group_integration'] = 1;
 	else
 		$newoptions['deep_group_integration'] = 0;
@@ -261,7 +264,7 @@ function bp_groupblog_add_admin_menu() {
 	add_submenu_page( 'bp-general-settings', __( 'GroupBlog Setup', 'groupblog' ), '<span class="bp-groupblog-admin-menu-header">' . __( 'GroupBlog Setup', 'groupblog' ) . '&nbsp;&nbsp;&nbsp;</span>', 'manage_options', 'bp_groupblog_management_page', 'bp_groupblog_management_page' );
 
 }
-add_action( 'admin_menu', 'bp_groupblog_add_admin_menu', 10 );
+add_action( bp_core_admin_hook(), 'bp_groupblog_add_admin_menu', 10 );
 
 function bp_groupblog_management_page() {
 	global $wpdb;
@@ -271,10 +274,12 @@ function bp_groupblog_management_page() {
 		wp_die( __( 'You do not have permission to access this page.', 'groupblog' ) );
 
 	// process form submission
-  if ( $_POST['action'] == 'update' ) {
+	if ( isset( $_POST['action'] ) && $_POST['action'] == 'update' ) {
 		bp_groupblog_update_defaults();
 		$updated = true;
-  }
+	} else {
+		$updated = false;
+	}
 
 	// make sure we're using latest data
 	$opt = get_site_option( 'bp_groupblog_blog_defaults_options' );
@@ -315,15 +320,15 @@ function bp_groupblog_management_page() {
 					if( is_array( $blog_allowed_themes ) )
 						$allowed_themes = array_merge( $allowed_themes, $blog_allowed_themes );
 
-					if( $blog_id != 1 )
+					if( $wpdb->blogid != 1 )
 						unset( $allowed_themes[ 'h3' ] );
 
-					if( isset( $allowed_themes[ wp_specialchars( $ct->stylesheet ) ] ) == false )
-						$allowed_themes[ wp_specialchars( $ct->stylesheet ) ] = true;
+					if( isset( $allowed_themes[ esc_html( $ct->stylesheet ) ] ) == false )
+						$allowed_themes[ esc_html( $ct->stylesheet ) ] = true;
 
 					reset( $themes );
 					foreach( $themes as $key => $theme ) {
-						if( isset( $allowed_themes[ wp_specialchars( $theme[ 'Stylesheet' ] ) ] ) == false ) {
+						if( isset( $allowed_themes[ esc_html( $theme[ 'Stylesheet' ] ) ] ) == false ) {
 							unset( $themes[ $key ] );
 						}
 					}
@@ -380,7 +385,7 @@ function bp_groupblog_management_page() {
 
 					<h3><?php _e( 'Current Theme', 'groupblog' ) ?></h3>
 					<div id="current-theme">
-						<?php if ( $themes[$current_groupblog_theme]['Screenshot'] ) : ?>
+						<?php if ( isset( $themes[$current_groupblog_theme]['Screenshot'] ) ) : ?>
 							<img src="<?php echo $themes[$current_groupblog_theme]['Theme Root URI'] . '/' . $themes[$current_groupblog_theme]['Stylesheet'] . '/' . $themes[$current_groupblog_theme]['Screenshot']; ?>" alt="<?php _e('Current theme preview'); ?>" />
 						<?php endif; ?>
 						<div class="alt" id="current-theme-info">
