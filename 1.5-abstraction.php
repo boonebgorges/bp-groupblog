@@ -41,6 +41,14 @@ if ( !function_exists( 'bp_is_groups_component' ) ) :
 	}
 endif;
 
+if ( !function_exists( 'groups_get_current_group' ) ) :
+	function groups_get_current_group() {
+		global $bp;
+
+		return apply_filters( 'groups_get_current_group', !empty( $bp->groups->current_group ) ? $bp->groups->current_group : new stdClass );
+	}
+endif;
+
 if ( !function_exists( 'bp_get_current_group_id' ) ) :
 	function bp_get_current_group_id() {
 		global $bp;

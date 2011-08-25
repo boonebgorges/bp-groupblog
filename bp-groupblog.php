@@ -97,9 +97,9 @@ function bp_groupblog_setup_nav() {
 
 	if ( bp_is_group() ) {
 
-		$bp->groups->current_group->is_group_visible_to_member = ( 'public' == $bp->groups->current_group->status || $is_member ) ? true : false;
+		$bp->groups->current_group->is_group_visible_to_member = ( 'public' == $bp->groups->current_group->status || groups_is_user_member( bp_loggedin_user_id(), bp_get_current_group_id() ) ) ? true : false;
 
-		$group_link = $bp->root_domain . '/' . $bp->groups->slug . '/' . $bp->groups->current_group->slug . '/';
+		$group_link = bp_get_group_permalink( groups_get_current_group() );
 
 		$checks = get_site_option('bp_groupblog_blog_defaults_options');
 
@@ -247,19 +247,24 @@ function groupblog_edit_base_settings( $groupblog_enable_blog, $groupblog_silent
  * Runs whenever member permissions are changed and saved - by Boone
  */
 function bp_groupblog_member_join( $group_id ) {
-  global $bp, $wpdb, $username, $blog_id, $userdata, $current_blog;
+	global $bp, $wpdb, $username, $blog_id, $userdata, $current_blog;
 
-  $blog_id = groups_get_groupmeta ( $group_id, 'groupblog_blog_id' );
+	$params = array(
+		'exclude_admins_mods'	=> 0,
+		'per_page'		=> 10000,
+		'group_id'		=> $group_id
+	);
 
-	$group = new BP_Groups_Group ( $group_id );
+	if ( bp_group_has_members( $params ) ) {
+		$blog_id = groups_get_groupmeta( $group_id, 'groupblog_blog_id' );
+		$group   = new BP_Groups_Group( $group_id );
 
-	if ( bp_group_has_members( 'exclude_admins_mods=false&per_page=1000' ) ) {
 		while ( bp_group_members() ) {
 			bp_group_the_member();
 			$user_id = bp_get_group_member_id();
-			if ( !is_user_member_of_blog($user_id, $blog_id) ) return false;
+
 			if ( $group->creator_id != $user_id )
-  			bp_groupblog_upgrade_user( $blog_id, $user_id, $group_id );
+  				bp_groupblog_upgrade_user( $blog_id, $user_id, $group_id );
 		}
 	}
 }
@@ -270,24 +275,23 @@ function bp_groupblog_member_join( $group_id ) {
  * Subscribes user in question to blog in question
  * This code was initially inspired by Burt Adsit re-interpreted by Boone
  */
-function bp_groupblog_upgrade_user( $blog_id, $user_id, $group_id ) {
+function bp_groupblog_upgrade_user( $blog_id = false, $user_id, $group_id ) {
 
-	$blog_id = groups_get_groupmeta ( $group_id, 'groupblog_blog_id' );
-
-	//echo "<script language='JavaScript'>alert( 'Group ID: " . $group_id . " Blog ID: " . $blog_id . " User ID: " . $user_id . "');</script>";
+	if ( !$blog_id )
+		$blog_id = groups_get_groupmeta ( $group_id, 'groupblog_blog_id' );
 
 	// If the group has no blog linked, get the heck out of here!
 	if ( !$blog_id )
 		return;
 
 	// Setup some variables
-	$groupblog_silent_add = groups_get_groupmeta ( $group_id, 'groupblog_silent_add' );
+	$groupblog_silent_add 	       = groups_get_groupmeta ( $group_id, 'groupblog_silent_add' );
 	$groupblog_default_member_role = groups_get_groupmeta ( $group_id, 'groupblog_default_member_role' );
-	$groupblog_default_mod_role = groups_get_groupmeta ( $group_id, 'groupblog_default_mod_role' );
-	$groupblog_default_admin_role = groups_get_groupmeta ( $group_id, 'groupblog_default_admin_role' );
-	$groupblog_creator_role = 'admin';
+	$groupblog_default_mod_role    = groups_get_groupmeta ( $group_id, 'groupblog_default_mod_role' );
+	$groupblog_default_admin_role  = groups_get_groupmeta ( $group_id, 'groupblog_default_admin_role' );
+	$groupblog_creator_role        = 'admin';
 
-	$user = new WP_User($user_id);
+	$user = new WP_User( $user_id );
 
 	$user_role = bp_groupblog_get_user_role( $user_id, $user->data->user_login, $blog_id );
 
@@ -297,27 +301,21 @@ function bp_groupblog_upgrade_user( $blog_id, $user_id, $group_id ) {
 		$default_role = $groupblog_default_mod_role;
 	} else if ( groups_is_user_member ( $user_id, $group_id ) ) {
 		$default_role = $groupblog_default_member_role;
+	} else {
+		return false;
 	}
 
-	if ($user_role == $default_role && $groupblog_silent_add == true) return false;
+	if ( $user_role == $default_role && $groupblog_silent_add == true ) {
+		return false;
+	}
 
-	if ( ($user_role == 'norole') && $groupblog_silent_add == true ){
-		$did_it_add = add_user_to_blog($blog_id, $user_id, $default_role);
+	if ( !$groupblog_silent_add ) {
+		$default_role = 'subscriber';
+	}
 
-  }
-	else if ( is_user_member_of_blog($user_id, $blog_id) && $groupblog_silent_add == true ) {
-  	$user = new WP_User($user_id);
-  	$user->for_blog($blog_id);
-  	$user->set_role($default_role);
-  	wp_cache_delete($user_id, 'users' );
- 	}
- 	else if ( is_user_member_of_blog($user_id, $blog_id) && $groupblog_silent_add != true ) {
-  	$user = new WP_User($user_id);
-  	$user->for_blog($blog_id);
-  	$user->set_role('subscriber');
-  	wp_cache_delete($user_id, 'users' );
-  }
+	add_user_to_blog( $blog_id, $user_id, $default_role );
 
+	do_action( 'bp_groupblog_upgrade_user', $user_id, $user_role, $default_role );
 }
 
 /**
@@ -326,7 +324,7 @@ function bp_groupblog_upgrade_user( $blog_id, $user_id, $group_id ) {
  * Called when user joins group - by Boone
  */
 function bp_groupblog_just_joined_group( $group_id, $user_id ) {
-	bp_groupblog_upgrade_user( $blog_id, $user_id, $group_id );
+	bp_groupblog_upgrade_user( $user_id, $group_id );
 }
 add_action( 'groups_join_group', 'bp_groupblog_just_joined_group', 10, 2 );
 
@@ -339,7 +337,7 @@ add_action( 'groups_join_group', 'bp_groupblog_just_joined_group', 10, 2 );
  * therefore we put these in a sepperate function.
  */
 function bp_groupblog_changed_status_group( $user_id, $group_id ) {
-	bp_groupblog_upgrade_user( $blog_id, $user_id, $group_id );
+	bp_groupblog_upgrade_user( $user_id, $group_id );
 }
 add_action( 'groups_promoted_member', 'bp_groupblog_changed_status_group', 10, 2 );
 add_action( 'groups_demoted_member', 'bp_groupblog_changed_status_group', 10, 2 );
