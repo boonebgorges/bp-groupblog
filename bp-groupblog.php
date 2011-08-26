@@ -981,10 +981,10 @@ function groupblog_screen_blog() {
 		$checks = get_site_option('bp_groupblog_blog_defaults_options');
 		$blog_details = get_blog_details( get_groupblog_blog_id(), true );
 
-		if ( $checks['redirectblog'] == 1 ) {
+		if ( isset( $checks['redirectblog'] ) && $checks['redirectblog'] == 1 ) {
 			bp_core_redirect( $blog_details->siteurl );
 		}
-		else if ( $checks['redirectblog'] == 2 ) {
+		else if ( isset( $checks['redirectblog'] ) && $checks['redirectblog'] == 2 ) {
 			bp_core_redirect( $blog_details->siteurl . '/' . $checks['pageslug'] . '/' );
 		}
 		else {
@@ -1044,12 +1044,11 @@ function bp_groupblog_delete_meta( $blog_id, $drop = false ) {
 	groups_update_groupmeta ( $group_id, 'groupblog_blog_id', '' );
 	groups_update_groupmeta ( $group_id, 'groupblog_silent_add', '' );
 
-  groups_update_groupmeta ( $group_id, 'groupblog_default_admin_role', '' );
+  	groups_update_groupmeta ( $group_id, 'groupblog_default_admin_role', '' );
 	groups_update_groupmeta ( $group_id, 'groupblog_default_mod_role', '' );
 	groups_update_groupmeta ( $group_id, 'groupblog_default_member_role', '' );
 
 }
-
 add_action('delete_blog', 'bp_groupblog_delete_meta', 10, 1);
 
 ?>
