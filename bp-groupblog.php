@@ -690,6 +690,8 @@ function bp_groupblog_signup_blog($blogname = '', $blog_title = '', $errors = ''
 	// Create or Edit screen
 	$group_id = bp_is_group_create() ? bp_get_new_group_id() : bp_get_current_group_id();
 
+	$disabled = !bp_groupblog_silent_add( $group_id ) || !bp_groupblog_is_blog_enabled( $group_id ) ? ' disabled="true" ' : '';
+
   if ( !$groupblog_create_screen ) { ?>
 	<h2><?php _e( 'Group Blog', 'groupblog' ) ?></h2>
 
@@ -731,25 +733,25 @@ function bp_groupblog_signup_blog($blogname = '', $blog_title = '', $errors = ''
 			?>
 
 			<label><strong><?php _e( 'Default Administrator Role:', 'groupblog' ); ?></strong></label>
-			<input type="radio" <?php checked( $groupblog_default_admin_role, 'administrator' ) ?> value="administrator" name="default-administrator"<?php if ( !bp_groupblog_silent_add( $group_id ) || !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Administrator', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_admin_role, 'editor' ) ?> value="editor" name="default-administrator"<?php if ( !bp_groupblog_silent_add( $group_id ) || !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Editor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_admin_role, 'author' ) ?> value="author" name="default-administrator"<?php if ( !bp_groupblog_silent_add( $group_id ) || !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Author', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_admin_role, 'contributor' ) ?> value="contributor" name="default-administrator"<?php if ( !bp_groupblog_silent_add( $group_id ) || !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Contributor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_admin_role, 'subscriber' ) ?> value="subscriber" name="default-administrator"<?php if ( !bp_groupblog_silent_add( $group_id ) || !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Subscriber', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_admin_role, 'administrator' ) ?> value="administrator" name="default-administrator"<?php echo $disabled ?> /><span>&nbsp;<?php _e( 'Administrator', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_admin_role, 'editor' ) ?> value="editor" name="default-administrator"<?php echo $disabled ?> /><span>&nbsp;<?php _e( 'Editor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_admin_role, 'author' ) ?> value="author" name="default-administrator"<?php echo $disabled ?> /><span>&nbsp;<?php _e( 'Author', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_admin_role, 'contributor' ) ?> value="contributor" name="default-administrator"<?php echo $disabled ?> /><span>&nbsp;<?php _e( 'Contributor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_admin_role, 'subscriber' ) ?> value="subscriber" name="default-administrator"<?php echo $disabled ?> /><span>&nbsp;<?php _e( 'Subscriber', 'groupblog' ); ?>&nbsp;&nbsp;</span>
 
 			<label><strong><?php _e( 'Default Moderator Role:', 'groupblog' ); ?></strong></label>
-			<input type="radio" <?php checked( $groupblog_default_mod_role, 'administrator' ) ?> value="administrator" name="default-moderator"<?php if ( !bp_groupblog_silent_add( $group_id ) || !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Administrator', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_mod_role, 'editor' ) ?> value="editor" name="default-moderator"<?php if ( !bp_groupblog_silent_add( $group_id ) || !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Editor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_mod_role, 'author' ) ?> value="author" name="default-moderator"<?php if ( !bp_groupblog_silent_add( $group_id ) || !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Author', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_mod_role, 'contributor' ) ?> value="contributor" name="default-moderator"<?php if ( !bp_groupblog_silent_add( $group_id ) || !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Contributor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_mod_role, 'subscriber' ) ?> value="subscriber" name="default-moderator"<?php if ( !bp_groupblog_silent_add( $group_id ) || !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Subscriber', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_mod_role, 'administrator' ) ?> value="administrator" name="default-moderator"<?php echo $disabled ?> /><span>&nbsp;<?php _e( 'Administrator', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_mod_role, 'editor' ) ?> value="editor" name="default-moderator"<?php echo $disabled ?> /><span>&nbsp;<?php _e( 'Editor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_mod_role, 'author' ) ?> value="author" name="default-moderator"<?php echo $disabled ?> /><span>&nbsp;<?php _e( 'Author', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_mod_role, 'contributor' ) ?> value="contributor" name="default-moderator"<?php echo $disabled ?> /><span>&nbsp;<?php _e( 'Contributor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_mod_role, 'subscriber' ) ?> value="subscriber" name="default-moderator"<?php echo $disabled ?> /><span>&nbsp;<?php _e( 'Subscriber', 'groupblog' ); ?>&nbsp;&nbsp;</span>
 
 			<label><strong><?php _e( 'Default Member Role:', 'groupblog' ); ?></strong></label>
-			<input type="radio" <?php checked( $groupblog_default_member_role, 'administrator' ) ?> value="administrator" name="default-member"<?php if ( !bp_groupblog_silent_add( $group_id ) || !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Administrator', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_member_role, 'editor' ) ?> value="editor" name="default-member"<?php if ( !bp_groupblog_silent_add( $group_id ) || !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Editor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_member_role, 'author' ) ?> value="author" name="default-member"<?php if ( !bp_groupblog_silent_add( $group_id ) || !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Author', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_member_role, 'contributor' ) ?> value="contributor" name="default-member"<?php if ( !bp_groupblog_silent_add( $group_id ) || !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Contributor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_member_role, 'subscriber' ) ?> value="subscriber" name="default-member"<?php if ( !bp_groupblog_silent_add( $group_id ) || !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Subscriber', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_member_role, 'administrator' ) ?> value="administrator" name="default-member"<?php echo $disabled ?> /><span>&nbsp;<?php _e( 'Administrator', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_member_role, 'editor' ) ?> value="editor" name="default-member"<?php echo $disabled ?> /><span>&nbsp;<?php _e( 'Editor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_member_role, 'author' ) ?> value="author" name="default-member"<?php echo $disabled ?> /><span>&nbsp;<?php _e( 'Author', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_member_role, 'contributor' ) ?> value="contributor" name="default-member"<?php echo $disabled ?> /><span>&nbsp;<?php _e( 'Contributor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_member_role, 'subscriber' ) ?> value="subscriber" name="default-member"<?php echo $disabled ?> /><span>&nbsp;<?php _e( 'Subscriber', 'groupblog' ); ?>&nbsp;&nbsp;</span>
 
 			<div id="groupblog-member-roles">
 				<label><strong><?php _e( 'A bit about WordPress member roles:', 'groupblog' ); ?></strong></label>
