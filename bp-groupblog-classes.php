@@ -33,7 +33,10 @@ class BP_Groupblog_Extension extends BP_Group_Extension {
 
 		$groupblog_create_screen = true;
 
-		bp_groupblog_signup_blog();
+		// Attaching the markup via a hook, so that plugins can unhook and replace with
+		// their own markup. This is a bit of a hack.
+		add_action( 'bp_groupblog_create_screen_markup', 'bp_groupblog_signup_blog' );
+		do_action( 'bp_groupblog_create_screen_markup' );
 
 		echo '<input type="hidden" name="groupblog-group-id" value="' . $bp->groups->current_group->id . '" />';
 		echo '<input type="hidden" name="groupblog-create-save" value="groupblog-create-save" />';
@@ -53,7 +56,10 @@ class BP_Groupblog_Extension extends BP_Group_Extension {
 		if ( !bp_is_group_admin_screen( $this->slug ) )
 			return false;
 
-		bp_groupblog_signup_blog();
+		// Attaching the markup via a hook, so that plugins can unhook and replace with
+		// their own markup. This is a bit of a hack.
+		add_action( 'bp_groupblog_edit_screen_markup', 'bp_groupblog_signup_blog' );
+		do_action( 'bp_groupblog_edit_screen_markup' );
 
 	}
 
