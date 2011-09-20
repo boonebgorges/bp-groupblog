@@ -313,6 +313,8 @@ function bp_groupblog_management_page() {
 					$themes = get_themes();
 					$ct = current_theme_info();
 
+					$current_groupblog_theme = '';
+
 					$allowed_themes = get_site_allowed_themes();
 					if( $allowed_themes == false )
 						$allowed_themes = array();
