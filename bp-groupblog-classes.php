@@ -19,7 +19,8 @@ class BP_Groupblog_Extension extends BP_Group_Extension {
 
 		$this->nav_item_name     = 'Blog';
 		$this->nav_item_position = 30;
-		$this->enable_nav_item   = $this->enable_nav_item();
+		//$this->enable_nav_item   = $this->enable_nav_item();
+		$this->enable_nav_item	 = false;
 		$this->template_file     = 'groupblog/blog';
 	}
 
@@ -68,12 +69,7 @@ class BP_Groupblog_Extension extends BP_Group_Extension {
 	}
 
 	function enable_nav_item() {
-		global $bp;
-
-		if ( groups_get_groupmeta( $bp->groups->current_group->id, 'groupblog_enable_blog' ) )
-			return true;
-		else
-			return false;
+		return bp_is_group() && groups_get_groupmeta( bp_get_current_group_id(), 'groupblog_enable_blog' );
 	}
 
 }
