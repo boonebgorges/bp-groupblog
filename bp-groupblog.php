@@ -115,61 +115,72 @@ add_action( 'bp_setup_nav', 'bp_groupblog_setup_nav' );
  * groupblog_edit_settings()
  *
  * Save the blog-settings accessible only by the group admin or mod.
+ *
+ * Since version 1.6, this function has been called directly by
+ * BP_Groupblog_Extension::edit_screen_save()
+ *
+ * @package BP Groupblog
  */
 function groupblog_edit_settings() {
-	global $bp, $groupblog_blog_id, $errors;
+	global $bp, $groupblog_blog_id, $errors, $filtered_results;
 
-	$group_id = $_POST['groupblog-group-id'];
+	$group_id = isset( $_POST['groupblog-group-id'] ) ? $_POST['groupblog-group-id'] : bp_get_current_group_id();
 
-	if ( !isset( $group_id ) )
-	    $group_id = $bp->groups->current_group->id;
-
-	if ( $bp->current_component == $bp->groups->slug && 'group-blog' == $bp->action_variables[0] ) {
-		if ( $bp->is_item_admin || $bp->is_item_mod  ) {
-
-			// If the edit form has been submitted, save the edited details
-			if ( isset( $_POST['save'] ) ) {
-				if ( !bp_groupblog_blog_exists( $bp->groups->current_group->id ) ) {
-					if ( isset( $_POST['groupblog-enable-blog'] ) ) {
-					    if ( $_POST['groupblog-create-new'] == 'yes' ) {
-					        //Create a new blog and assign the blog id to the global $groupblog_blog_id
-    						if ( !bp_groupblog_validate_blog_signup() ) {
-    							$errors = $filtered_results['errors'];
-    							bp_core_add_message ( $errors );
-    							$group_id = '';
-    						}
-    					} else if ( $_POST['groupblog-create-new'] == 'no' ) {
-    					    // They're using an existing blog, so we try to assign that to $groupblog_blog_id
-    					    if ( !( $groupblog_blog_id = $_POST['groupblog-blogid'] ) ) {
-    					        //They forgot to choose a blog, so send them back and make them do it!
-        						bp_core_add_message( __( 'Please choose one of your blogs from the drop-down menu.' . $group_id, 'groupblog' ), 'error' );
-        						if ( $bp->action_variables[0] == 'step' ) {
-        							bp_core_redirect( $bp->loggedin_user->domain . $bp->groups->slug . '/create/step/' . $bp->action_variables[1] );
-        						} else {
-        							bp_core_redirect( $bp->root_domain . '/' . $bp->current_component . '/' . $bp->current_item . '/admin/group-blog' );
-        						}
-    					    }
-    					}
-					}
-				} else {
-				    // They already have a blog associated with the group, we're just saving other settings
-					$groupblog_blog_id = groups_get_groupmeta ( $bp->groups->current_group->id, 'groupblog_blog_id' );
-				}
-
-				if ( !groupblog_edit_base_settings( $_POST['groupblog-enable-blog'], $_POST['groupblog-silent-add'], $_POST['default-administrator'], $_POST['default-moderator'], $_POST['default-member'], $_POST['page_template_layout'], $bp->groups->current_group->id, $groupblog_blog_id ) ) {
-					bp_core_add_message( __( 'There was an error creating your group blog, please try again.', 'groupblog' ), 'error' );
-				} else {
-					bp_core_add_message( __( 'Group details were successfully updated.', 'groupblog' ) );
-				}
-
-				do_action( 'groupblog_details_edited', $bp->groups->current_group->id );
-
-				bp_core_redirect( $bp->root_domain . '/' . $bp->current_component . '/' . $bp->current_item . '/admin/group-blog' );
+	if ( !bp_groupblog_blog_exists( $group_id ) ) {
+		if ( isset( $_POST['groupblog-enable-blog'] ) ) {
+		    if ( $_POST['groupblog-create-new'] == 'yes' ) {
+			//Create a new blog and assign the blog id to the global $groupblog_blog_id
+			if ( !bp_groupblog_validate_blog_signup() ) {
+				$errors = $filtered_results['errors'];
+				bp_core_add_message ( $errors );
+				$group_id = '';
 			}
+		} else if ( $_POST['groupblog-create-new'] == 'no' ) {
+		    // They're using an existing blog, so we try to assign that to $groupblog_blog_id
+		    if ( !( $groupblog_blog_id = $_POST['groupblog-blogid'] ) ) {
+			//They forgot to choose a blog, so send them back and make them do it!
+				bp_core_add_message( __( 'Please choose one of your blogs from the drop-down menu.' . $group_id, 'groupblog' ), 'error' );
+				if ( bp_is_action_variable( 'step', 0 ) ) {
+					bp_core_redirect( $bp->loggedin_user->domain . $bp->groups->slug . '/create/step/' . $bp->action_variables[1] );
+				} else {
+					bp_core_redirect( $bp->root_domain . '/' . $bp->current_component . '/' . $bp->current_item . '/admin/group-blog' );
+				}
+		    }
+		}
+		}
+	} else {
+	    // They already have a blog associated with the group, we're just saving other settings
+		$groupblog_blog_id = groups_get_groupmeta ( $bp->groups->current_group->id, 'groupblog_blog_id' );
+	}
+
+	// Get the necessary settings out of the $_POST global so that we can use them to set up
+	// the blog
+	$settings = array(
+		'groupblog-enable-blog' => '',
+		'groupblog-silent-add'  => '',
+		'default-administrator' => '',
+		'default-moderator'     => '',
+		'default-member'        => '',
+		'page_template_layout'  => ''
+	);
+
+	foreach( $settings as $setting => $val ) {
+		if ( isset( $_POST[$setting] ) ) {
+			$settings[$setting] = $_POST[$setting];
 		}
 	}
+
+	if ( !groupblog_edit_base_settings( $settings['groupblog-enable-blog'], $settings['groupblog-silent-add'], $settings['default-administrator'], $settings['default-moderator'], $settings['default-member'], $settings['page_template_layout'], $bp->groups->current_group->id, $groupblog_blog_id ) ) {
+		bp_core_add_message( __( 'There was an error creating your group blog, please try again.', 'groupblog' ), 'error' );
+	} else {
+		bp_core_add_message( __( 'Group details were successfully updated.', 'groupblog' ) );
+	}
+
+	do_action( 'groupblog_details_edited', $bp->groups->current_group->id );
+
+	//bp_core_redirect( $bp->root_domain . '/' . $bp->current_component . '/' . $bp->current_item . '/admin/group-blog' );
+
 }
-add_action( 'wp', 'groupblog_edit_settings', 4 );
 
 /**
  * groupblog_edit_base_settings()
@@ -209,7 +220,7 @@ function groupblog_edit_base_settings( $groupblog_enable_blog, $groupblog_silent
 		bp_groupblog_member_join( $group_id );
 	}
 
-	do_action( 'groups_details_updated', $group->id );
+	do_action( 'groups_details_updated', $group_id );
 
 	return true;
 }
@@ -385,7 +396,7 @@ function bp_groupblog_get_user_role( $user_id, $user_login, $blog_id ) {
 
 function bp_groupblog_create_screen_save() {
 	global $bp;
-	global $groupblog_blog_id, $groupblog_create_screen;
+	global $groupblog_blog_id, $groupblog_create_screen, $filtered_results;
 
 	if ( bp_is_action_variable( 'step', 0 ) ) {
 		$groupblog_create_screen = true;
@@ -646,7 +657,7 @@ function bp_groupblog_validate_blog_form() {
  */
 function bp_groupblog_signup_blog($blogname = '', $blog_title = '', $errors = '') {
 	global $current_user, $current_site, $groupblog_create_screen;
-	global $bp;
+	global $bp, $filtered_results;
 
 	if ( ! is_wp_error($errors) ) {
 		$errors = new WP_Error();
@@ -792,11 +803,9 @@ function bp_groupblog_signup_blog($blogname = '', $blog_title = '', $errors = ''
  */
 function bp_groupblog_validate_blog_signup() {
 	global $bp, $wpdb, $current_user, $blogname, $blog_title, $errors;
-	global $groupblog_blog_id;
+	global $groupblog_blog_id, $filtered_results;
 
-	$group_id = $_COOKIE['bp_new_group_id'];
-
-	require_once( ABSPATH . WPINC . '/registration.php' );
+	$group_id = isset( $_COOKIE['bp_new_group_id'] ) ? $_COOKIE['bp_new_group_id'] : bp_get_current_group_id();
 
 	$current_user = wp_get_current_user();
 	if( !is_user_logged_in() )
