@@ -264,18 +264,18 @@ function bp_groupblog_member_join( $group_id ) {
 			$user_id = bp_get_group_member_id();
 
 			if ( $group->creator_id != $user_id )
-  				bp_groupblog_upgrade_user( $blog_id, $user_id, $group_id );
+  				bp_groupblog_upgrade_user( $user_id, $group_id, $blog_id );
 		}
 	}
 }
 
 /**
- * bp_groupblog_upgrade_user( $blog_id, $user_id, $group_id )
+ * bp_groupblog_upgrade_user( $user_id, $group_id, $blog_id )
  *
  * Subscribes user in question to blog in question
  * This code was initially inspired by Burt Adsit re-interpreted by Boone
  */
-function bp_groupblog_upgrade_user( $blog_id = false, $user_id, $group_id ) {
+function bp_groupblog_upgrade_user( $user_id, $group_id, $blog_id = false ) {
 
 	if ( !$blog_id )
 		$blog_id = groups_get_groupmeta ( $group_id, 'groupblog_blog_id' );
@@ -284,7 +284,7 @@ function bp_groupblog_upgrade_user( $blog_id = false, $user_id, $group_id ) {
 	if ( !$blog_id )
 		return;
 
-	// Setup some variables
+	// Set up some variables
 	$groupblog_silent_add 	       = groups_get_groupmeta ( $group_id, 'groupblog_silent_add' );
 	$groupblog_default_member_role = groups_get_groupmeta ( $group_id, 'groupblog_default_member_role' );
 	$groupblog_default_mod_role    = groups_get_groupmeta ( $group_id, 'groupblog_default_mod_role' );
@@ -326,7 +326,7 @@ function bp_groupblog_upgrade_user( $blog_id = false, $user_id, $group_id ) {
 function bp_groupblog_just_joined_group( $group_id, $user_id ) {
 	bp_groupblog_upgrade_user( $user_id, $group_id );
 }
-add_action( 'groups_join_group', 'bp_groupblog_just_joined_group', 10, 2 );
+add_action( 'groups_join_group', 'bp_groupblog_just_joined_group', 5, 2 );
 
 /*
  * bp_groupblog_changed_status_group( $user_id, $group_id )
@@ -352,20 +352,17 @@ add_action( 'groups_accept_invite', 'bp_groupblog_changed_status_group', 10, 2 )
  * Called when user leaves, or is banned from, the group
  */
 function bp_groupblog_remove_user( $group_id, $user_id = false ) {
-  global $bp, $blog_id;
+	global $bp, $blog_id;
 
-  $blog_id = get_groupblog_blog_id( $group_id );
+	$blog_id = get_groupblog_blog_id( $group_id );
 
-  if ( !$user_id )
-    $user_id = $bp->loggedin_user->id;
+	if ( !$user_id )
+		$user_id = bp_loggedin_user_id();
 
-  if ( !is_user_member_of_blog($user_id, $blog_id) )
-	  return;
-
-  $user = new WP_User( $user_id );
-  $user->for_blog($blog_id);
-  $user->set_role('subscriber');
-  wp_cache_delete($user_id, 'users' );
+	$user = new WP_User( $user_id );
+	$user->for_blog( $blog_id );
+	$user->set_role( 'subscriber' );
+	wp_cache_delete( $user_id, 'users' );
 }
 add_action( 'groups_leave_group', 'bp_groupblog_remove_user' );
 add_action( 'groups_banned_member', 'bp_groupblog_remove_user' );
@@ -382,7 +379,7 @@ function bp_groupblog_get_user_role( $user_id, $user_login, $blog_id ) {
 		return false;
 
 	// determine users role, if any, on this blog
-	$roles = get_usermeta( $user_id, 'wp_' . $blog_id . '_capabilities' );
+	$roles = get_user_meta( $user_id, 'wp_' . $blog_id . '_capabilities', true );
 
 	// this seems to be the only way to do this
 	if ( isset( $roles['subscriber'] ) )
