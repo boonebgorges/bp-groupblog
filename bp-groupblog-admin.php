@@ -121,10 +121,11 @@ function bp_groupblog_update_defaults() {
 		$newoptions['deep_group_integration'] = 0;
 
 	// groupblog redirect option
-	$newoptions['redirectblog'] = $_POST['bp_groupblog_redirect_blog'];
-	$newoptions['pagetitle'] = (isset($_POST['bp_groupblog_page_title'])) ?  $_POST['bp_groupblog_page_title'] : 'Blog';
-	$newoptions['pageslug'] = (isset($_POST['bp_groupblog_page_title'])) ?  sanitize_title($_POST['bp_groupblog_page_title']) : '';
-	$newoptions['page_template_layout'] = (isset($_POST['page_template_layout'])) ?  $_POST['page_template_layout'] : 'magazine';
+	$newoptions['redirectblog']         = isset( $_POST['bp_groupblog_redirect_blog'] ) ? $_POST['bp_groupblog_redirect_blog'] : '';
+	$newoptions['pagetitle']            = isset( $_POST['bp_groupblog_page_title'] ) ?  $_POST['bp_groupblog_page_title'] : __( 'Blog', 'bp-groupblog' );
+	$newoptions['pageslug']             = isset( $_POST['bp_groupblog_page_title'] ) ?  sanitize_title( $_POST['bp_groupblog_page_title'] ) : '';
+	$newoptions['page_template_layout'] = isset( $_POST['page_template_layout'] ) ?  $_POST['page_template_layout'] : 'magazine';
+
 	$newoptions['rerun'] = 0;
 
 	if ( ($newoptions['redirectblog'] == 2) ) {
