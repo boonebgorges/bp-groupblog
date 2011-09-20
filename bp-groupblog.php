@@ -969,7 +969,7 @@ add_action( 'bp_group_activity_filter_options', 'bp_groupblog_posts' );
 function groupblog_screen_blog() {
 	global $bp;
 
-	if ( $bp->current_component == $bp->groups->slug && 'blog' == $bp->current_action ) {
+	if ( bp_is_groups_component() && bp_is_current_action( 'blog' ) ) {
 
 		$checks = get_site_option('bp_groupblog_blog_defaults_options');
 		$blog_details = get_blog_details( get_groupblog_blog_id(), true );
@@ -986,8 +986,8 @@ function groupblog_screen_blog() {
 				add_action( 'bp_screens', 'groupblog_screen_blog' );
 			}
 			else {
+			 	add_action( 'bp_template_content', 'groupblog_screen_blog_content' );
 				bp_core_load_template( apply_filters( 'bp_core_template_plugin', 'groups/single/plugins' ) );
-			  add_action( 'bp_template_content', 'groupblog_screen_blog_content' );
 			}
 		}
 	}
