@@ -41,6 +41,14 @@ if ( !function_exists( 'bp_is_groups_component' ) ) :
 	}
 endif;
 
+if ( !function_exists( 'bp_is_forums_component' ) ) :
+	function bp_is_forums_component() {
+		global $bp;
+
+		return apply_filters( 'bp_is_forums_component', $bp->forums->slug == $bp->current_component );
+	}
+endif;
+
 if ( !function_exists( 'groups_get_current_group' ) ) :
 	function groups_get_current_group() {
 		global $bp;
