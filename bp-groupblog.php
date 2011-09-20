@@ -170,7 +170,7 @@ function groupblog_edit_settings() {
 		}
 	}
 
-	if ( !groupblog_edit_base_settings( $settings['groupblog-enable-blog'], $settings['groupblog-silent-add'], $settings['default-administrator'], $settings['default-moderator'], $settings['default-member'], $settings['page_template_layout'], $bp->groups->current_group->id, $groupblog_blog_id ) ) {
+	if ( !groupblog_edit_base_settings( $settings['groupblog-enable-blog'], $settings['groupblog-silent-add'], $settings['default-administrator'], $settings['default-moderator'], $settings['default-member'], $settings['page_template_layout'], $group_id, $groupblog_blog_id ) ) {
 		bp_core_add_message( __( 'There was an error creating your group blog, please try again.', 'groupblog' ), 'error' );
 	} else {
 		bp_core_add_message( __( 'Group details were successfully updated.', 'groupblog' ) );
@@ -191,6 +191,8 @@ function groupblog_edit_settings() {
 function groupblog_edit_base_settings( $groupblog_enable_blog, $groupblog_silent_add = NULL, $groupblog_default_admin_role, $groupblog_default_mod_role, $groupblog_default_member_role, $page_template_layout, $group_id, $groupblog_blog_id = NULL ) {
 	global $bp;
 
+	$group_id = (int)$group_id;
+
 	if ( empty( $group_id ) )
 		return false;
 
@@ -210,7 +212,7 @@ function groupblog_edit_base_settings( $groupblog_enable_blog, $groupblog_silent
 	groups_update_groupmeta ( $group_id, 'groupblog_blog_id', $groupblog_blog_id );
 	groups_update_groupmeta ( $group_id, 'groupblog_silent_add', $groupblog_silent_add );
 
-  groups_update_groupmeta ( $group_id, 'groupblog_default_admin_role', $groupblog_default_admin_role );
+  	groups_update_groupmeta ( $group_id, 'groupblog_default_admin_role', $groupblog_default_admin_role );
 	groups_update_groupmeta ( $group_id, 'groupblog_default_mod_role', $groupblog_default_mod_role );
 	groups_update_groupmeta ( $group_id, 'groupblog_default_member_role', $groupblog_default_member_role );
 
@@ -404,42 +406,41 @@ function bp_groupblog_create_screen_save() {
 		$groupblog_create_screen = false;
 	}
 
-	if ( isset ($_POST['save'] ) && isset ($_POST['groupblog-create-save']) && isset($_POST['groupblog-enable-blog']) ) {
-		// Set up some default roles
-		$groupblog_default_admin_role  = isset( $_POST['default-administrator'] ) ? $_POST['default-administrator'] : BP_GROUPBLOG_DEFAULT_ADMIN_ROLE;
-		$groupblog_default_mod_role    = isset( $_POST['default-moderator'] ) ? $_POST['default-moderator'] : BP_GROUPBLOG_DEFAULT_MOD_ROLE;
-		$groupblog_default_member_role = isset( $_POST['default-member'] ) ? $_POST['default-member'] : BP_GROUPBLOG_DEFAULT_MEMBER_ROLE;
-		$groupblog_group_id = $_POST['group_id'];
-		$silent_add = $_POST['groupblog-silent-add'];
-		$page_template_layout = $_POST['page_template_layout'];
+	// Set up some default roles
+	$groupblog_default_admin_role  = isset( $_POST['default-administrator'] ) ? $_POST['default-administrator'] : BP_GROUPBLOG_DEFAULT_ADMIN_ROLE;
+	$groupblog_default_mod_role    = isset( $_POST['default-moderator'] ) ? $_POST['default-moderator'] : BP_GROUPBLOG_DEFAULT_MOD_ROLE;
+	$groupblog_default_member_role = isset( $_POST['default-member'] ) ? $_POST['default-member'] : BP_GROUPBLOG_DEFAULT_MEMBER_ROLE;
 
+	// Set up some other values
+	$groupblog_group_id	= isset( $_POST['group_id'] ) ? $_POST['group_id'] : bp_get_new_group_id();
+	$silent_add 		= isset( $_POST['groupblog-silent-add'] ) ? $_POST['groupblog-silent-add'] : '';
+	$page_template_layout	= isset( $_POST['page_template_layout'] ) ? $_POST['page_template_layout'] : '';
+	$enable_group_blog	= isset( $_POST['groupblog-enable-blog'] ) ? $_POST['groupblog-enable-blog'] : '';
 
-	    if ( $_POST['groupblog-create-new'] == 'yes' ) {
-	        //Create a new blog and assign the blog id to the global $groupblog_blog_id
-			if ( !bp_groupblog_validate_blog_signup() ) {
-				$errors = $filtered_results['errors'];
-				bp_core_add_message ( $errors );
-				$group_id = '';
-			}
-		} else if ( $_POST['groupblog-create-new'] == 'no' ) {
-		    // They're using an existing blog, so we try to assign that to $groupblog_blog_id
-		    if ( !( $groupblog_blog_id = $_POST['groupblog-blogid'] ) ) {
-		        //They forgot to choose a blog, so send them back and make them do it!
-				bp_core_add_message( __( 'Please choose one of your blogs from the drop-down menu.' . $group_id, 'groupblog' ), 'error' );
-				bp_core_redirect( $bp->loggedin_user->domain . $bp->groups->slug . '/create/step/' . $bp->action_variables[1] );
-			}
-		} else {
-		    // They already have a blog associated with the group, we're just saving other settings
-			$groupblog_blog_id = groups_get_groupmeta ( $bp->groups->current_group->id, 'groupblog_blog_id' );
+	if ( $_POST['groupblog-create-new'] == 'yes' ) {
+	//Create a new blog and assign the blog id to the global $groupblog_blog_id
+		if ( !$groupblog_blog_id = bp_groupblog_validate_blog_signup() ) {
+			$errors = $filtered_results['errors'];
+			bp_core_add_message ( $errors );
+			$group_id = '';
 		}
-
-		if ( !groupblog_edit_base_settings( $_POST['groupblog-enable-blog'], $_POST['groupblog-silent-add'], $_POST['default-administrator'], $_POST['default-moderator'], $_POST['default-member'], $_POST['page_template_layout'], $groupblog_group_id, $groupblog_blog_id ) ) {
-			bp_core_add_message( __( 'There was an error creating your group blog, please try again.', 'groupblog' ), 'error' );
+	} else if ( $_POST['groupblog-create-new'] == 'no' ) {
+	    // They're using an existing blog, so we try to assign that to $groupblog_blog_id
+	    if ( !( $groupblog_blog_id = $_POST['groupblog-blogid'] ) ) {
+		//They forgot to choose a blog, so send them back and make them do it!
+			bp_core_add_message( __( 'Please choose one of your blogs from the drop-down menu.' . $group_id, 'groupblog' ), 'error' );
 			bp_core_redirect( $bp->loggedin_user->domain . $bp->groups->slug . '/create/step/' . $bp->action_variables[1] );
 		}
+	} else {
+	    // They already have a blog associated with the group, we're just saving other settings
+		$groupblog_blog_id = groups_get_groupmeta ( $bp->groups->current_group->id, 'groupblog_blog_id' );
+	}
+
+	if ( !groupblog_edit_base_settings( $enable_group_blog, $silent_add, $groupblog_default_admin_role, $groupblog_default_mod_role, $groupblog_default_member_role, $page_template_layout, $groupblog_group_id, $groupblog_blog_id ) ) {
+		bp_core_add_message( __( 'There was an error creating your group blog, please try again.', 'groupblog' ), 'error' );
+		bp_core_redirect( $bp->loggedin_user->domain . $bp->groups->slug . '/create/step/' . $bp->action_variables[1] );
 	}
 }
-add_action( 'bp_actions', 'bp_groupblog_create_screen_save' );
 
 /**
  * bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors = '' )
@@ -449,6 +450,11 @@ add_action( 'bp_actions', 'bp_groupblog_create_screen_save' );
  */
 function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors = '' ) {
 	global $bp, $groupblog_create_screen, $current_site;
+
+	// Get the group id, which is fetched differently depending on whether this is a group
+	// Create or Edit screen
+	$group_id = bp_is_group_create() ? bp_get_new_group_id() : bp_get_current_group_id();
+
 	?>
 
 	<div id="blog-details-fields">
@@ -490,8 +496,8 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 
     <p><?php _e( 'Choose either one of your existing blogs or create a new one all together with the details displayed below.', 'groupblog' ); ?><br /><?php _e('Take care as you can only choose once.  Later you may still disable or enable the blog, but your choice is set.', 'groupblog' ); ?></p>
 
-		<p><input<?php if ( !bp_groupblog_is_blog_enabled( bp_get_group_id() ) ) { ?> disabled="true"<?php } ?> type="radio" value="no" name="groupblog-create-new" /><span>&nbsp;<?php _e( 'Use one of your own available blogs:', 'groupblog' ); ?>&nbsp;</span>
-	    <select<?php if ( !bp_groupblog_is_blog_enabled( bp_get_group_id() ) ) { ?> disabled="true"<?php } ?> name="groupblog-blogid" id="groupblog-blogid">
+		<p><input<?php if ( !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> type="radio" value="no" name="groupblog-create-new" /><span>&nbsp;<?php _e( 'Use one of your own available blogs:', 'groupblog' ); ?>&nbsp;</span>
+	    <select<?php if ( !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> name="groupblog-blogid" id="groupblog-blogid">
 	      <option value="0"><?php _e( 'choose a blog', 'groupblog' ) ?></option>
 				  <?php
 				  $user_blogs = get_blogs_of_user( get_current_user_id() );
@@ -504,7 +510,7 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 	   	</select>
     </p>
 
-		<p><input<?php if ( !bp_groupblog_is_blog_enabled( bp_get_group_id() ) ) { ?> disabled="true"<?php } ?> type="radio" value="yes" name="groupblog-create-new" checked="checked" /><span>&nbsp;<?php _e( 'Or, create a new blog', 'groupblog' ); ?></span></p>
+		<p><input<?php if ( !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> type="radio" value="yes" name="groupblog-create-new" checked="checked" /><span>&nbsp;<?php _e( 'Or, create a new blog', 'groupblog' ); ?></span></p>
 
 		<ul id="groupblog-details">
 		  <li>
@@ -567,8 +573,6 @@ do_action('signup_blogform', $errors);
  * This function validates that the blog does not exist already, illegal names, etc...
  */
 function bp_groupblog_validate_blog_form() {
-
-	require_once( ABSPATH . WPINC . '/registration.php' );
 
 	$user = '';
 	if ( is_user_logged_in() )
@@ -673,6 +677,10 @@ function bp_groupblog_signup_blog($blogname = '', $blog_title = '', $errors = ''
 		$groupblog_create_screen = false;
 	}
 
+	// Get the group id, which is fetched differently depending on whether this is a group
+	// Create or Edit screen
+	$group_id = bp_is_group_create() ? bp_get_new_group_id() : bp_get_current_group_id();
+
   if ( !$groupblog_create_screen ) { ?>
 	<h2><?php _e( 'Group Blog', 'groupblog' ) ?></h2>
 
@@ -682,7 +690,7 @@ function bp_groupblog_signup_blog($blogname = '', $blog_title = '', $errors = ''
 	<?php } ?>
 
 		<div class="checkbox">
-			<label><input type="checkbox" name="groupblog-enable-blog" id="groupblog-enable-blog" value="1"<?php bp_groupblog_show_enabled( bp_get_group_id() ) ?>/> <?php _e( 'Enable group blog', 'groupblog' ); ?></label>
+			<label><input type="checkbox" name="groupblog-enable-blog" id="groupblog-enable-blog" value="1"<?php bp_groupblog_show_enabled( $group_id ) ?>/> <?php _e( 'Enable group blog', 'groupblog' ); ?></label>
 		</div>
 
 		<?php bp_groupblog_show_blog_form($blogname, $blog_title, $errors); ?>
@@ -696,7 +704,7 @@ function bp_groupblog_signup_blog($blogname = '', $blog_title = '', $errors = ''
 			<p><?php _e( 'Enable blog posting to allow adding of group members to the blog with the roles set below.', 'groupblog' ); ?><br /><?php _e( 'When disabled, all members will temporarily be set to subscribers, disabling posting.', 'groupblog' ); ?></p>
 
 			<div class="checkbox">
-				<label><input<?php if ( !bp_groupblog_is_blog_enabled( bp_get_group_id() ) ) { ?> disabled="true"<?php } ?> type="checkbox" name="groupblog-silent-add" id="groupblog-silent-add" value="1"<?php if ( bp_groupblog_silent_add( bp_get_group_id() ) ) { ?> checked="checked"<?php } ?>/> <?php _e( 'Enable member blog posting', 'groupblog' ); ?></label>
+				<label><input<?php if ( !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> type="checkbox" name="groupblog-silent-add" id="groupblog-silent-add" value="1"<?php if ( bp_groupblog_silent_add( $group_id ) ) { ?> checked="checked"<?php } ?>/> <?php _e( 'Enable member blog posting', 'groupblog' ); ?></label>
 			</div>
 
 			<?php
@@ -714,28 +722,28 @@ function bp_groupblog_signup_blog($blogname = '', $blog_title = '', $errors = ''
 			?>
 
 			<label><strong><?php _e( 'Default Administrator Role:', 'groupblog' ); ?></strong></label>
-			<input type="radio"<?php if ( $groupblog_default_admin_role == 'administrator' ) {?> checked="checked"<?php } ?> value="administrator" name="default-administrator"<?php if ( !bp_groupblog_silent_add( bp_get_group_id() ) || !bp_groupblog_is_blog_enabled( bp_get_group_id() ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Administrator', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio"<?php if ( $groupblog_default_admin_role == 'editor' ) {?> checked="checked"<?php } ?> value="editor" name="default-administrator"<?php if ( !bp_groupblog_silent_add( bp_get_group_id() ) || !bp_groupblog_is_blog_enabled( bp_get_group_id() ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Editor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio"<?php if ( $groupblog_default_admin_role == 'author' ) {?> checked="checked"<?php } ?> value="author" name="default-administrator"<?php if ( !bp_groupblog_silent_add( bp_get_group_id() ) || !bp_groupblog_is_blog_enabled( bp_get_group_id() ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Author', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio"<?php if ( $groupblog_default_admin_role == 'contributor' ) {?> checked="checked"<?php } ?> value="contributor" name="default-administrator"<?php if ( !bp_groupblog_silent_add( bp_get_group_id() ) || !bp_groupblog_is_blog_enabled( bp_get_group_id() ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Contributor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio"<?php if ( $groupblog_default_admin_role == 'subscriber' ) {?> checked="checked"<?php } ?> value="subscriber" name="default-administrator"<?php if ( !bp_groupblog_silent_add( bp_get_group_id() ) || !bp_groupblog_is_blog_enabled( bp_get_group_id() ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Subscriber', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio"<?php if ( $groupblog_default_admin_role == 'administrator' ) {?> checked="checked"<?php } ?> value="administrator" name="default-administrator"<?php if ( !bp_groupblog_silent_add( $group_id ) || !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Administrator', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio"<?php if ( $groupblog_default_admin_role == 'editor' ) {?> checked="checked"<?php } ?> value="editor" name="default-administrator"<?php if ( !bp_groupblog_silent_add( $group_id ) || !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Editor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio"<?php if ( $groupblog_default_admin_role == 'author' ) {?> checked="checked"<?php } ?> value="author" name="default-administrator"<?php if ( !bp_groupblog_silent_add( $group_id ) || !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Author', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio"<?php if ( $groupblog_default_admin_role == 'contributor' ) {?> checked="checked"<?php } ?> value="contributor" name="default-administrator"<?php if ( !bp_groupblog_silent_add( $group_id ) || !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Contributor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio"<?php if ( $groupblog_default_admin_role == 'subscriber' ) {?> checked="checked"<?php } ?> value="subscriber" name="default-administrator"<?php if ( !bp_groupblog_silent_add( $group_id ) || !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Subscriber', 'groupblog' ); ?>&nbsp;&nbsp;</span>
 
 			<label><strong><?php _e( 'Default Moderator Role:', 'groupblog' ); ?></strong></label>
-			<input type="radio"<?php if ( $groupblog_default_mod_role == 'administrator' ) {?> checked="checked"<?php } ?> value="administrator" name="default-moderator"<?php if ( !bp_groupblog_silent_add( bp_get_group_id() ) || !bp_groupblog_is_blog_enabled( bp_get_group_id() ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Administrator', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio"<?php if ( $groupblog_default_mod_role == 'editor' ) {?> checked="checked"<?php } ?> value="editor" name="default-moderator"<?php if ( !bp_groupblog_silent_add( bp_get_group_id() ) || !bp_groupblog_is_blog_enabled( bp_get_group_id() ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Editor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio"<?php if ( $groupblog_default_mod_role == 'author' ) {?> checked="checked"<?php } ?> value="author" name="default-moderator"<?php if ( !bp_groupblog_silent_add( bp_get_group_id() ) || !bp_groupblog_is_blog_enabled( bp_get_group_id() ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Author', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio"<?php if ( $groupblog_default_mod_role == 'contributor' ) {?> checked="checked"<?php } ?> value="contributor" name="default-moderator"<?php if ( !bp_groupblog_silent_add( bp_get_group_id() ) || !bp_groupblog_is_blog_enabled( bp_get_group_id() ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Contributor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio"<?php if ( $groupblog_default_mod_role == 'subscriber' ) {?> checked="checked"<?php } ?> value="subscriber" name="default-moderator"<?php if ( !bp_groupblog_silent_add( bp_get_group_id() ) || !bp_groupblog_is_blog_enabled( bp_get_group_id() ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Subscriber', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio"<?php if ( $groupblog_default_mod_role == 'administrator' ) {?> checked="checked"<?php } ?> value="administrator" name="default-moderator"<?php if ( !bp_groupblog_silent_add( $group_id ) || !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Administrator', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio"<?php if ( $groupblog_default_mod_role == 'editor' ) {?> checked="checked"<?php } ?> value="editor" name="default-moderator"<?php if ( !bp_groupblog_silent_add( $group_id ) || !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Editor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio"<?php if ( $groupblog_default_mod_role == 'author' ) {?> checked="checked"<?php } ?> value="author" name="default-moderator"<?php if ( !bp_groupblog_silent_add( $group_id ) || !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Author', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio"<?php if ( $groupblog_default_mod_role == 'contributor' ) {?> checked="checked"<?php } ?> value="contributor" name="default-moderator"<?php if ( !bp_groupblog_silent_add( $group_id ) || !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Contributor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio"<?php if ( $groupblog_default_mod_role == 'subscriber' ) {?> checked="checked"<?php } ?> value="subscriber" name="default-moderator"<?php if ( !bp_groupblog_silent_add( $group_id ) || !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Subscriber', 'groupblog' ); ?>&nbsp;&nbsp;</span>
 
 			<label><strong><?php _e( 'Default Member Role:', 'groupblog' ); ?></strong></label>
-			<input type="radio"<?php if ( $groupblog_default_member_role == 'administrator' ) {?> checked="checked"<?php } ?> value="administrator" name="default-member"<?php if ( !bp_groupblog_silent_add( bp_get_group_id() ) || !bp_groupblog_is_blog_enabled( bp_get_group_id() ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Administrator', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio"<?php if ( $groupblog_default_member_role == 'editor' ) {?> checked="checked"<?php } ?> value="editor" name="default-member"<?php if ( !bp_groupblog_silent_add( bp_get_group_id() ) || !bp_groupblog_is_blog_enabled( bp_get_group_id() ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Editor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio"<?php if ( $groupblog_default_member_role == 'author' ) {?> checked="checked"<?php } ?> value="author" name="default-member"<?php if ( !bp_groupblog_silent_add( bp_get_group_id() ) || !bp_groupblog_is_blog_enabled( bp_get_group_id() ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Author', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio"<?php if ( $groupblog_default_member_role == 'contributor' ) {?> checked="checked"<?php } ?> value="contributor" name="default-member"<?php if ( !bp_groupblog_silent_add( bp_get_group_id() ) || !bp_groupblog_is_blog_enabled( bp_get_group_id() ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Contributor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio"<?php if ( $groupblog_default_member_role == 'subscriber' ) {?> checked="checked"<?php } ?> value="subscriber" name="default-member"<?php if ( !bp_groupblog_silent_add( bp_get_group_id() ) || !bp_groupblog_is_blog_enabled( bp_get_group_id() ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Subscriber', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio"<?php if ( $groupblog_default_member_role == 'administrator' ) {?> checked="checked"<?php } ?> value="administrator" name="default-member"<?php if ( !bp_groupblog_silent_add( $group_id ) || !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Administrator', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio"<?php if ( $groupblog_default_member_role == 'editor' ) {?> checked="checked"<?php } ?> value="editor" name="default-member"<?php if ( !bp_groupblog_silent_add( $group_id ) || !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Editor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio"<?php if ( $groupblog_default_member_role == 'author' ) {?> checked="checked"<?php } ?> value="author" name="default-member"<?php if ( !bp_groupblog_silent_add( $group_id ) || !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Author', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio"<?php if ( $groupblog_default_member_role == 'contributor' ) {?> checked="checked"<?php } ?> value="contributor" name="default-member"<?php if ( !bp_groupblog_silent_add( $group_id ) || !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Contributor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio"<?php if ( $groupblog_default_member_role == 'subscriber' ) {?> checked="checked"<?php } ?> value="subscriber" name="default-member"<?php if ( !bp_groupblog_silent_add( $group_id ) || !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> /><span>&nbsp;<?php _e( 'Subscriber', 'groupblog' ); ?>&nbsp;&nbsp;</span>
 
 			<div id="groupblog-member-roles">
-				<label><strong><?php _e( 'A bit about the WPMU member roles:', 'groupblog' ); ?></strong></label>
+				<label><strong><?php _e( 'A bit about WordPress member roles:', 'groupblog' ); ?></strong></label>
 				<ul id="groupblog-members">
 					<li><?php _e( 'Administrator', 'groupblog' ); ?> - <?php _e( "Somebody who has access to all the administration features.", 'groupblog' ); ?></li>
 					<li><?php _e( 'Editor', 'groupblog' ); ?> - <?php _e( "Somebody who can publish posts, manage posts as well as manage other people's posts, etc.", 'groupblog' ); ?></li>
@@ -768,13 +776,13 @@ function bp_groupblog_signup_blog($blogname = '', $blog_title = '', $errors = ''
 						<td class="available-theme top left">
 							<?php echo '<img src="' . WP_PLUGIN_URL . '/bp-groupblog/inc/i/screenshot-mag.png">';?>
 							<br /><br />
-							<input<?php if ( !bp_groupblog_is_blog_enabled( bp_get_group_id() ) ) { ?> disabled="true"<?php } ?> name="page_template_layout" id="page_template_layout"  value="magazine" type="radio" <?php if ($page_template_layout == 'magazine') echo 'checked="checked"'; ?> /><label style="display:inline;"> <?php _e( 'Magazine', 'groupblog' ) ?></label>
+							<input<?php if ( !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> name="page_template_layout" id="page_template_layout"  value="magazine" type="radio" <?php if ($page_template_layout == 'magazine') echo 'checked="checked"'; ?> /><label style="display:inline;"> <?php _e( 'Magazine', 'groupblog' ) ?></label>
 							<p class="description"><?php _e( 'Balanced template for groups with diverse postings.', 'groupblog' ) ?></p>
 						</td>
 						<td class="available-theme top">
 							<?php echo '<img src="' . WP_PLUGIN_URL . '/bp-groupblog/inc/i/screenshot-micro.png">';?>
 							<br /><br />
-							<input<?php if ( !bp_groupblog_is_blog_enabled( bp_get_group_id() ) ) { ?> disabled="true"<?php } ?> name="page_template_layout" id="page_template_layout"  value="microblog" type="radio" <?php if ($page_template_layout == 'microblog') echo 'checked="checked"'; ?> /><label style="display:inline;"> <?php _e( 'Microblog', 'groupblog' ) ?></label>
+							<input<?php if ( !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> name="page_template_layout" id="page_template_layout"  value="microblog" type="radio" <?php if ($page_template_layout == 'microblog') echo 'checked="checked"'; ?> /><label style="display:inline;"> <?php _e( 'Microblog', 'groupblog' ) ?></label>
 							<p class="description"><?php _e( 'Great for simple listing of posts in a chronological order.', 'groupblog' ) ?></p>
 						</td>
 					</tr>
@@ -815,9 +823,10 @@ function bp_groupblog_validate_blog_signup() {
 	$result = bp_groupblog_validate_blog_form();
 	extract($result);
 
-	$checks = get_site_option('bp_groupblog_blog_defaults_options');
+	$checks = get_site_option( 'bp_groupblog_blog_defaults_options' );
 
 	if ( $errors->get_error_code() ) {
+		$message = '';
 		$message .= $errors->get_error_message('blogname');
 		$message .= __( ' However, you may continue with the blog address as listed below.', 'groupblog' );
 		$message .= __( ' We suggest adjusting the group name in group details following these requirements.', 'groupblog' );
@@ -838,18 +847,15 @@ function bp_groupblog_validate_blog_signup() {
 
 	$public = (int) $_POST['blog_public'];
 
+	groups_update_groupmeta( $group_id, 'groupblog_public', $public);
+	groups_update_groupmeta( $group_id, 'groupblog_title', $blog_title);
+	groups_update_groupmeta( $group_id, 'groupblog_path', $path);
+	groups_update_groupmeta( $group_id, 'groupblog_domain', $domain);
 
-	if ( $bp->action_variables[0] == 'step' ) {
-		groups_update_groupmeta( $group_id, 'groupblog_public', $public);
-		groups_update_groupmeta( $group_id, 'groupblog_title', $blog_title);
-		groups_update_groupmeta( $group_id, 'groupblog_path', $path);
-		groups_update_groupmeta( $group_id, 'groupblog_domain', $domain);
-	} else {
-		$meta = apply_filters('signup_create_blog_meta', array ('lang_id' => 1, 'public' => $public)); // depreciated
-		$meta = apply_filters( "add_signup_meta", $meta );
+	$meta = apply_filters('signup_create_blog_meta', array ('lang_id' => 1, 'public' => $public)); // depreciated
+	$meta = apply_filters( "add_signup_meta", $meta );
 
-		$groupblog_blog_id = wpmu_create_blog( $domain, $path, $blog_title, $current_user->id, $meta, $wpdb->siteid );
-	}
+	$groupblog_blog_id = wpmu_create_blog( $domain, $path, $blog_title, $current_user->id, $meta, $wpdb->siteid );
 
 	$errors = $filtered_results['errors'];
 
