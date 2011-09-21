@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: buddypress,groups,blogs,content
 Requires at least: WP 3.0 / BP 1.2
 Tested up to: WP 3.2.1 / BP 1.5
-Stable tag: 1.5
+Stable tag: 1.6
 
 BuddyPress Groupblog extends the group functionality by enabling the group to have a single blog associated with it.
 
