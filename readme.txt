@@ -3,7 +3,7 @@ Contributors: MariusOoms, reblevins
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7374704
 Tags: buddypress,groups,blogs,content
 Requires at least: WP 3.0 / BP 1.2
-Tested up to: WP 3.0.1
+Tested up to: WP 3.2.1 / BP 1.5
 Stable tag: 1.5
 
 BuddyPress Groupblog extends the group functionality by enabling the group to have a single blog associated with it.
@@ -105,8 +105,10 @@ function bp_core_avatar_url() {
 
 == Changelog == 
 
-= Trunk =
+= 1.6 =
+* Compatibility with BuddyPress 1.5
 * Cosmetic changes to the P2 BuddyPress to match the default BuddyPress 
+* Bug fixes related to blog autojoining
 
 = 1.5 =
 * Added support for subdomains, big thanks to Lemmy
