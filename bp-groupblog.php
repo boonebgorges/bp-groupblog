@@ -466,11 +466,13 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 	
 	$blog_id = get_groupblog_blog_id();
 	
+	$disabled = bp_groupblog_is_blog_enabled( $group_id ) ? '' : ' disabled="true" ';
+	
 	?>
 	
 	<div id="blog-details-fields">
 	
-	<?php if ( !$groupblog_create_screen && !( $blog_id == '' ) ) : ?>
+	<?php if ( !$groupblog_create_screen && $blog_id != '' ) : ?>
 		<?php //We're showing the admin form ?>
 		<?php $blog_details = get_blog_details( get_groupblog_blog_id(), true ); ?>
 		<label for="blog_title"><strong><?php _e( 'Blog Title:', 'groupblog' ) ?></strong></label>
@@ -508,9 +510,9 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 		<p><?php _e( 'Choose either one of your existing blogs or create a new one all together with the details displayed below.', 'groupblog' ); ?><br /><?php _e('Take care as you can only choose once.  Later you may still disable or enable the blog, but your choice is set.', 'groupblog' ); ?></p>
 	
 		<p>
-			<input<?php if ( !bp_groupblog_is_blog_enabled( $group_id ) ) : ?> disabled="true"<?php endif ?> type="radio" value="no" name="groupblog-create-new" /><span>&nbsp;<?php _e( 'Use one of your own available blogs:', 'groupblog' ); ?>&nbsp;</span>
+			<input <?php echo $disabled ?> type="radio" value="no" name="groupblog-create-new" /><span>&nbsp;<?php _e( 'Use one of your own available blogs:', 'groupblog' ); ?>&nbsp;</span>
 
-			<select<?php if ( !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> name="groupblog-blogid" id="groupblog-blogid">
+			<select <?php echo $disabled ?> name="groupblog-blogid" id="groupblog-blogid">
 				<option value="0"><?php _e( 'choose a blog', 'groupblog' ) ?></option>
 				<?php
 				$user_blogs = get_blogs_of_user( get_current_user_id() );
@@ -525,7 +527,7 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 		</p>
 	
 		<p>
-			<input<?php if ( !bp_groupblog_is_blog_enabled( $group_id ) ) : ?> disabled="true"<?php endif ?> type="radio" value="yes" name="groupblog-create-new" checked="checked" /><span>&nbsp;<?php _e( 'Or, create a new blog', 'groupblog' ); ?></span>
+			<input <?php echo $disabled ?> type="radio" value="yes" name="groupblog-create-new" checked="checked" /><span>&nbsp;<?php _e( 'Or, create a new blog', 'groupblog' ); ?></span>
 		</p>
 		
 		<ul id="groupblog-details">
@@ -580,7 +582,8 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 	
 	</div>
 	<?php
-do_action('signup_blogform', $errors);
+	
+	do_action( 'signup_blogform', $errors );
 }
 
 /**
