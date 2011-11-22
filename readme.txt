@@ -105,6 +105,9 @@ function bp_core_avatar_url() {
 
 == Changelog == 
 
+= 1.7 =
+* Allows group admins to specify blog address and title at the time of creation
+
 = 1.6 =
 * Compatibility with BuddyPress 1.5
 * Cosmetic changes to the P2 BuddyPress to match the default BuddyPress 
