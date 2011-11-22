@@ -541,7 +541,9 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 				
 				<?php $blog_title = isset( $_GET['invalid_name'] ) ? urldecode( $_GET['invalid_name'] ) : $bp->groups->current_group->name ?>
 				
-				<input name="blog_title" type="text" id="blog_title" value="<?php echo $blog_title ?>" />
+				<span class="gbd-value">
+					<input name="blog_title" type="text" id="blog_title" value="<?php echo $blog_title ?>" />
+				</span>
 			</li>
 			
 			<li>
@@ -553,9 +555,9 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 				<?php $blog_address = isset( $_GET['invalid_address'] ) ? urldecode( $_GET['invalid_address'] ) : bp_groupblog_sanitize_blog_name( $bp->groups->current_group->slug ) ?>
 				
 				<?php if (is_subdomain_install()) : ?>
-					<span><em>http://</em><input name="blogname" type="text" id="blogname" value="<?php echo $blog_address; ?>" maxlength="50" /><em><?php echo $current_site->domain . $current_site->path ?></em></span>
+					<span class="gbd-value"><em>http://</em><input name="blogname" type="text" id="blogname" value="<?php echo $blog_address; ?>" maxlength="50" /><em><?php echo $current_site->domain . $current_site->path ?></em></span>
 				<?php else : ?>
-					<span><em>http://<?php echo $current_site->domain . $current_site->path ?></em><input name="blogname" type="text" id="blogname" value="<?php echo $blog_address; ?>" maxlength="50" /></span>
+					<span class="gbd-value"><em>http://<?php echo $current_site->domain . $current_site->path ?></em><input name="blogname" type="text" id="blogname" value="<?php echo $blog_address; ?>" maxlength="50" /></span>
 				<?php endif ?>
 
 			</li>
