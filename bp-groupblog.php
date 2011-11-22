@@ -459,93 +459,100 @@ function bp_groupblog_create_screen_save() {
  */
 function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors = '' ) {
 	global $bp, $groupblog_create_screen, $current_site;
-
+	
 	// Get the group id, which is fetched differently depending on whether this is a group
 	// Create or Edit screen
 	$group_id = bp_is_group_create() ? bp_get_new_group_id() : bp_get_current_group_id();
-
+	
+	$blog_id = get_groupblog_blog_id();
+	
 	?>
-
+	
 	<div id="blog-details-fields">
-	<?php $blog_id = get_groupblog_blog_id(); ?>
-    <?php if ( !$groupblog_create_screen && !( $blog_id == '' ) ) { ?>
+	
+	<?php if ( !$groupblog_create_screen && !( $blog_id == '' ) ) : ?>
 		<?php //We're showing the admin form ?>
 		<?php $blog_details = get_blog_details( get_groupblog_blog_id(), true ); ?>
-	    <label for="blog_title"><strong><?php _e( 'Blog Title:', 'groupblog' ) ?></strong></label>
-	    <?php if ( $errmsg = $errors->get_error_message('blog_title') ) { ?>
-	      <p class="error"><?php echo $errmsg ?></p>
-	    <?php } ?>
-	    <p><?php echo $blog_details->blogname; ?></p>
-	    <input name="blog_title" type="hidden" id="blog_title" value="<?php echo $blog_details->blogname; ?>" />
-
-	    <label for="blogname"><strong><?php _e( 'Blog Address:', 'groupblog' ) ?></strong></label>
-	    <?php if ( $errmsg = $errors->get_error_message('blogname') ) { ?>
-	      <p class="error"><?php echo $errmsg ?></p>
-	    <?php }
-    	$checks = get_site_option('bp_groupblog_blog_defaults_options');
-
-	    $baddies = array ();
-	    if ( $checks['allowdashes'] != '1' )
-	    	$baddies[] = '-';
-			if ( $checks['allowunderscores'] != '1' )
-				$baddies[] = '_';
-
-	    $blog_address = str_replace ( $baddies, '', $bp->groups->current_group->slug );
+		<label for="blog_title"><strong><?php _e( 'Blog Title:', 'groupblog' ) ?></strong></label>
+		<?php if ( $errmsg = $errors->get_error_message('blog_title') ) { ?>
+			<p class="error"><?php echo $errmsg ?></p>
+		<?php } ?>
+		<p><?php echo $blog_details->blogname; ?></p>
+		<input name="blog_title" type="hidden" id="blog_title" value="<?php echo $blog_details->blogname; ?>" />
+		
+		<label for="blogname"><strong><?php _e( 'Blog Address:', 'groupblog' ) ?></strong></label>
+		<?php if ( $errmsg = $errors->get_error_message('blogname') ) { ?>
+			<p class="error"><?php echo $errmsg ?></p>
+		<?php }
+		$checks = get_site_option('bp_groupblog_blog_defaults_options');
+		
+		$baddies = array ();
+		if ( $checks['allowdashes'] != '1' )
+			$baddies[] = '-';
+		if ( $checks['allowunderscores'] != '1' )
+			$baddies[] = '_';
+		
+		$blog_address = str_replace ( $baddies, '', $bp->groups->current_group->slug );
 		?>
-
+		
 		<p><em><?php echo $blog_details->siteurl; ?> </em></p>
 		<input name="blogname" type="hidden" id="blogname" value="<?php echo $blog_details->siteurl; ?>" maxlength="50" />
-
+		
 		<?php $bp->groups->current_group->status == 'public' ? $group_public = '1' : $group_public = '0'; ?>
 		<input type="hidden" id="blog_public" name="blog_public" value="<?php echo $group_public ?>" />
 		<input type="hidden" id="groupblog_create_screen" name="groupblog_create_screen" value="<?php echo $groupblog_create_screen; ?>" />
-
-	<?php } else { ?>
+	
+	<?php else : ?>
 		<?php //Showing the create screen form ?>
+	
+		<p><?php _e( 'Choose either one of your existing blogs or create a new one all together with the details displayed below.', 'groupblog' ); ?><br /><?php _e('Take care as you can only choose once.  Later you may still disable or enable the blog, but your choice is set.', 'groupblog' ); ?></p>
+	
+		<p>
+			<input<?php if ( !bp_groupblog_is_blog_enabled( $group_id ) ) : ?> disabled="true"<?php endif ?> type="radio" value="no" name="groupblog-create-new" /><span>&nbsp;<?php _e( 'Use one of your own available blogs:', 'groupblog' ); ?>&nbsp;</span>
 
-    <p><?php _e( 'Choose either one of your existing blogs or create a new one all together with the details displayed below.', 'groupblog' ); ?><br /><?php _e('Take care as you can only choose once.  Later you may still disable or enable the blog, but your choice is set.', 'groupblog' ); ?></p>
-
-		<p><input<?php if ( !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> type="radio" value="no" name="groupblog-create-new" /><span>&nbsp;<?php _e( 'Use one of your own available blogs:', 'groupblog' ); ?>&nbsp;</span>
-	    <select<?php if ( !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> name="groupblog-blogid" id="groupblog-blogid">
-	      <option value="0"><?php _e( 'choose a blog', 'groupblog' ) ?></option>
-				  <?php
-				  $user_blogs = get_blogs_of_user( get_current_user_id() );
-	        //print_r ($user_blogs);
-	          foreach ($user_blogs AS $user_blog) {
-		          if ( !get_groupblog_group_id( $user_blog->userblog_id ) ) { ?>
-		            <option value="<?php echo $user_blog->userblog_id; ?>"><?php echo $user_blog->blogname; ?></option>
-	          <?php }
-	          	} ?>
-	   	</select>
-    </p>
-
-		<p><input<?php if ( !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> type="radio" value="yes" name="groupblog-create-new" checked="checked" /><span>&nbsp;<?php _e( 'Or, create a new blog', 'groupblog' ); ?></span></p>
-
+			<select<?php if ( !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> name="groupblog-blogid" id="groupblog-blogid">
+				<option value="0"><?php _e( 'choose a blog', 'groupblog' ) ?></option>
+				<?php
+				$user_blogs = get_blogs_of_user( get_current_user_id() );
+				//print_r ($user_blogs);
+				foreach ($user_blogs AS $user_blog) {
+					if ( !get_groupblog_group_id( $user_blog->userblog_id ) ) : ?>
+						<option value="<?php echo $user_blog->userblog_id; ?>"><?php echo $user_blog->blogname; ?></option>
+					<?php
+					endif;
+				} ?>
+			</select>
+		</p>
+	
+		<p>
+			<input<?php if ( !bp_groupblog_is_blog_enabled( $group_id ) ) : ?> disabled="true"<?php endif ?> type="radio" value="yes" name="groupblog-create-new" checked="checked" /><span>&nbsp;<?php _e( 'Or, create a new blog', 'groupblog' ); ?></span>
+		</p>
+		
 		<ul id="groupblog-details">
-		  <li>
+			<li>
 				<label class="groupblog-label" for="blog_title"><strong><?php _e( 'Blog Title:', 'groupblog' ) ?></strong></label>
 				<?php if ( $errmsg = $errors->get_error_message('blog_title') ) { ?>
-					<span class="error"><?php echo $errmsg ?></span>
+				<span class="error"><?php echo $errmsg ?></span>
 				<?php } ?>
 				<span><?php echo $bp->groups->current_group->name; ?></span>
 				<input name="blog_title" type="hidden" id="blog_title" value="<?php echo $bp->groups->current_group->name; ?>" />
-	    </li>
-
-	    <li>
+			</li>
+			
+			<li>
 				<label class="groupblog-label" for="blogname"><strong><?php _e( 'Blog Address:', 'groupblog' ) ?></strong></label>
 				<?php if ( $errmsg = $errors->get_error_message('blogname') ) { ?>
-					<span class="error"><?php echo $errmsg ?></span>
+				<span class="error"><?php echo $errmsg ?></span>
 				<?php }
-	    	$checks = get_site_option('bp_groupblog_blog_defaults_options');
-
-		    $baddies = array ();
-		    if ( $checks['allowdashes'] != '1' )
-		    	$baddies[] = '-';
+				$checks = get_site_option('bp_groupblog_blog_defaults_options');
+				
+				$baddies = array ();
+				if ( $checks['allowdashes'] != '1' )
+					$baddies[] = '-';
 				if ( $checks['allowunderscores'] != '1' )
 					$baddies[] = '_';
-
-		    $blog_address = str_replace ( $baddies, '', $bp->groups->current_group->slug );
-
+				
+				$blog_address = str_replace ( $baddies, '', $bp->groups->current_group->slug );
+				
 				/*
 				* If we're re-directing from bp_groupblog_validate_blog_signup(), it means that there was a problem
 				* creating the blog either because the name already exists, or it doesn't have enough characters, or
@@ -555,7 +562,7 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 					$blog_address .= 'blog';
 				}
 				?>
-
+				
 				<?php if (is_subdomain_install()) { ?>
 					<span><em><?php echo 'http://' . $blog_address. '.' . $current_site->domain . $current_site->path ?></em></span>
 				<?php } else { ?>
@@ -563,16 +570,16 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 				<?php } ?>
 				<input name="blogname" type="hidden" id="blogname" value="<?php echo $blog_address; ?>" maxlength="50" />
 			</li>
-    </ul>
-
+		</ul>
+		
 		<?php $bp->groups->current_group->status == 'public' ? $group_public = '1' : $group_public = '0'; ?>
 		<input type="hidden" id="blog_public" name="blog_public" value="<?php echo $group_public ?>" />
 		<input type="hidden" id="groupblog_create_screen" name="groupblog_create_screen" value="<?php echo $groupblog_create_screen; ?>" />
-
-	<?php } ?>
-
-</div>
-<?php
+		
+	<?php endif ?>
+	
+	</div>
+	<?php
 do_action('signup_blogform', $errors);
 }
 
