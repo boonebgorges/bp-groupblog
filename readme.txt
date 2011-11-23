@@ -105,6 +105,11 @@ function bp_core_avatar_url() {
 
 == Changelog == 
 
+= 1.7 =
+* Allows group admins to specify blog address and title at the time of creation
+* Ensures that 'Enable group blog' checkbox is checked when returning from a failed blog creation
+* Enables admins to 'uncouple' groups from blogs
+
 = 1.6 =
 * Compatibility with BuddyPress 1.5
 * Cosmetic changes to the P2 BuddyPress to match the default BuddyPress 
