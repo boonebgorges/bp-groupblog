@@ -483,22 +483,21 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 		<input name="blog_title" type="hidden" id="blog_title" value="<?php echo $blog_details->blogname; ?>" />
 		
 		<label for="blogname"><strong><?php _e( 'Blog Address:', 'groupblog' ) ?></strong></label>
-		<?php if ( $errmsg = $errors->get_error_message('blogname') ) { ?>
+		<?php if ( $errmsg = $errors->get_error_message('blogname') ) : ?>
 			<p class="error"><?php echo $errmsg ?></p>
-		<?php }
-		$checks = get_site_option('bp_groupblog_blog_defaults_options');
-		
-		$baddies = array ();
-		if ( $checks['allowdashes'] != '1' )
-			$baddies[] = '-';
-		if ( $checks['allowunderscores'] != '1' )
-			$baddies[] = '_';
-		
-		$blog_address = str_replace ( $baddies, '', $bp->groups->current_group->slug );
-		?>
+		<?php endif ?>
 		
 		<p><em><?php echo $blog_details->siteurl; ?> </em></p>
 		<input name="blogname" type="hidden" id="blogname" value="<?php echo $blog_details->siteurl; ?>" maxlength="50" />
+		
+		<div id="uncouple-blog">
+			<label for="uncouple"><?php printf( __( 'Uncouple the blog "%1$s" from the group "%2$s":', 'groupblog' ), $blog_details->blogname, $bp->groups->current_group->name ) ?></label>
+			
+			<p class="description"><?php printf( __( '<strong>Note:</strong> Uncoupling will remove the blog from your group&#8217;s navigation and prevent future synchronization of group members and blog authors, but it will not remove change blog permissions for any current member. Visit <a href="%1$s">the Users panel</a> if you&#8217;d like to remove users from the blog.', 'groupblog' ), $blog_details->siteurl . '/wp-admin/users.php' ) ?></p>
+			
+			<a class="button" href="<?php echo wp_nonce_url( bp_get_group_permalink( $bp->groups->current_group ) . 'admin/group-blog/uncouple', 'groupblog-uncouple' ) ?>">Uncouple</a>
+			
+		</div>
 		
 		<?php $bp->groups->current_group->status == 'public' ? $group_public = '1' : $group_public = '0'; ?>
 		<input type="hidden" id="blog_public" name="blog_public" value="<?php echo $group_public ?>" />
@@ -682,6 +681,36 @@ function bp_groupblog_sanitize_blog_name( $group_name = '' ) {
 	
 	return $blog_address;
 }
+
+/**
+ * Catches and processes a groupblog uncoupling
+ *
+ * @since 1.7
+ */
+function bp_groupblog_process_uncouple() {
+	if ( bp_is_group() && bp_is_current_action( 'admin' ) && bp_is_action_variable( 'group-blog', 0 ) && bp_is_action_variable( 'uncouple', 1 ) ) {
+		check_admin_referer( 'groupblog-uncouple' );
+		
+		if ( !bp_group_is_admin() ) {
+			bp_core_add_message( __( 'You must be a group admin to perform this action.', 'groupblog' ), 'error' );
+			bp_core_redirect( bp_get_group_permalink( groups_get_current_group() ) );
+		}
+		
+		$blog_id = get_groupblog_blog_id();
+
+		// If groupblog is enabled, disable it
+		groups_update_groupmeta( bp_get_current_group_id(), 'groupblog_enable_blog', 0 );
+		
+		// Unset the groupblog ID
+		groups_update_groupmeta( bp_get_current_group_id(), 'groupblog_blog_id', '' );
+		
+		bp_core_add_message( __( 'Blog uncoupled.', 'groupblog' ) );
+		
+		// Redirect to the groupblog admin
+		bp_core_redirect( bp_get_group_permalink( groups_get_current_group() ) . 'admin/group-blog' );
+	}
+}
+add_action( 'bp_actions', 'bp_groupblog_process_uncouple', 1 );
 
 /**
  * bp_groupblog_signup_blog($blogname = '', $blog_title = '', $errors = '')
