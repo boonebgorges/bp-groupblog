@@ -888,8 +888,7 @@ function bp_groupblog_validate_blog_signup() {
 	if ( $errors->get_error_code() ) {
 		$message = '';
 		$message .= $errors->get_error_message('blogname');
-		$message .= __( ' However, you may continue with the blog address as listed below.', 'groupblog' );
-		$message .= __( ' We suggest adjusting the group name in group details following these requirements.', 'groupblog' );
+		$message .= __( ' We suggest adjusting the blog address below, in accordance with the following requirements:', 'groupblog' );
 		if ( $checks['allowunderscores'] != '1' || $checks['allowdashes'] != '1' )
 			$message .= __( ' &raquo; Only letters and numbers allowed.', 'groupblog' );
 		$message .= sprintf( __( ' &raquo; Must be at least %s characters.', 'groupblog' ), $checks['minlength'] );
