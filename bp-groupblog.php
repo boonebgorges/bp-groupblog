@@ -364,33 +364,9 @@ function bp_groupblog_upgrade_user( $user_id, $group_id, $blog_id = false ) {
 		$default_role = 'subscriber';
 	}
 
-	bp_groupblog_add_users_to_blog( $blog_id, $user_id, $default_role );
+	add_user_to_blog( $blog_id, $user_id, $default_role );
 
 	do_action( 'bp_groupblog_upgrade_user', $user_id, $user_role, $default_role );
-}
-
-function bp_groupblog_add_users_to_blog( $blog_id, $user_id, $role ) {
-	switch_to_blog($blog_id);
-
-	$user = new WP_User($user_id);
-
-	if ( empty( $user->ID ) ) {
-		restore_current_blog();
-		return new WP_Error('user_does_not_exist', __('That user does not exist.'));
-	}
-
-	if ( !get_user_meta($user_id, 'primary_blog', true) ) {
-		update_user_meta($user_id, 'primary_blog', $blog_id);
-		$details = get_blog_details($blog_id);
-		update_user_meta($user_id, 'source_domain', $details->domain);
-	}
-
-	$user->set_role($role);
-
-	do_action('add_user_to_blog', $user_id, $role, $blog_id);
-	wp_cache_delete( $user_id, 'users' );
-	restore_current_blog();
-	return true;
 }
 
 /**
