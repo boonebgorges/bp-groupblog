@@ -101,6 +101,9 @@ function bp_core_avatar_url() {
 
 == Changelog == 
 
+= 1.7.1 =
+* Refactors the process that adds members to group blog, to improve performance with large groups
+
 = 1.7 =
 * Allows group admins to specify blog address and title at the time of creation
 * Ensures that 'Enable group blog' checkbox is checked when returning from a failed blog creation
