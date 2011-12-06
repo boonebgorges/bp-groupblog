@@ -155,9 +155,9 @@ function groupblog_edit_settings() {
 			//They forgot to choose a blog, so send them back and make them do it!
 				bp_core_add_message( __( 'Please choose one of your blogs from the drop-down menu.' . $group_id, 'groupblog' ), 'error' );
 				if ( bp_is_action_variable( 'step', 0 ) ) {
-					bp_core_redirect( $bp->loggedin_user->domain . $bp->groups->slug . '/create/step/' . $bp->action_variables[1] );
+					bp_core_redirect( trailingslashit( $bp->loggedin_user->domain . $bp->groups->slug . '/create/step/' . $bp->action_variables[1] ) );
 				} else {
-					bp_core_redirect( $bp->root_domain . '/' . $bp->current_component . '/' . $bp->current_item . '/admin/group-blog' );
+					bp_core_redirect( trailingslashit( $bp->root_domain . '/' . $bp->current_component . '/' . $bp->current_item . '/admin/group-blog' ) );
 				}
 		    }
 		}
@@ -254,7 +254,7 @@ function bp_groupblog_member_join( $group_id ) {
 		'per_page'		=> 10000,
 		'group_id'		=> $group_id
 	);
-
+	
 	if ( bp_group_has_members( $params ) ) {
 		$blog_id = groups_get_groupmeta( $group_id, 'groupblog_blog_id' );
 		$group   = new BP_Groups_Group( $group_id );
@@ -276,6 +276,7 @@ function bp_groupblog_member_join( $group_id ) {
  * This code was initially inspired by Burt Adsit re-interpreted by Boone
  */
 function bp_groupblog_upgrade_user( $user_id, $group_id, $blog_id = false ) {
+	global $bp;
 
 	if ( !$blog_id )
 		$blog_id = groups_get_groupmeta ( $group_id, 'groupblog_blog_id' );
@@ -295,14 +296,64 @@ function bp_groupblog_upgrade_user( $user_id, $group_id, $blog_id = false ) {
 
 	$user_role = bp_groupblog_get_user_role( $user_id, $user->data->user_login, $blog_id );
 
-	if ( groups_is_user_admin ( $user_id, $group_id ) ) {
-		$default_role = $groupblog_default_admin_role;
-	} else if ( groups_is_user_mod ( $user_id, $group_id ) ) {
-		$default_role = $groupblog_default_mod_role;
-	} else if ( groups_is_user_member ( $user_id, $group_id ) ) {
-		$default_role = $groupblog_default_member_role;
+	// Get the current user's group status. For efficiency, we try first to look at the
+	// current group object
+	if ( isset( $bp->groups->current_group->id ) && $group_id == $bp->groups->current_group->id ) {
+		// It's tricky to walk through the admin/mod lists over and over, so let's format
+		if ( empty( $bp->groups->current_group->adminlist ) ) {
+			$bp->groups->current_group->adminlist = array();
+			if ( isset( $bp->groups->current_group->admins ) ) {
+				foreach( (array)$bp->groups->current_group->admins as $admin ) {
+					if ( isset( $admin->user_id ) ) {
+						$bp->groups->current_group->adminlist[] = $admin->user_id;
+					}
+				}
+			}
+		}
+		
+		if ( empty( $bp->groups->current_group->modlist ) ) {
+			$bp->groups->current_group->modlist = array();
+			if ( isset( $bp->groups->current_group->mods ) ) {
+				foreach( (array)$bp->groups->current_group->mods as $mod ) {
+					if ( isset( $mod->user_id ) ) {
+						$bp->groups->current_group->modlist[] = $mod->user_id;
+					}
+				}
+			}
+		}
+		
+		if ( in_array( $user_id, $bp->groups->current_group->adminlist ) ) {
+			$user_group_status = 'admin';
+		} elseif ( in_array( $user_id, $bp->groups->current_group->modlist ) ) {
+			$user_group_status = 'mod';
+		} else {
+			// I'm assuming that if a user is passed to this function, they're a member
+			// Doing an actual lookup is costly. Try to look for an efficient method
+			$user_group_status = 'member';
+		}
 	} else {
-		return false;
+		if ( groups_is_user_admin ( $user_id, $group_id ) ) {
+			$user_group_status = 'admin';
+		} else if ( groups_is_user_mod ( $user_id, $group_id ) ) {
+			$user_group_status = 'mod';
+		} else if ( groups_is_user_member ( $user_id, $group_id ) ) {
+			$user_group_status = 'member';
+		} else {
+			return false;
+		}
+	}
+	
+	switch ( $user_group_status ) {
+		case 'admin' :
+			$default_role = $groupblog_default_admin_role;
+			break;
+		case 'mod' :
+			$default_role = $groupblog_default_mod_role;
+			break;
+		case 'member' :
+		default :
+			$default_role = $groupblog_default_member_role;
+			break;
 	}
 
 	if ( $user_role == $default_role && $groupblog_silent_add == true ) {
@@ -313,9 +364,33 @@ function bp_groupblog_upgrade_user( $user_id, $group_id, $blog_id = false ) {
 		$default_role = 'subscriber';
 	}
 
-	add_user_to_blog( $blog_id, $user_id, $default_role );
+	bp_groupblog_add_users_to_blog( $blog_id, $user_id, $default_role );
 
 	do_action( 'bp_groupblog_upgrade_user', $user_id, $user_role, $default_role );
+}
+
+function bp_groupblog_add_users_to_blog( $blog_id, $user_id, $role ) {
+	switch_to_blog($blog_id);
+
+	$user = new WP_User($user_id);
+
+	if ( empty( $user->ID ) ) {
+		restore_current_blog();
+		return new WP_Error('user_does_not_exist', __('That user does not exist.'));
+	}
+
+	if ( !get_user_meta($user_id, 'primary_blog', true) ) {
+		update_user_meta($user_id, 'primary_blog', $blog_id);
+		$details = get_blog_details($blog_id);
+		update_user_meta($user_id, 'source_domain', $details->domain);
+	}
+
+	$user->set_role($role);
+
+	do_action('add_user_to_blog', $user_id, $role, $blog_id);
+	wp_cache_delete( $user_id, 'users' );
+	restore_current_blog();
+	return true;
 }
 
 /**
@@ -438,7 +513,7 @@ function bp_groupblog_create_screen_save() {
 	    if ( !( $groupblog_blog_id = $_POST['groupblog-blogid'] ) ) {
 		//They forgot to choose a blog, so send them back and make them do it!
 			bp_core_add_message( __( 'Please choose one of your blogs from the drop-down menu.' . $group_id, 'groupblog' ), 'error' );
-			bp_core_redirect( $bp->loggedin_user->domain . $bp->groups->slug . '/create/step/' . $bp->action_variables[1] );
+			bp_core_redirect( trailingslashit( $bp->loggedin_user->domain . $bp->groups->slug . '/create/step/' . $bp->action_variables[1] ) );
 		}
 	} else {
 	    // They already have a blog associated with the group, we're just saving other settings
@@ -447,7 +522,7 @@ function bp_groupblog_create_screen_save() {
 
 	if ( !groupblog_edit_base_settings( $enable_group_blog, $silent_add, $groupblog_default_admin_role, $groupblog_default_mod_role, $groupblog_default_member_role, $page_template_layout, $groupblog_group_id, $groupblog_blog_id ) ) {
 		bp_core_add_message( __( 'There was an error creating your group blog, please try again.', 'groupblog' ), 'error' );
-		bp_core_redirect( $bp->loggedin_user->domain . $bp->groups->slug . '/create/step/' . $bp->action_variables[1] );
+		bp_core_redirect( trailingslashit( $bp->loggedin_user->domain . $bp->groups->slug . '/create/step/' . $bp->action_variables[1] ) );
 	}
 }
 
@@ -896,7 +971,7 @@ function bp_groupblog_validate_blog_signup() {
 			$message .= __( ' &raquo; Has to contain letters as well.', 'groupblog' );
 		bp_core_add_message( $message, 'error' );
 
-		$redirect_url = isset( $bp->action_variables[0] ) && 'step' == $bp->action_variables[0] ? bp_loggedin_user_domain() . $bp->groups->slug . '/create/step/' . $bp->action_variables[1] : bp_get_group_permalink( groups_get_current_group() ) . '/admin/group-blog/';
+		$redirect_url = isset( $bp->action_variables[0] ) && 'step' == $bp->action_variables[0] ? trailingslashit( bp_loggedin_user_domain() . $bp->groups->slug . '/create/step/' . $bp->action_variables[1] ) : bp_get_group_permalink( groups_get_current_group() ) . '/admin/group-blog/';
 
 		$error_params = array(
 			'create_error'    => '4815162342',
