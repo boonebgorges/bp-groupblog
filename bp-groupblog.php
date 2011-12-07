@@ -257,7 +257,7 @@ function bp_groupblog_member_join( $group_id ) {
 	
 	if ( bp_group_has_members( $params ) ) {
 		$blog_id = groups_get_groupmeta( $group_id, 'groupblog_blog_id' );
-		$group   = new BP_Groups_Group( $group_id );
+		$group   = groups_get_group( array( 'group_id' => $group_id ) );
 
 		while ( bp_group_members() ) {
 			bp_group_the_member();
@@ -1026,7 +1026,7 @@ function bp_groupblog_set_group_to_post_activity( $activity ) {
 
 	$group_id = get_groupblog_group_id( $blog_id );
 	if ( !$group_id ) return;
-	$group = new BP_Groups_Group( $group_id, true );
+	$group = groups_get_group( array( 'group_id' => $group_id ) );
 
 	// Verify if we already have the modified activity for this blog post
 	$id = bp_activity_get_activity_id( array(
