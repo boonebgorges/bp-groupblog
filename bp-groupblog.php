@@ -1054,7 +1054,9 @@ function bp_groupblog_set_group_to_post_activity( $activity ) {
 	$activity->item_id = $group_id;
 	$activity->component = 'groups';
 	$activity->hide_sitewide = 0;
-
+	
+	remove_action( 'bp_activity_before_save', 'bp_groupblog_set_group_to_post_activity');
+	return $activity;
 }
 add_action( 'bp_activity_before_save', 'bp_groupblog_set_group_to_post_activity');
 
