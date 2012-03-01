@@ -23,9 +23,9 @@ add_action( 'admin_print_styles', 'bp_groupblog_add_admin_style' );
 function bp_groupblog_add_js() {
 	if ( bp_is_groups_component() && bp_is_action_variable( 'group-blog' ) ) {
 		if ( file_exists( STYLESHEETPATH . '/groupblog/js/general.js' ) )
-			wp_enqueue_script( 'bp-groupblog-js', get_stylesheet_directory_uri() . '/groupblog/js/general.js' );
+			wp_enqueue_script( 'bp-groupblog-js', get_stylesheet_directory_uri() . '/groupblog/js/general.js', array( 'jquery' ) );
 		else
-			wp_enqueue_script( 'bp-groupblog-js', plugins_url() . '/bp-groupblog/groupblog/js/general.js' );
+			wp_enqueue_script( 'bp-groupblog-js', plugins_url() . '/bp-groupblog/groupblog/js/general.js', array( 'jquery' ) );
 	}
 }
 add_action( 'wp_enqueue_scripts', 'bp_groupblog_add_js', 1 );
