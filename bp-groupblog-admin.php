@@ -5,11 +5,11 @@
 function bp_groupblog_blog_defaults( $blog_id ) {
 	global $bp, $wp_rewrite;
 
-	switch_to_blog( $blog_id );
-
 	// only apply defaults to groupblog blogs
 	if ( bp_is_groups_component() ) {
 
+		switch_to_blog( $blog_id );
+	
 		// get the site options
 		$options = get_site_option( 'bp_groupblog_blog_defaults_options' );
 
@@ -71,6 +71,9 @@ function bp_groupblog_blog_defaults( $blog_id ) {
 				update_option('page_on_front', $blog_page_id);
 			}
 		}
+
+		restore_current_blog();
+
 	}
 }
 
