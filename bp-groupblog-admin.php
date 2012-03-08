@@ -265,7 +265,20 @@ function bp_groupblog_add_admin_menu() {
 		return false;
 
 	/* Add the administration tab under the "Site Admin" tab for site administrators */
-	add_submenu_page( 'bp-general-settings', __( 'GroupBlog Setup', 'groupblog' ), '<span class="bp-groupblog-admin-menu-header">' . __( 'GroupBlog Setup', 'groupblog' ) . '&nbsp;&nbsp;&nbsp;</span>', 'manage_options', 'bp_groupblog_management_page', 'bp_groupblog_management_page' );
+	$page = add_submenu_page( 
+	
+		'bp-general-settings', 
+		__( 'GroupBlog Setup', 'groupblog' ), 
+		'<span class="bp-groupblog-admin-menu-header">' . __( 'GroupBlog Setup', 'groupblog' ) . '&nbsp;&nbsp;&nbsp;</span>', 
+		'manage_options', 
+		'bp_groupblog_management_page', 
+		'bp_groupblog_management_page' 
+		
+	);
+	
+	// add styles only on bp-groupblog admin page, see:
+	// http://codex.wordpress.org/Function_Reference/wp_enqueue_script#Load_scripts_only_on_plugin_pages
+	add_action( 'admin_print_styles-'.$page, 'bp_groupblog_add_admin_style' );
 
 }
 add_action( bp_core_admin_hook(), 'bp_groupblog_add_admin_menu', 10 );

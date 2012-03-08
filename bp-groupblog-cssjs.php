@@ -1,21 +1,24 @@
 <?php
 
 /**
- * bp_groupblog_add_admin_js()
+ * bp_groupblog_add_admin_style()
+ * 
+ * Reworked so that our CSS and JS is only loaded on our admin page.
+ * See bp_groupblog_add_admin_menu() for how this is loaded.
  */
-function bp_groupblog_add_admin_js() {
+function bp_groupblog_add_admin_style() {
+
+	// add css
+	wp_enqueue_style('bp-groupblog-admin-style', plugins_url() . '/bp-groupblog/inc/css/admin.css');
+	wp_enqueue_style('jQueryUISmoothness', plugins_url() . '/bp-groupblog/inc/smoothness/jquery-ui-smoothness.css');
+	
+	// add javascripts
 	wp_enqueue_script( 'bp-groupblog-admin-js', plugins_url() . '/bp-groupblog/inc/js/admin.js' );
 	wp_enqueue_script('jquery-ui-core');
 	wp_enqueue_script('jquery-ui-tabs');
-	wp_enqueue_script('effects.core', WP_PLUGIN_URL .'/inc/js/effects.core.js', array('jquery-ui-core'));
+	wp_enqueue_script('effects.core', plugins_url() .'/bp-groupblog/inc/js/effects.core.js', array('jquery-ui-core'));
+	
 }
-add_action( 'admin_enqueue_scripts', 'bp_groupblog_add_admin_js', 1 );
-
-function bp_groupblog_add_admin_style() {
-	wp_enqueue_style('bp-groupblog-admin-style', plugins_url() . '/bp-groupblog/inc/css/admin.css');
-	wp_enqueue_style('jQueryUISmoothness', plugins_url() . '/bp-groupblog/inc/smoothness/jquery-ui-smoothness.css');
-}
-add_action( 'admin_print_styles', 'bp_groupblog_add_admin_style' );
 
 /**
  * bp_groupblog_add_js()
