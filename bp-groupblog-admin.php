@@ -265,7 +265,20 @@ function bp_groupblog_add_admin_menu() {
 		return false;
 
 	/* Add the administration tab under the "Site Admin" tab for site administrators */
-	add_submenu_page( 'bp-general-settings', __( 'GroupBlog Setup', 'groupblog' ), '<span class="bp-groupblog-admin-menu-header">' . __( 'GroupBlog Setup', 'groupblog' ) . '&nbsp;&nbsp;&nbsp;</span>', 'manage_options', 'bp_groupblog_management_page', 'bp_groupblog_management_page' );
+	$page = add_submenu_page( 
+	
+		'bp-general-settings', 
+		__( 'GroupBlog Setup', 'groupblog' ), 
+		'<span class="bp-groupblog-admin-menu-header">' . __( 'GroupBlog Setup', 'groupblog' ) . '&nbsp;&nbsp;&nbsp;</span>', 
+		'manage_options', 
+		'bp_groupblog_management_page', 
+		'bp_groupblog_management_page' 
+		
+	);
+	
+	// add styles only on bp-groupblog admin page, see:
+	// http://codex.wordpress.org/Function_Reference/wp_enqueue_script#Load_scripts_only_on_plugin_pages
+	add_action( 'admin_print_styles-'.$page, 'bp_groupblog_add_admin_style' );
 
 }
 add_action( bp_core_admin_hook(), 'bp_groupblog_add_admin_menu', 10 );
@@ -349,7 +362,7 @@ function bp_groupblog_management_page() {
 					<div id="select-theme">
 						<?php _e( 'Select the default theme:', 'groupblog' ) ?>
 						<select id="theme" name="theme" size="1">
-						<option value="groupblog-themes" style="font-weight: bold"><?php _e( 'GroupBlog Themes:', 'groupblog' ) ?></option>
+						<optgroup label="<?php echo esc_attr( __( 'GroupBlog Themes:', 'groupblog' ) ) ?>">
 					 	<?php
 						foreach ( $theme_names as $theme_name ) {
 
@@ -359,7 +372,7 @@ function bp_groupblog_management_page() {
 								$stylesheet = $themes[$theme_name]['Stylesheet'];
 								$title = $themes[$theme_name]['Title'];
 								$selected = "";
-								if( $opt[theme] == $template . "|" . $stylesheet ) {
+								if( $opt['theme'] == $template . "|" . $stylesheet ) {
 									$selected = "selected = 'selected' ";
 									$current_groupblog_theme = $theme_name;
 								}
@@ -367,8 +380,8 @@ function bp_groupblog_management_page() {
 							}
 						}
 						?>
-						<option value=""></option>
-						<option value="regular-themes" style="font-weight: bold"><?php _e( 'Regular Themes:', 'groupblog' ) ?></option>
+						</optgroup>
+						<optgroup label="<?php echo esc_attr( __( 'Regular Themes:', 'groupblog' ) ) ?>">
 						<?php
 						foreach ( $theme_names as $theme_name ) {
 
@@ -378,7 +391,7 @@ function bp_groupblog_management_page() {
 								$stylesheet = $themes[$theme_name]['Stylesheet'];
 								$title = $themes[$theme_name]['Title'];
 								$selected = "";
-								if( $opt[theme] == $template . "|" . $stylesheet ) {
+								if( $opt['theme'] == $template . "|" . $stylesheet ) {
 									$selected = "selected = 'selected' ";
 									$current_groupblog_theme = $theme_name;
 								}
@@ -386,6 +399,7 @@ function bp_groupblog_management_page() {
 							}
 						}
 						?>
+						</optgroup>
 						</select>
 					</div>
 
