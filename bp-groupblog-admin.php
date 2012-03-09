@@ -362,7 +362,7 @@ function bp_groupblog_management_page() {
 					<div id="select-theme">
 						<?php _e( 'Select the default theme:', 'groupblog' ) ?>
 						<select id="theme" name="theme" size="1">
-						<option value="groupblog-themes" style="font-weight: bold"><?php _e( 'GroupBlog Themes:', 'groupblog' ) ?></option>
+						<optgroup label="<?php echo esc_attr( __( 'GroupBlog Themes:', 'groupblog' ) ) ?>">
 					 	<?php
 						foreach ( $theme_names as $theme_name ) {
 
@@ -372,7 +372,7 @@ function bp_groupblog_management_page() {
 								$stylesheet = $themes[$theme_name]['Stylesheet'];
 								$title = $themes[$theme_name]['Title'];
 								$selected = "";
-								if( $opt[theme] == $template . "|" . $stylesheet ) {
+								if( $opt['theme'] == $template . "|" . $stylesheet ) {
 									$selected = "selected = 'selected' ";
 									$current_groupblog_theme = $theme_name;
 								}
@@ -380,8 +380,8 @@ function bp_groupblog_management_page() {
 							}
 						}
 						?>
-						<option value=""></option>
-						<option value="regular-themes" style="font-weight: bold"><?php _e( 'Regular Themes:', 'groupblog' ) ?></option>
+						</optgroup>
+						<optgroup label="<?php echo esc_attr( __( 'Regular Themes:', 'groupblog' ) ) ?>">
 						<?php
 						foreach ( $theme_names as $theme_name ) {
 
@@ -391,7 +391,7 @@ function bp_groupblog_management_page() {
 								$stylesheet = $themes[$theme_name]['Stylesheet'];
 								$title = $themes[$theme_name]['Title'];
 								$selected = "";
-								if( $opt[theme] == $template . "|" . $stylesheet ) {
+								if( $opt['theme'] == $template . "|" . $stylesheet ) {
 									$selected = "selected = 'selected' ";
 									$current_groupblog_theme = $theme_name;
 								}
@@ -399,6 +399,7 @@ function bp_groupblog_management_page() {
 							}
 						}
 						?>
+						</optgroup>
 						</select>
 					</div>
 
