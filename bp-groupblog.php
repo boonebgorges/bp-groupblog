@@ -991,6 +991,8 @@ function bp_groupblog_validate_blog_signup() {
 	$meta = apply_filters( "add_signup_meta", $meta );
 
 	$groupblog_blog_id = wpmu_create_blog( $domain, $path, $blog_title, $current_user->ID, $meta, $wpdb->siteid );
+	
+	// do the meta values need removing?
 
 	$errors = $filtered_results['errors'];
 
@@ -1024,6 +1026,8 @@ function bp_groupblog_create_blog( $group_id ) {
 	$groupblog_blog_id = wpmu_create_blog( $domain, $path, $blog_title, $current_user->ID, $meta, $wpdb->siteid );
 
 	groups_update_groupmeta( $group_id, 'groupblog_blog_id', $groupblog_blog_id );
+	
+	// do these need to be removed?
 	groups_update_groupmeta( $group_id, 'groupblog_public', '');
 	groups_update_groupmeta( $group_id, 'groupblog_title', '');
 	groups_update_groupmeta( $group_id, 'groupblog_path', '');
@@ -1167,11 +1171,21 @@ add_action( 'bp_init', 'groupblog_redirect_group_home' );
 function bp_groupblog_delete_meta( $blog_id, $drop = false ) {
 
 	$group_id = get_groupblog_group_id( $blog_id );
-
+	
+	// delete core meta
 	groups_update_groupmeta ( $group_id, 'groupblog_enable_blog', '' );
 	groups_update_groupmeta ( $group_id, 'groupblog_blog_id', '' );
 	groups_update_groupmeta ( $group_id, 'groupblog_silent_add', '' );
-
+	
+	// also delete other meta info, if it exists - this papers over an inconsistency between 
+	// bp_groupblog_create_blog and bp_groupblog_validate_blog_signup... the latter deletes 
+	// them after calling wpmu_create_blog, the former doesn't.
+	groups_update_groupmeta ( $group_id, 'groupblog_domain', '' );
+	groups_update_groupmeta ( $group_id, 'groupblog_public', '' );
+	groups_update_groupmeta ( $group_id, 'groupblog_title', '' );
+	groups_update_groupmeta ( $group_id, 'groupblog_path', '' );
+	
+	// delete roles
   	groups_update_groupmeta ( $group_id, 'groupblog_default_admin_role', '' );
 	groups_update_groupmeta ( $group_id, 'groupblog_default_mod_role', '' );
 	groups_update_groupmeta ( $group_id, 'groupblog_default_member_role', '' );
