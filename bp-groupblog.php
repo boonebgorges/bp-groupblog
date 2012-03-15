@@ -802,18 +802,20 @@ function bp_groupblog_signup_blog($blogname = '', $blog_title = '', $errors = ''
 	$disabled = !bp_groupblog_silent_add( $group_id ) || !bp_groupblog_is_blog_enabled( $group_id ) ? ' disabled="true" ' : '';
 	
 	
-	if ( !$groupblog_create_screen ) { 
-	
-	/*
-	<form id="setupform" method="post" action="<?php bp_groupblog_admin_form_action( 'group-blog' ); ?>">
-		<input type="hidden" name="stage" value="gimmeanotherblog" />
-	*/
-	
 	?>
 	<h2><?php _e( 'Group Blog', 'groupblog' ) ?></h2>
+	<?php
 
+	if ( !$groupblog_create_screen ) { 
+	
+		/*
+		<form id="setupform" method="post" action="<?php bp_groupblog_admin_form_action( 'group-blog' ); ?>">
+		*/
+		
+		?>
+		<input type="hidden" name="stage" value="gimmeanotherblog" />
 		<?php do_action( "signup_hidden_fields" ); ?>
-	<?php 
+		<?php 
 	
 	} ?>
 
