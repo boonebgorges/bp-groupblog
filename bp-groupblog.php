@@ -800,14 +800,22 @@ function bp_groupblog_signup_blog($blogname = '', $blog_title = '', $errors = ''
 	$group_id = bp_is_group_create() ? bp_get_new_group_id() : bp_get_current_group_id();
 
 	$disabled = !bp_groupblog_silent_add( $group_id ) || !bp_groupblog_is_blog_enabled( $group_id ) ? ' disabled="true" ' : '';
-
-  if ( !$groupblog_create_screen ) { ?>
-	<h2><?php _e( 'Group Blog', 'groupblog' ) ?></h2>
-
+	
+	
+	if ( !$groupblog_create_screen ) { 
+	
+	/*
 	<form id="setupform" method="post" action="<?php bp_groupblog_admin_form_action( 'group-blog' ); ?>">
 		<input type="hidden" name="stage" value="gimmeanotherblog" />
+	*/
+	
+	?>
+	<h2><?php _e( 'Group Blog', 'groupblog' ) ?></h2>
+
 		<?php do_action( "signup_hidden_fields" ); ?>
-	<?php } ?>
+	<?php 
+	
+	} ?>
 
 		<div class="checkbox">
 			<label><input type="checkbox" name="groupblog-enable-blog" id="groupblog-enable-blog" value="1"<?php bp_groupblog_show_enabled( $group_id ) ?>/> <?php _e( 'Enable group blog', 'groupblog' ); ?></label>
@@ -919,9 +927,13 @@ function bp_groupblog_signup_blog($blogname = '', $blog_title = '', $errors = ''
 		<p>
 			<input id="save" type="submit" name="save" class="submit" value="<?php _e('Save Changes &raquo;', 'groupblog') ?>"/>
 		</p>
-	</form>
 	<?php
 	}
+	
+	/*
+	</form>
+	*/
+
 }
 
 /**
@@ -1063,6 +1075,9 @@ function bp_groupblog_set_group_to_post_activity( $activity ) {
 	$activity->item_id = (int)$group_id;
 	$activity->component = 'groups';
 	$activity->hide_sitewide = 0;
+	
+	// CMW: assume groupblog_post is intended
+	$activity->type = 'new_groupblog_post';
 
 	remove_action( 'bp_activity_before_save', 'bp_groupblog_set_group_to_post_activity');
 	return $activity;

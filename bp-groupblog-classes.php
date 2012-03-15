@@ -74,7 +74,7 @@ class BP_Groupblog_Extension extends BP_Group_Extension {
 	function edit_screen_save() {
 	
 		if ( isset( $_POST['save'] ) ) {
-		
+			
 			check_admin_referer( 'groups_edit_save_' . $this->slug );
 			
 			groupblog_edit_settings();
