@@ -546,7 +546,7 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 			
 			<p class="description"><?php printf( __( '<strong>Note:</strong> Uncoupling will remove the blog from your group&#8217;s navigation and prevent future synchronization of group members and blog authors, but it will not remove change blog permissions for any current member. Visit <a href="%1$s">the Users panel</a> if you&#8217;d like to remove users from the blog.', 'groupblog' ), $blog_details->siteurl . '/wp-admin/users.php' ) ?></p>
 			
-			<a class="button" href="<?php echo wp_nonce_url( bp_get_group_permalink( $bp->groups->current_group ) . 'admin/group-blog/uncouple', 'groupblog-uncouple' ) ?>">Uncouple</a>
+			<a class="button" href="<?php echo wp_nonce_url( bp_get_group_permalink( $bp->groups->current_group ) . 'admin/group-blog/uncouple', 'groupblog-uncouple' ) ?>"><?php _e( 'Uncouple', 'groupblog' ); ?></a>
 			
 		</div>
 		
