@@ -12,7 +12,7 @@ function bp_groupblog_blog_defaults( $blog_id ) {
 
 		// get the site options
 		$options = get_site_option( 'bp_groupblog_blog_defaults_options' );
-
+		
 		foreach( (array)$options as $key => $value )
 			update_option( $key, $value );
 
@@ -22,7 +22,7 @@ function bp_groupblog_blog_defaults( $blog_id ) {
 			$values = explode( "|", $options['theme'] );
 			switch_theme( $values[0], $values[1] );
 		}
-
+		
 		// groupblog bonus options
 		if ( strlen( $options['default_cat_name'] ) > 0 ) {
 			global $wpdb;
@@ -72,6 +72,7 @@ function bp_groupblog_blog_defaults( $blog_id ) {
 			}
 		}
 	}
+	restore_current_blog();
 }
 
 function bp_groupblog_update_defaults() {
