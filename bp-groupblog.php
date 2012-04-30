@@ -106,8 +106,8 @@ function bp_groupblog_setup_nav() {
 		if ( !$checks['deep_group_integration'] ) {
 
 			$parent_slug = isset( $bp->bp_nav[$bp->groups->current_group->slug] ) ? $bp->groups->current_group->slug : $bp->groups->slug;
-
-			if ( bp_groupblog_is_blog_enabled( $bp->groups->current_group->id ) )
+			
+			if ( bp_groupblog_is_blog_enabled( $bp->groups->current_group->id ) || $_POST['groupblog-create-new'] == 'yes' )
 				bp_core_new_subnav_item(
 					array(
 						'name' => __( 'Blog', 'groupblog' ),
