@@ -17,7 +17,9 @@ function bp_groupblog_blog_defaults( $blog_id ) {
 			update_option( $key, $value );
 
 		// override default themes
-		if ( ! empty( $options['theme'] ) ) {
+		if ( ! empty( $options['theme'] ) && $options['theme'] !='groupblog-theme' && $options['theme'] !='regular-themes' && $options['theme'] != 'none' ) {
+			
+			echo 'Here!';
 			// we want something other than the default theme
 			$values = explode( "|", $options['theme'] );
 			switch_theme( $values[0], $values[1] );
@@ -46,7 +48,7 @@ function bp_groupblog_blog_defaults( $blog_id ) {
 		}
 		if ( $options['delete_blogroll_links'] == 1 ) {
 		 	wp_delete_link( 1 ); //delete Wordpress.com blogroll link
-    	wp_delete_link( 2 ); //delete Wordpress.org blogroll link
+    		wp_delete_link( 2 ); //delete Wordpress.org blogroll link
 		}
 		if ( $options['redirectblog'] == 2 ) {
 			$blog_page = array(
@@ -347,6 +349,8 @@ function bp_groupblog_management_page() {
 					<div id="select-theme">
 						<?php _e( 'Select the default theme:', 'groupblog' ) ?>
 						<select id="theme" name="theme" size="1">
+						<?php if( $opt[theme] == 'none' || $opt[theme] == '') $str_checked_none = ' checked="checked"';  ?>
+						<option value="none" style="font-weight: bold" <?php echo $str_checked_none; ?>><?php _e( 'Use WordPress Settings', 'groupblog' ) ?></option>
 						<option value="groupblog-themes" style="font-weight: bold"><?php _e( 'GroupBlog Themes:', 'groupblog' ) ?></option>
 					 	<?php
 						foreach ( $theme_names as $theme_name ) {
@@ -365,7 +369,6 @@ function bp_groupblog_management_page() {
 							}
 						}
 						?>
-						<option value=""></option>
 						<option value="regular-themes" style="font-weight: bold"><?php _e( 'Regular Themes:', 'groupblog' ) ?></option>
 						<?php
 						foreach ( $theme_names as $theme_name ) {
