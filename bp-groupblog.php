@@ -1202,4 +1202,9 @@ function bp_groupblog_privacy_check(){
 		exit;
 	endif;
 }
-add_action( 'init', 'bp_groupblog_privacy_check' );
+
+$options = get_site_option('bp_groupblog_blog_defaults_options');
+
+if( $options['bp_groupblog_redirect_non_members_to_main_blog'] == 1 ):
+	add_action( 'init', 'bp_groupblog_privacy_check' );
+endif;

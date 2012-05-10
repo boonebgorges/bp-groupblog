@@ -122,9 +122,16 @@ function bp_groupblog_update_defaults() {
 		$newoptions['deep_group_integration'] = 1;
 	else
 		$newoptions['deep_group_integration'] = 0;
+	
+	// redirect group home to blog home
+	if ( !empty( $_POST['bp_groupblog_redirect_non_members_to_main_blog'] ) )
+		$newoptions['bp_groupblog_redirect_non_members_to_main_blog'] = 1;
+	else
+		$newoptions['bp_groupblog_redirect_non_members_to_main_blog'] = 0;
 
 	// groupblog redirect option
 	$newoptions['redirectblog']         = isset( $_POST['bp_groupblog_redirect_blog'] ) ? $_POST['bp_groupblog_redirect_blog'] : '';
+	$newoptions['redirect_non_publig_blog']         = isset( $_POST['bp_groupblog_redirect_blog'] ) ? $_POST['bp_groupblog_redirect_blog'] : '';
 	$newoptions['pagetitle']            = isset( $_POST['bp_groupblog_page_title'] ) ?  $_POST['bp_groupblog_page_title'] : __( 'Blog', 'bp-groupblog' );
 	$newoptions['pageslug']             = isset( $_POST['bp_groupblog_page_title'] ) ?  sanitize_title( $_POST['bp_groupblog_page_title'] ) : '';
 	$newoptions['page_template_layout'] = isset( $_POST['page_template_layout'] ) ?  $_POST['page_template_layout'] : 'magazine';
@@ -437,6 +444,12 @@ function bp_groupblog_management_page() {
 							<th><?php _e( 'Redirect Group Home:', 'groupblog' ) ?></th>
 							<td>
 								<label for="deep_group_integration"><input name="deep_group_integration" type="checkbox" id="deep_group_integration" value="1" <?php if ($opt['deep_group_integration'] == 1) echo('checked="checked"'); ?> /> <?php _e( 'Yes, redirect Group Home to Blog Home', 'groupblog' ) ?></label><p><?php _e( 'This option will take control of the GROUP home page and redirects it to the BLOG home page. This will enable posting from the group Home using P2 instead of the BuddyPress form.', 'groupblog' ) ?></p>
+					  	</td>
+						</tr>
+						<tr>
+							<th><?php _e( 'Redirect non Public Blogs:', 'groupblog' ) ?></th>
+							<td>
+								<label for="bp_groupblog_redirect_non_members_to_main_blog"><input name="bp_groupblog_redirect_non_members_to_main_blog" type="checkbox" id="bp_groupblog_redirect_non_members_to_main_blog" value="1" <?php if ($opt['bp_groupblog_redirect_non_members_to_main_blog'] == 1) echo('checked="checked"'); ?> /> <?php _e( 'Yes, redirect users to the Main Blog', 'groupblog' ) ?></label><p><?php _e( 'On enabling this option, users who are not members of the Groupblog will be redirected to the Main Blog if group is not public', 'groupblog' ) ?></p>
 					  	</td>
 						</tr>
 						</tbody>
