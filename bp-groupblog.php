@@ -1155,4 +1155,51 @@ function bp_groupblog_delete_meta( $blog_id, $drop = false ) {
 }
 add_action('delete_blog', 'bp_groupblog_delete_meta', 10, 1);
 
-?>
+/**
+ * bp_groupblog_privacy_check()
+ *
+ * Clean up groupmeta after a blog gets deleted.
+ */
+function bp_groupblog_privacy_check(){
+	global $bp, $wpdb, $blog_id, $current_user;
+	
+	$found = FALSE;
+	$public_group = TRUE;
+	
+	// If is not the main Blog
+	if( $blog_id != BLOG_ID_CURRENT_SITE && $blog_id != '' ):
+		
+		// Getting group ID
+		$sql = "SELECT meta_value FROM " . $bp->groups->table_name_groupmeta . " WHERE groupblog_blog_id = " . $blog_id ;
+		$metas = $wpdb->get_col( $wpdb->prepare("SELECT group_id FROM " . $bp->groups->table_name_groupmeta . " WHERE meta_key = 'groupblog_blog_id' AND meta_value = %s", $blog_id ) );
+		$group_id  = (int) $metas[0];
+		
+		// If Group ID was found
+		if( $group_id != '' ):
+			
+			$group = new BP_Groups_Group( $group_id );
+			
+			// If Group is hidden
+			if( $group->status != 'public' ):
+				$public_group = FALSE;
+				
+				// Checking users
+				$blogusers = get_users_of_blog();
+				
+				$bloguser_ids = array();
+				foreach( $blogusers AS $bloguser ):
+					if( $bloguser->user_id == $current_user->ID )
+						$found = TRUE;
+				endforeach;
+			endif;
+		endif;
+	endif;
+	
+	// If User was not found and it's a hidden group -> Redirect to main blog
+	if( !$found && !$public_group ):
+		$url = get_blog_option( BLOG_ID_CURRENT_SITE, 'siteurl' );
+		wp_redirect( $url );
+		exit;
+	endif;
+}
+add_action( 'init', 'bp_groupblog_privacy_check' );
