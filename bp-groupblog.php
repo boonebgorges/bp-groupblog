@@ -107,7 +107,21 @@ function bp_groupblog_setup_nav() {
 
 			$parent_slug = isset( $bp->bp_nav[$bp->groups->current_group->slug] ) ? $bp->groups->current_group->slug : $bp->groups->slug;
 
-			if ( bp_groupblog_is_blog_enabled( $bp->groups->current_group->id ) || $_POST['groupblog-create-new'] == 'yes' ) {
+			if ( 
+				
+				// existing groupblog logic
+				bp_groupblog_is_blog_enabled( $bp->groups->current_group->id ) 
+				
+				OR 
+				
+				// mahype's fixes for the non-appearance of the groupblog tab
+				// with the addition of a check for the array key to prevent PHP notices.
+				( 
+					isset( $_POST['groupblog-create-new'] ) AND
+					$_POST['groupblog-create-new'] == 'yes' 
+				)
+				
+			) {
 			
 				// add a filter so plugins can change the name
 				$name = __( 'Blog', 'groupblog' );
