@@ -5,14 +5,14 @@
 function bp_groupblog_blog_defaults( $blog_id ) {
 	global $bp, $wp_rewrite;
 
+	switch_to_blog( $blog_id );
+
 	// only apply defaults to groupblog blogs
 	if ( bp_is_groups_component() ) {
 
-		switch_to_blog( $blog_id );
-	
 		// get the site options
 		$options = get_site_option( 'bp_groupblog_blog_defaults_options' );
-
+		
 		foreach( (array)$options as $key => $value )
 			update_option( $key, $value );
 
@@ -22,7 +22,7 @@ function bp_groupblog_blog_defaults( $blog_id ) {
 			$values = explode( "|", $options['theme'] );
 			switch_theme( $values[0], $values[1] );
 		}
-
+		
 		// groupblog bonus options
 		if ( strlen( $options['default_cat_name'] ) > 0 ) {
 			global $wpdb;
@@ -71,10 +71,8 @@ function bp_groupblog_blog_defaults( $blog_id ) {
 				update_option('page_on_front', $blog_page_id);
 			}
 		}
-
-		restore_current_blog();
-
 	}
+	restore_current_blog();
 }
 
 function bp_groupblog_update_defaults() {
@@ -265,20 +263,7 @@ function bp_groupblog_add_admin_menu() {
 		return false;
 
 	/* Add the administration tab under the "Site Admin" tab for site administrators */
-	$page = add_submenu_page( 
-	
-		'bp-general-settings', 
-		__( 'GroupBlog Setup', 'groupblog' ), 
-		'<span class="bp-groupblog-admin-menu-header">' . __( 'GroupBlog Setup', 'groupblog' ) . '&nbsp;&nbsp;&nbsp;</span>', 
-		'manage_options', 
-		'bp_groupblog_management_page', 
-		'bp_groupblog_management_page' 
-		
-	);
-	
-	// add styles only on bp-groupblog admin page, see:
-	// http://codex.wordpress.org/Function_Reference/wp_enqueue_script#Load_scripts_only_on_plugin_pages
-	add_action( 'admin_print_styles-'.$page, 'bp_groupblog_add_admin_style' );
+	add_submenu_page( 'bp-general-settings', __( 'GroupBlog Setup', 'groupblog' ), '<span class="bp-groupblog-admin-menu-header">' . __( 'GroupBlog Setup', 'groupblog' ) . '&nbsp;&nbsp;&nbsp;</span>', 'manage_options', 'bp_groupblog_management_page', 'bp_groupblog_management_page' );
 
 }
 add_action( bp_core_admin_hook(), 'bp_groupblog_add_admin_menu', 10 );
@@ -362,7 +347,7 @@ function bp_groupblog_management_page() {
 					<div id="select-theme">
 						<?php _e( 'Select the default theme:', 'groupblog' ) ?>
 						<select id="theme" name="theme" size="1">
-						<optgroup label="<?php echo esc_attr( __( 'GroupBlog Themes:', 'groupblog' ) ) ?>">
+						<option value="groupblog-themes" style="font-weight: bold"><?php _e( 'GroupBlog Themes:', 'groupblog' ) ?></option>
 					 	<?php
 						foreach ( $theme_names as $theme_name ) {
 
@@ -372,7 +357,7 @@ function bp_groupblog_management_page() {
 								$stylesheet = $themes[$theme_name]['Stylesheet'];
 								$title = $themes[$theme_name]['Title'];
 								$selected = "";
-								if( $opt['theme'] == $template . "|" . $stylesheet ) {
+								if( $opt[theme] == $template . "|" . $stylesheet ) {
 									$selected = "selected = 'selected' ";
 									$current_groupblog_theme = $theme_name;
 								}
@@ -380,8 +365,8 @@ function bp_groupblog_management_page() {
 							}
 						}
 						?>
-						</optgroup>
-						<optgroup label="<?php echo esc_attr( __( 'Regular Themes:', 'groupblog' ) ) ?>">
+						<option value=""></option>
+						<option value="regular-themes" style="font-weight: bold"><?php _e( 'Regular Themes:', 'groupblog' ) ?></option>
 						<?php
 						foreach ( $theme_names as $theme_name ) {
 
@@ -391,7 +376,7 @@ function bp_groupblog_management_page() {
 								$stylesheet = $themes[$theme_name]['Stylesheet'];
 								$title = $themes[$theme_name]['Title'];
 								$selected = "";
-								if( $opt['theme'] == $template . "|" . $stylesheet ) {
+								if( $opt[theme] == $template . "|" . $stylesheet ) {
 									$selected = "selected = 'selected' ";
 									$current_groupblog_theme = $theme_name;
 								}
@@ -399,7 +384,6 @@ function bp_groupblog_management_page() {
 							}
 						}
 						?>
-						</optgroup>
 						</select>
 					</div>
 

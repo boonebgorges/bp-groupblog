@@ -101,6 +101,11 @@ function bp_core_avatar_url() {
 
 == Changelog == 
 
+= 1.7.2 =
+* l18n improvements
+* Fixes switch_to_blog() bug
+* Impovements to consistency of menu display
+
 = 1.7.1 =
 * Refactors the process that adds members to group blog, to improve performance with large groups
 * Fixes bug that caused blog post activity to be posted to the incorrect group on some setups
