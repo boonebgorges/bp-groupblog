@@ -1207,4 +1207,51 @@ function bp_groupblog_delete_meta( $blog_id, $drop = false ) {
 }
 add_action('delete_blog', 'bp_groupblog_delete_meta', 10, 1);
 
-?>
+/**
+ * bp_groupblog_privacy_check()
+ *
+ * Check if a non-public group is being accessed by a user who is not a member of the group
+ * Adapted from code in mahype's fork
+ */
+function bp_groupblog_privacy_check() {
+
+	global $blog_id, $current_user;
+	
+	// if is not the main blog but we do have a blog ID...
+	if( !is_main_site() AND isset( $blog_id ) AND is_numeric( $blog_id ) ) {
+		
+		// get group ID for this blog
+		$group_id = get_groupblog_group_id( $blog_id );
+		
+		// if we get one...
+		if( is_numeric( $group_id ) ) {
+			
+			// get the group object
+			$group = new BP_Groups_Group( $group_id );
+			
+			// if group is not public...
+			if( $group->status != 'public' ) {
+			
+				// is the current user a member of the blog?
+				if ( !is_user_member_of_blog( $current_user->ID, $blog_id ) ) {
+					
+					// no - redirect to network home
+					wp_redirect( network_site_url() );
+					exit;
+
+				}
+				
+			}
+		
+		}
+	
+	}
+	
+}
+
+// add action at init
+add_action( 'init', 'bp_groupblog_privacy_check' );
+
+
+
+
