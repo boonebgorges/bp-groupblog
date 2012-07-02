@@ -1235,8 +1235,8 @@ function bp_groupblog_privacy_check() {
 				// is the current user a member of the blog?
 				if ( !is_user_member_of_blog( $current_user->ID, $blog_id ) ) {
 					
-					// no - redirect to network home
-					wp_redirect( network_site_url() );
+					// no - redirect to network home, but allow overrides
+					wp_redirect( apply_filters( 'bp_groupblog_privacy_redirect_url', network_site_url() ) );
 					exit;
 
 				}
