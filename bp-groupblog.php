@@ -775,7 +775,9 @@ function bp_groupblog_signup_blog($blogname = '', $blog_title = '', $errors = ''
 	if ( ! is_wp_error($errors) ) {
 		$errors = new WP_Error();
 	}
-
+	
+	
+	
 	// allow definition of default variables
 	$filtered_results = apply_filters('signup_blog_init', array('blogname' => $blogname, 'blog_title' => $blog_title, 'errors' => $errors ));
 	$blogname = $filtered_results['blogname'];
@@ -938,11 +940,11 @@ function bp_groupblog_validate_blog_signup() {
 
 	if ( $errors->get_error_code() ) {
 		$message = '';
-		$message .= $errors->get_error_message('blogname');
-		$message .= __( ' We suggest adjusting the blog address below, in accordance with the following requirements:', 'groupblog' );
+		// $message .= $errors->get_error_message('blogname');
+		$message .= __( ' We suggest adjusting the blog address below, in accordance with the following requirements:', 'groupblog' ) . '<br /><br />';
 		if ( $checks['allowunderscores'] != '1' || $checks['allowdashes'] != '1' )
-			$message .= __( ' &raquo; Only letters and numbers allowed.', 'groupblog' );
-		$message .= sprintf( __( ' &raquo; Must be at least %s characters.', 'groupblog' ), $checks['minlength'] );
+			$message .= __( ' &raquo; Only letters and numbers allowed.', 'groupblog' ) . '<br />';
+		$message .= sprintf( __( ' &raquo; Must be at least %s characters.', 'groupblog' ), $checks['minlength'] ) . '<br />' ;
 		if ( $checks['allownumeric'] != '1' )
 			$message .= __( ' &raquo; Has to contain letters as well.', 'groupblog' );
 		bp_core_add_message( $message, 'error' );
