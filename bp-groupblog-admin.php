@@ -9,10 +9,10 @@ function bp_groupblog_blog_defaults( $blog_id ) {
 	if ( bp_is_groups_component() ) {
 
 		switch_to_blog( $blog_id );
-	
+
 		// get the site options
 		$options = get_site_option( 'bp_groupblog_blog_defaults_options' );
-		
+
 		foreach( (array)$options as $key => $value )
 			update_option( $key, $value );
 
@@ -22,7 +22,7 @@ function bp_groupblog_blog_defaults( $blog_id ) {
 			$values = explode( "|", $options['theme'] );
 			switch_theme( $values[0], $values[1] );
 		}
-		
+
 		// groupblog bonus options
 		if ( strlen( $options['default_cat_name'] ) > 0 ) {
 			global $wpdb;
@@ -265,17 +265,17 @@ function bp_groupblog_add_admin_menu() {
 		return false;
 
 	/* Add the administration tab under the "Site Admin" tab for site administrators */
-	$page = add_submenu_page( 
-	
-		'bp-general-settings', 
-		__( 'GroupBlog Setup', 'groupblog' ), 
-		'<span class="bp-groupblog-admin-menu-header">' . __( 'GroupBlog Setup', 'groupblog' ) . '&nbsp;&nbsp;&nbsp;</span>', 
-		'manage_options', 
-		'bp_groupblog_management_page', 
-		'bp_groupblog_management_page' 
-		
+	$page = add_submenu_page(
+
+		'bp-general-settings',
+		__( 'GroupBlog Setup', 'groupblog' ),
+		'<span class="bp-groupblog-admin-menu-header">' . __( 'GroupBlog Setup', 'groupblog' ) . '&nbsp;&nbsp;&nbsp;</span>',
+		'manage_options',
+		'bp_groupblog_management_page',
+		'bp_groupblog_management_page'
+
 	);
-	
+
 	// add styles only on bp-groupblog admin page, see:
 	// http://codex.wordpress.org/Function_Reference/wp_enqueue_script#Load_scripts_only_on_plugin_pages
 	add_action( 'admin_print_styles-'.$page, 'bp_groupblog_add_admin_style' );
@@ -326,27 +326,25 @@ function bp_groupblog_management_page() {
 
 				<div id='groupblog_default_theme'>
 					<?php
-					
+
 					$current_groupblog_theme = '';
-					
+
 					// get all themes
 					if ( function_exists( 'wp_get_themes' ) ) {
-					
+
 						// do things the WP3.4 way...
 						$themes = wp_get_themes(
-						
-							false, // get only error-free themes
-							'network', // get only network-allowed themes
-							0 // use current blog as reference
-						
+							false,     // only error-free themes
+							'network', // only network-allowed themes
+							0          // use current blog as reference
 						);
-						
+
 						$ct = wp_get_theme();
 						$allowed_themes = WP_Theme::get_allowed_on_network();
 						$blog_allowed_themes = WP_Theme::get_allowed_on_site();
 
 					} else {
-						
+
 						// pre WP3.4
 						$themes = get_themes();
 
@@ -355,13 +353,13 @@ function bp_groupblog_management_page() {
 						$blog_allowed_themes = wpmu_get_blog_allowedthemes();
 
 					}
-		
+
 					if( $allowed_themes == false )
 						$allowed_themes = array();
 
 					if( is_array( $blog_allowed_themes ) )
 						$allowed_themes = array_merge( $allowed_themes, $blog_allowed_themes );
-						
+
 					if( $wpdb->blogid != 1 )
 						unset( $allowed_themes[ 'h3' ] );
 
@@ -382,9 +380,11 @@ function bp_groupblog_management_page() {
 					?>
 
 					<h3><?php _e( 'Default Theme', 'groupblog' ) ?></h3>
+
 					<div id="select-theme">
 						<label for="theme"><?php _e( 'Select the default theme for new groupblogs:', 'groupblog' ) ?></label>
 						<select id="theme" name="theme" size="1">
+
 						<optgroup label="<?php echo esc_attr( __( 'GroupBlog Themes:', 'groupblog' ) ) ?>">
 					 	<?php
 
