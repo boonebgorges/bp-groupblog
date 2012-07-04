@@ -332,7 +332,7 @@ function bp_groupblog_management_page() {
 					// get all themes
 					if ( function_exists( 'wp_get_themes' ) ) {
 					
-						// do things the WP3.4 way...
+						// get theme data the WP3.4 way...
 						$themes = wp_get_themes(
 						
 							false, // get only error-free themes
@@ -347,7 +347,7 @@ function bp_groupblog_management_page() {
 
 					} else {
 						
-						// pre WP3.4
+						// pre WP3.4 functions
 						$themes = get_themes();
 
 						$ct = current_theme_info();
@@ -355,7 +355,7 @@ function bp_groupblog_management_page() {
 						$blog_allowed_themes = wpmu_get_blog_allowedthemes();
 
 					}
-		
+					
 					if( $allowed_themes == false )
 						$allowed_themes = array();
 
@@ -377,6 +377,11 @@ function bp_groupblog_management_page() {
 					reset( $themes );
 
 					// get the names of the themes & sort them
+					/* 
+					Note: pre-WP3.4 the keys are the theme names. In 3.4, the keys are folder names
+					Fortunately, the magic methods of the object retain backwards compatibility and allow
+					array-style access to work
+					*/
 					$theme_names = array_keys( $themes );
 					natcasesort( $theme_names );
 					?>
@@ -427,14 +432,23 @@ function bp_groupblog_management_page() {
 					</div>
 
 					<h3><?php _e( 'Current Theme', 'groupblog' ) ?></h3>
-					<div id="current-theme">
+					<div id="current-theme"<?php if ( function_exists( 'wp_get_themes' ) ) echo ' class="current-theme-3point4plus"' ?>>
 						<?php if ( isset( $themes[$current_groupblog_theme]['Screenshot'] ) ) : ?>
 							<img src="<?php echo $themes[$current_groupblog_theme]['Theme Root URI'] . '/' . $themes[$current_groupblog_theme]['Stylesheet'] . '/' . $themes[$current_groupblog_theme]['Screenshot']; ?>" alt="<?php _e('Current theme preview'); ?>" />
 						<?php endif; ?>
 						<div class="alt" id="current-theme-info">
+							<?php
+							
+							// is a theme set yet?
+							if ( isset( $themes[$current_groupblog_theme] ) ) {
+							
+							?>
 							<h4><?php	/* translators: 1: theme title, 2: theme version, 3: theme author */
 							printf(__('%1$s %2$s by %3$s'), $themes[$current_groupblog_theme]['Title'], $themes[$current_groupblog_theme]['Version'], $themes[$current_groupblog_theme]['Author']) ; ?></h4>
 							<p class="theme-description"><?php /*print_r ($themes[$current_groupblog_theme]);*/echo $themes[$current_groupblog_theme]['Description']; ?></p>
+							<?php } else { ?>
+							<h4><?php _e( 'Please select a theme', 'groupblog' ) ?></h4>
+							<?php } ?>
 							</div>
 					</div>
 
