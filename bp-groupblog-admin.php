@@ -383,10 +383,13 @@ function bp_groupblog_management_page() {
 
 					<h3><?php _e( 'Default Theme', 'groupblog' ) ?></h3>
 					<div id="select-theme">
-						<?php _e( 'Select the default theme:', 'groupblog' ) ?>
+						<label for="theme"><?php _e( 'Select the default theme for new groupblogs:', 'groupblog' ) ?></label>
 						<select id="theme" name="theme" size="1">
 						<optgroup label="<?php echo esc_attr( __( 'GroupBlog Themes:', 'groupblog' ) ) ?>">
 					 	<?php
+
+					 	$groupblog_themes_options = '';
+
 						foreach ( $theme_names as $theme_name ) {
 
 							if ( in_array( 'groupblog', (array)$themes[$theme_name]['Tags'] ) ) {
@@ -399,13 +402,23 @@ function bp_groupblog_management_page() {
 									$selected = "selected = 'selected' ";
 									$current_groupblog_theme = $theme_name;
 								}
-								echo('<option value="' . $template . "|" . $stylesheet .  '"' . $selected . '>' . $title . "</option>");
+								$groupblog_themes_options .= '<option value="' . $template . "|" . $stylesheet .  '"' . $selected . '>' . $title . "</option>";
 							}
 						}
+
+						if ( !empty( $groupblog_themes_options ) ) {
+							echo $groupblog_themes_options;
+						} else {
+							echo '<option value="" disabled="disabled">' . __( 'No groupblog-enabled themes available', 'groupblog' ) . '</option>';
+						}
+
 						?>
 						</optgroup>
 						<optgroup label="<?php echo esc_attr( __( 'Regular Themes:', 'groupblog' ) ) ?>">
 						<?php
+
+						$non_groupblog_themes_options = '';
+
 						foreach ( $theme_names as $theme_name ) {
 
 							if ( !in_array( 'groupblog', (array)$themes[$theme_name]['Tags'] ) ) {
@@ -418,25 +431,39 @@ function bp_groupblog_management_page() {
 									$selected = "selected = 'selected' ";
 									$current_groupblog_theme = $theme_name;
 								}
-								echo('<option value="' . $template . "|" . $stylesheet .  '"' . $selected . '>' . $title . "</option>");
+								$non_groupblog_themes_options .= '<option value="' . $template . "|" . $stylesheet .  '"' . $selected . '>' . $title . "</option>";
 							}
 						}
+
+						if ( !empty( $non_groupblog_themes_options ) ) {
+							echo $non_groupblog_themes_options;
+						} else {
+							echo '<option value="" disabled="disabled">' . __( 'No regular themes available', 'groupblog' ) . '</option>';
+						}
+
 						?>
 						</optgroup>
+
+						<option value="" <?php selected( $current_groupblog_theme, '' ) ?>><?php _e( '- None selected -', 'groupblog' ) ?></option>
+
 						</select>
 					</div>
 
-					<h3><?php _e( 'Current Theme', 'groupblog' ) ?></h3>
-					<div id="current-theme">
-						<?php if ( isset( $themes[$current_groupblog_theme]['Screenshot'] ) ) : ?>
-							<img src="<?php echo $themes[$current_groupblog_theme]['Theme Root URI'] . '/' . $themes[$current_groupblog_theme]['Stylesheet'] . '/' . $themes[$current_groupblog_theme]['Screenshot']; ?>" alt="<?php _e('Current theme preview'); ?>" />
-						<?php endif; ?>
-						<div class="alt" id="current-theme-info">
-							<h4><?php	/* translators: 1: theme title, 2: theme version, 3: theme author */
-							printf(__('%1$s %2$s by %3$s'), $themes[$current_groupblog_theme]['Title'], $themes[$current_groupblog_theme]['Version'], $themes[$current_groupblog_theme]['Author']) ; ?></h4>
-							<p class="theme-description"><?php /*print_r ($themes[$current_groupblog_theme]);*/echo $themes[$current_groupblog_theme]['Description']; ?></p>
-							</div>
-					</div>
+					<?php if ( !empty( $current_groupblog_theme ) ) : ?>
+
+						<div id="current-theme">
+							<?php if ( isset( $themes[$current_groupblog_theme]['Screenshot'] ) ) : ?>
+								<img src="<?php echo $themes[$current_groupblog_theme]['Theme Root URI'] . '/' . $themes[$current_groupblog_theme]['Stylesheet'] . '/' . $themes[$current_groupblog_theme]['Screenshot']; ?>" alt="<?php _e('Current theme preview'); ?>" />
+							<?php endif; ?>
+
+							<div class="alt" id="current-theme-info">
+								<h4><?php	/* translators: 1: theme title, 2: theme version, 3: theme author */
+								printf(__('%1$s %2$s by %3$s'), $themes[$current_groupblog_theme]['Title'], $themes[$current_groupblog_theme]['Version'], $themes[$current_groupblog_theme]['Author']) ; ?></h4>
+								<p class="theme-description"><?php /*print_r ($themes[$current_groupblog_theme]);*/echo $themes[$current_groupblog_theme]['Description']; ?></p>
+								</div>
+						</div>
+
+					<?php endif ?>
 
 					<div class="clear"></div>
 
