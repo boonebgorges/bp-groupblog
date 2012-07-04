@@ -264,10 +264,23 @@ function bp_groupblog_add_admin_menu() {
 	if ( !is_super_admin() )
 		return false;
 
+	// test for BP1.6+ (truncated to allow testing on beta versions)
+	if ( version_compare( substr( BP_VERSION, 0, 3 ), '1.6', '>=' ) ) {
+	
+		// BuddyPress 1.6 moves its admin pages elsewhere, so use Settings menu
+		$location = 'settings.php';
+	
+	} else {
+	
+		// versions prior to 1.6 have a BuddyPress top-level menu
+		$location = 'bp-general-settings';
+	
+	}
+	
 	/* Add the administration tab under the "Site Admin" tab for site administrators */
 	$page = add_submenu_page( 
 	
-		'bp-general-settings', 
+		$location, 
 		__( 'GroupBlog Setup', 'groupblog' ), 
 		'<span class="bp-groupblog-admin-menu-header">' . __( 'GroupBlog Setup', 'groupblog' ) . '&nbsp;&nbsp;&nbsp;</span>', 
 		'manage_options', 
@@ -275,12 +288,13 @@ function bp_groupblog_add_admin_menu() {
 		'bp_groupblog_management_page' 
 		
 	);
-	
+
 	// add styles only on bp-groupblog admin page, see:
 	// http://codex.wordpress.org/Function_Reference/wp_enqueue_script#Load_scripts_only_on_plugin_pages
 	add_action( 'admin_print_styles-'.$page, 'bp_groupblog_add_admin_style' );
 
 }
+
 add_action( bp_core_admin_hook(), 'bp_groupblog_add_admin_menu', 10 );
 
 function bp_groupblog_management_page() {
