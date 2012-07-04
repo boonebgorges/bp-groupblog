@@ -331,8 +331,8 @@ function bp_groupblog_management_page() {
 
 					// get all themes
 					if ( function_exists( 'wp_get_themes' ) ) {
-
-						// do things the WP3.4 way...
+					
+						// get theme data the WP3.4 way...
 						$themes = wp_get_themes(
 							false,     // only error-free themes
 							'network', // only network-allowed themes
@@ -344,8 +344,8 @@ function bp_groupblog_management_page() {
 						$blog_allowed_themes = WP_Theme::get_allowed_on_site();
 
 					} else {
-
-						// pre WP3.4
+						
+						// pre WP3.4 functions
 						$themes = get_themes();
 
 						$ct = current_theme_info();
@@ -375,6 +375,11 @@ function bp_groupblog_management_page() {
 					reset( $themes );
 
 					// get the names of the themes & sort them
+					/* 
+					Note: pre-WP3.4 the keys are the theme names. In 3.4, the keys are folder names
+					Fortunately, the magic methods of the object retain backwards compatibility and allow
+					array-style access to work
+					*/
 					$theme_names = array_keys( $themes );
 					natcasesort( $theme_names );
 					?>
