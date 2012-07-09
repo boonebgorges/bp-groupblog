@@ -101,7 +101,8 @@ function bp_core_avatar_url() {
 
 == Changelog == 
 
-= 1.7.2 =
+= 1.8 =
+* Fixes bug with blog autojoin
 * l18n improvements
 * Fixes switch_to_blog() bug
 * Impovements to consistency of menu display

@@ -261,8 +261,6 @@ function groupblog_edit_base_settings( $groupblog_enable_blog, $groupblog_silent
  * Runs whenever member permissions are changed and saved - by Boone
  */
 function bp_groupblog_member_join( $group_id ) {
-	global $bp, $wpdb, $username, $blog_id, $userdata, $current_blog;
-
 	$params = array(
 		'exclude_admins_mods'	=> 0,
 		'per_page'		=> 10000,
