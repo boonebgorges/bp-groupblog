@@ -1074,6 +1074,9 @@ function bp_groupblog_set_group_to_post_activity( $activity ) {
 	$activity->item_id = (int)$group_id;
 	$activity->component = 'groups';
 	$activity->hide_sitewide = 0;
+	
+	// need to set type as new_groupblog_post (see bp_groupblog_posts() below) or filters won't work
+	$activity->type = 'new_groupblog_post';
 
 	remove_action( 'bp_activity_before_save', 'bp_groupblog_set_group_to_post_activity');
 	return $activity;
