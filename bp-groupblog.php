@@ -122,10 +122,18 @@ function bp_groupblog_setup_nav() {
 				)
 
 			) {
+			
+				// add a filter so plugins can change the name
+				$name = __( 'Blog', 'groupblog' );
+				$name = apply_filters( 'bp_groupblog_subnav_item_name', $name );
+				
+				// add a filter so plugins can change the slug
+				$slug = apply_filters( 'bp_groupblog_subnav_item_slug', 'blog' );
+				
 				bp_core_new_subnav_item(
 					array(
-						'name' => __( 'Blog', 'groupblog' ),
-						'slug' => 'blog',
+						'name' => $name,
+						'slug' => $slug,
 						'parent_url' => $group_link,
 						'parent_slug' => $parent_slug,
 						'screen_function' => 'groupblog_screen_blog',
@@ -1092,7 +1100,7 @@ add_action( 'bp_group_activity_filter_options', 'bp_groupblog_posts' );
 function groupblog_screen_blog() {
 	global $bp;
 
-	if ( bp_is_groups_component() && bp_is_current_action( 'blog' ) ) {
+	if ( bp_is_groups_component() && bp_is_current_action( apply_filters( 'bp_groupblog_subnav_item_slug', 'blog' ) ) ) {
 
 		$checks = get_site_option('bp_groupblog_blog_defaults_options');
 		$blog_details = get_blog_details( get_groupblog_blog_id(), true );
