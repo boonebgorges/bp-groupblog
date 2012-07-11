@@ -1070,7 +1070,7 @@ function bp_groupblog_set_group_to_post_activity( $activity ) {
 	if ( $id ) $activity->id = $id;
 
 	// Replace the necessary values to display in group activity stream
-	$activity->action = sprintf( __( '%s wrote a new blog post %s in the group %s:', 'groupblog'), bp_core_get_userlink( $post->post_author ), '<a href="' . get_permalink( $post->ID ) .'">' . attribute_escape( $post->post_title ) . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . attribute_escape( $group->name ) . '</a>' );
+	$activity->action = sprintf( __( '%s wrote a new blog post %s in the group %s:', 'groupblog'), bp_core_get_userlink( $post->post_author ), '<a href="' . get_permalink( $post->ID ) .'">' . esc_attr( $post->post_title ) . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_attr( $group->name ) . '</a>' );
 	$activity->item_id = (int)$group_id;
 	$activity->component = 'groups';
 	$activity->hide_sitewide = 0;
