@@ -46,6 +46,7 @@ class BP_Groupblog_Extension extends BP_Group_Extension {
 
 	function create_screen_save() {
 		if ( isset( $_POST['save'] ) ) {
+			check_admin_referer( 'groups_create_save_' . $this->slug );
 			groupblog_edit_settings();
 		}
 	}
@@ -60,11 +61,14 @@ class BP_Groupblog_Extension extends BP_Group_Extension {
 		// their own markup. This is a bit of a hack.
 		add_action( 'bp_groupblog_edit_screen_markup', 'bp_groupblog_signup_blog' );
 		do_action( 'bp_groupblog_edit_screen_markup' );
+		
+		wp_nonce_field( 'groups_edit_save_' . $this->slug );
 
 	}
 
 	function edit_screen_save() {
 		if ( isset( $_POST['save'] ) ) {
+			check_admin_referer( 'groups_edit_save_' . $this->slug );
 			groupblog_edit_settings();
 		}
 	}
