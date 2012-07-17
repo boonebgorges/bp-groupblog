@@ -101,6 +101,9 @@ function bp_core_avatar_url() {
 
 == Changelog == 
 
+= 1.8.1 =
+* Security improvements
+
 = 1.8 =
 * Fixes bug with blog autojoin
 * l18n improvements
