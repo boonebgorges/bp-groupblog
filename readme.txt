@@ -103,7 +103,7 @@ function bp_core_avatar_url() {
 
 = 1.8.1 =
 * Security improvements
-* Fixes some markup and PHP variable reference bugs
+* Fixes some markup, deprecated function calls, and PHP variable reference bugs
 
 = 1.8 =
 * Fixes bug with blog autojoin
