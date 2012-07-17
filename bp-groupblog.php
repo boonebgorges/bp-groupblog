@@ -918,13 +918,11 @@ function bp_groupblog_signup_blog($blogname = '', $blog_title = '', $errors = ''
 
 		<?php endif; ?>
 
-		<?php if ( !$groupblog_create_screen ) { ?>
-		<p>
-			<input id="save" type="submit" name="save" class="submit" value="<?php _e('Save Changes &raquo;', 'groupblog') ?>"/>
-		</p>
-	</form>
-	<?php
-	}
+		<?php if ( !$groupblog_create_screen ) : ?>
+			<p>
+				<input id="save" type="submit" name="save" class="submit" value="<?php _e('Save Changes &raquo;', 'groupblog') ?>"/>
+			</p>
+		<?php endif;
 }
 
 /**
