@@ -153,7 +153,7 @@ function groupblog_edit_settings() {
 		    // They're using an existing blog, so we try to assign that to $groupblog_blog_id
 		    if ( !( $groupblog_blog_id = $_POST['groupblog-blogid'] ) ) {
 			//They forgot to choose a blog, so send them back and make them do it!
-				bp_core_add_message( __( 'Please choose one of your blogs from the drop-down menu.' . $group_id, 'groupblog' ), 'error' );
+				bp_core_add_message( sprintf( __( 'Please choose one of your blogs from the drop-down menu. %s', 'groupblog' ), $group_id ), 'error' );
 				if ( bp_is_action_variable( 'step', 0 ) ) {
 					bp_core_redirect( trailingslashit( $bp->loggedin_user->domain . $bp->groups->slug . '/create/step/' . $bp->action_variables[1] ) );
 				} else {
@@ -488,7 +488,7 @@ function bp_groupblog_create_screen_save() {
 	    // They're using an existing blog, so we try to assign that to $groupblog_blog_id
 	    if ( !( $groupblog_blog_id = $_POST['groupblog-blogid'] ) ) {
 		//They forgot to choose a blog, so send them back and make them do it!
-			bp_core_add_message( __( 'Please choose one of your blogs from the drop-down menu.' . $group_id, 'groupblog' ), 'error' );
+			bp_core_add_message( sprintf( __( 'Please choose one of your blogs from the drop-down menu. %s', 'groupblog' ), $group_id ), 'error' );
 			bp_core_redirect( trailingslashit( $bp->loggedin_user->domain . $bp->groups->slug . '/create/step/' . $bp->action_variables[1] ) );
 		}
 	} else {
