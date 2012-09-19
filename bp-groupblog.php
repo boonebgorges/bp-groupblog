@@ -443,15 +443,21 @@ add_action( 'groups_banned_member', 'bp_groupblog_remove_user' );
  *
  * Reworked function to retrieve the users current role - by Boone
  */
-function bp_groupblog_get_user_role( $user_id, $user_login, $blog_id ) {
-	global $bp, $blog_id, $current_blog;
-
-	if ( !$blog_id || !$user_id )
+function bp_groupblog_get_user_role( $user_id, $user_login, $_blog_id ) {
+	global $bp, $current_blog, $wpdb;
+	
+	// if no blog id passed, fall back to global
+	if ( !isset( $_blog_id ) ) {
+		global $blog_id;
+		$_blog_id = $blog_id;
+	}
+	
+	if ( !$_blog_id || !$user_id )
 		return false;
 
 	// determine users role, if any, on this blog
-	$roles = get_user_meta( $user_id, 'wp_' . $blog_id . '_capabilities', true );
-
+	$roles = get_user_meta( $user_id, $wpdb->base_prefix . $_blog_id . '_capabilities', true );
+	
 	// this seems to be the only way to do this
 	if ( isset( $roles['subscriber'] ) )
 		$user_role = 'subscriber';
