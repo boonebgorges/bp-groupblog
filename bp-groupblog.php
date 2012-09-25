@@ -316,51 +316,14 @@ function bp_groupblog_upgrade_user( $user_id, $group_id, $blog_id = false ) {
 
 	$user_role = bp_groupblog_get_user_role( $user_id, $user->data->user_login, $blog_id );
 
-	// Get the current user's group status. For efficiency, we try first to look at the
-	// current group object
-	if ( isset( $bp->groups->current_group->id ) && $group_id == $bp->groups->current_group->id ) {
-		// It's tricky to walk through the admin/mod lists over and over, so let's format
-		if ( empty( $bp->groups->current_group->adminlist ) ) {
-			$bp->groups->current_group->adminlist = array();
-			if ( isset( $bp->groups->current_group->admins ) ) {
-				foreach( (array)$bp->groups->current_group->admins as $admin ) {
-					if ( isset( $admin->user_id ) ) {
-						$bp->groups->current_group->adminlist[] = $admin->user_id;
-					}
-				}
-			}
-		}
-
-		if ( empty( $bp->groups->current_group->modlist ) ) {
-			$bp->groups->current_group->modlist = array();
-			if ( isset( $bp->groups->current_group->mods ) ) {
-				foreach( (array)$bp->groups->current_group->mods as $mod ) {
-					if ( isset( $mod->user_id ) ) {
-						$bp->groups->current_group->modlist[] = $mod->user_id;
-					}
-				}
-			}
-		}
-
-		if ( in_array( $user_id, $bp->groups->current_group->adminlist ) ) {
-			$user_group_status = 'admin';
-		} elseif ( in_array( $user_id, $bp->groups->current_group->modlist ) ) {
-			$user_group_status = 'mod';
-		} else {
-			// I'm assuming that if a user is passed to this function, they're a member
-			// Doing an actual lookup is costly. Try to look for an efficient method
-			$user_group_status = 'member';
-		}
+	if ( groups_is_user_admin ( $user_id, $group_id ) ) {
+		$user_group_status = 'admin';
+	} else if ( groups_is_user_mod ( $user_id, $group_id ) ) {
+		$user_group_status = 'mod';
+	} else if ( groups_is_user_member ( $user_id, $group_id ) ) {
+		$user_group_status = 'member';
 	} else {
-		if ( groups_is_user_admin ( $user_id, $group_id ) ) {
-			$user_group_status = 'admin';
-		} else if ( groups_is_user_mod ( $user_id, $group_id ) ) {
-			$user_group_status = 'mod';
-		} else if ( groups_is_user_member ( $user_id, $group_id ) ) {
-			$user_group_status = 'member';
-		} else {
-			return false;
-		}
+		return false;
 	}
 
 	switch ( $user_group_status ) {
