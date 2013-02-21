@@ -79,7 +79,11 @@ if ( file_exists( WP_PLUGIN_DIR . '/bp-groupblog/languages/groupblog-' . get_loc
  */
 function bp_groupblog_setup_globals() {
 	global $bp, $wpdb;
-
+	
+	// CMW: define groupblog class to avoid "Indirect modification of overloaded property" notice
+	$bp->groupblog = new stdClass;
+	
+	// now add properties
 	$bp->groupblog->image_base = WP_PLUGIN_DIR . '/bp-groupblog/groupblog/images';
 	$bp->groupblog->slug = BP_GROUPBLOG_SLUG;
 	$bp->groupblog->default_admin_role = BP_GROUPBLOG_DEFAULT_ADMIN_ROLE;
