@@ -413,14 +413,7 @@ function bp_groupblog_management_page() {
 					<div id="select-theme">
 						<label for="theme"><?php _e( 'Select the default theme for new groupblogs:', 'groupblog' ) ?></label>
 						<select id="theme" name="theme" size="1">
-<<<<<<< HEAD
-						<?php if( $opt[theme] == 'none' || $opt[theme] == '') $str_checked_none = ' checked="checked"';  ?>
-						<option value="none" style="font-weight: bold" <?php echo $str_checked_none; ?>><?php _e( 'Use WordPress Settings', 'groupblog' ) ?></option>
-						<option value="groupblog-themes" style="font-weight: bold"><?php _e( 'GroupBlog Themes:', 'groupblog' ) ?></option>
-=======
-
 						<optgroup label="<?php echo esc_attr( __( 'GroupBlog Themes:', 'groupblog' ) ) ?>">
->>>>>>> boone/1.8.x
 					 	<?php
 
 					 	$groupblog_themes_options = '';
@@ -448,12 +441,8 @@ function bp_groupblog_management_page() {
 						}
 
 						?>
-<<<<<<< HEAD
-						<option value="regular-themes" style="font-weight: bold"><?php _e( 'Regular Themes:', 'groupblog' ) ?></option>
-=======
 						</optgroup>
 						<optgroup label="<?php echo esc_attr( __( 'Regular Themes:', 'groupblog' ) ) ?>">
->>>>>>> boone/1.8.x
 						<?php
 
 						$non_groupblog_themes_options = '';
