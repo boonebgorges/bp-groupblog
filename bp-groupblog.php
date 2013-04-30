@@ -441,10 +441,8 @@ add_action( 'groups_banned_member', 'bp_groupblog_remove_user' );
  *
  * Reworked function to retrieve the users current role - by Boone
  */
-function bp_groupblog_get_user_role( $user_id, $user_login, $blog_id ) {
-	global $bp, $blog_id, $current_blog;
-
-	if ( !$blog_id || !$user_id )
+function bp_groupblog_get_user_role( $user_id, $user_login = false, $blog_id ) {
+	if ( ! $blog_id || ! $user_id )
 		return false;
 
 	global $wpdb;
@@ -453,19 +451,22 @@ function bp_groupblog_get_user_role( $user_id, $user_login, $blog_id ) {
 	$roles = get_user_meta( $user_id, $wpdb->get_blog_prefix( $blog_id ) . 'capabilities', true );
 
 	// this seems to be the only way to do this
-	if ( isset( $roles['subscriber'] ) )
+	if ( isset( $roles['subscriber'] ) ) {
 		$user_role = 'subscriber';
-	elseif	( isset( $roles['contributor'] ) )
+	} elseif ( isset( $roles['contributor'] ) ) {
 		$user_role = 'contributor';
-	elseif	( isset( $roles['author'] ) )
+	} elseif ( isset( $roles['author'] ) ) {
 		$user_role = 'author';
-	elseif ( isset( $roles['editor'] ) )
+	} elseif ( isset( $roles['editor'] ) ) {
 		$user_role = 'editor';
-	elseif ( isset( $roles['administrator'] ) )
+	} elseif ( isset( $roles['administrator'] ) ) {
 		$user_role = 'administrator';
-	elseif ( is_super_admin( $user_login ) )
+	} elseif ( is_super_admin( $user_id ) ) {
 		$user_role = 'siteadmin';
-	else $user_role = 'norole';
+	} else {
+		$user_role = 'norole';
+	}
+
 	return $user_role;
 }
 
