@@ -1091,20 +1091,19 @@ add_action( 'bp_group_activity_filter_options', 'bp_groupblog_posts' );
  * This screen gets called when the 'group blog' link is clicked.
  */
 function groupblog_screen_blog() {
-	global $bp;
 
 	if ( bp_is_groups_component() && bp_is_current_action( 'blog' ) ) {
 
 		$checks = get_site_option('bp_groupblog_blog_defaults_options');
-		$blog_details = get_blog_details( get_groupblog_blog_id(), true );
+		$home_url = get_home_url( get_groupblog_blog_id() );
 
 		if ( isset( $checks['redirectblog'] ) && $checks['redirectblog'] == 1 ) {
-			bp_core_redirect( $blog_details->siteurl );
-		}
-		else if ( isset( $checks['redirectblog'] ) && $checks['redirectblog'] == 2 ) {
-			bp_core_redirect( $blog_details->siteurl . '/' . $checks['pageslug'] . '/' );
-		}
-		else {
+			bp_core_redirect( $home_url );
+
+		} else if ( isset( $checks['redirectblog'] ) && $checks['redirectblog'] == 2 ) {
+			bp_core_redirect( $home_url . '/' . $checks['pageslug'] . '/' );
+
+		} else {
 			if ( file_exists( locate_template( array( 'groupblog/blog.php' ) ) ) ) {
 				bp_core_load_template( apply_filters( 'groupblog_screen_blog', 'groupblog/blog' ) );
 				add_action( 'bp_screens', 'groupblog_screen_blog' );
