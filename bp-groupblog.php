@@ -982,7 +982,7 @@ function bp_groupblog_validate_blog_signup() {
 	$meta = apply_filters('signup_create_blog_meta', array ('lang_id' => 1, 'public' => $public)); // depreciated
 	$meta = apply_filters( "add_signup_meta", $meta );
 
-	$groupblog_blog_id = wpmu_create_blog( $domain, $path, $blog_title, $current_user->id, $meta, $wpdb->siteid );
+	$groupblog_blog_id = wpmu_create_blog( $domain, $path, $blog_title, $current_user->ID, $meta, $wpdb->siteid );
 
 	$errors = $filtered_results['errors'];
 
