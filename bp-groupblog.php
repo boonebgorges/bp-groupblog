@@ -471,8 +471,10 @@ function bp_groupblog_get_user_role( $user_id, $user_login = false, $blog_id ) {
 	if ( ! $blog_id || ! $user_id )
 		return false;
 
+	global $wpdb;
+
 	// determine users role, if any, on this blog
-	$roles = get_user_meta( $user_id, 'wp_' . $blog_id . '_capabilities', true );
+	$roles = get_user_meta( $user_id, $wpdb->get_blog_prefix( $blog_id ) . 'capabilities', true );
 
 	// this seems to be the only way to do this
 	if ( isset( $roles['subscriber'] ) ) {
