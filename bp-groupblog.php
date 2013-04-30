@@ -363,13 +363,39 @@ function bp_groupblog_upgrade_user( $user_id, $group_id, $blog_id = false ) {
 		}
 	}
 
+	// change user status based on promotion / demotion
+	switch( bp_action_variable( 1 ) ) {
+		case 'promote' :
+			$user_group_status = bp_action_variable( 2 );
+			break;
+
+		case 'demote' :
+		case 'unban' :
+			$user_group_status = 'member';
+			break;
+
+		// we don't remove users from blogs at the moment
+		// we give them the minimum role of 'subscriber'
+		case 'ban' :
+		case 'remove' :
+			$user_group_status = 'subscriber';
+			break;
+	}
+
+	// set the role
 	switch ( $user_group_status ) {
 		case 'admin' :
 			$default_role = $groupblog_default_admin_role;
 			break;
+
 		case 'mod' :
 			$default_role = $groupblog_default_mod_role;
 			break;
+
+		case 'subscriber' :
+			$default_role = 'subscriber';
+			break;
+
 		case 'member' :
 		default :
 			$default_role = $groupblog_default_member_role;
@@ -410,17 +436,19 @@ add_action( 'groups_join_group', 'bp_groupblog_just_joined_group', 5, 2 );
 function bp_groupblog_changed_status_group( $user_id, $group_id ) {
 	bp_groupblog_upgrade_user( $user_id, $group_id );
 }
-add_action( 'groups_promoted_member', 'bp_groupblog_changed_status_group', 10, 2 );
-add_action( 'groups_demoted_member', 'bp_groupblog_changed_status_group', 10, 2 );
-add_action( 'groups_unbanned_member', 'bp_groupblog_changed_status_group', 10, 2 );
+add_action( 'groups_promoted_member',     'bp_groupblog_changed_status_group', 10, 2 );
+add_action( 'groups_demoted_member',      'bp_groupblog_changed_status_group', 10, 2 );
+add_action( 'groups_unbanned_member',     'bp_groupblog_changed_status_group', 10, 2 );
+add_action( 'groups_banned_member',       'bp_groupblog_changed_status_group', 10, 2 );
+add_action( 'groups_removed_member',      'bp_groupblog_changed_status_group', 10, 2 );
 add_action( 'groups_membership_accepted', 'bp_groupblog_changed_status_group', 10, 2 );
-add_action( 'groups_accept_invite', 'bp_groupblog_changed_status_group', 10, 2 );
+add_action( 'groups_accept_invite',       'bp_groupblog_changed_status_group', 10, 2 );
 
 
 /**
  * bp_groupblog_remove_user( $group_id, $user_id = false )
  *
- * Called when user leaves, or is banned from, the group
+ * Called when user leaves.
  */
 function bp_groupblog_remove_user( $group_id, $user_id = false ) {
 	$blog_id = get_groupblog_blog_id( $group_id );
@@ -434,7 +462,6 @@ function bp_groupblog_remove_user( $group_id, $user_id = false ) {
 	wp_cache_delete( $user_id, 'users' );
 }
 add_action( 'groups_leave_group', 'bp_groupblog_remove_user' );
-add_action( 'groups_banned_member', 'bp_groupblog_remove_user' );
 
 /**
  * bp_groupblog_get_user_role( $user_id, $user_login, $blog_id )
