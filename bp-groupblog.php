@@ -305,9 +305,8 @@ function bp_groupblog_upgrade_user( $user_id, $group_id, $blog_id = false ) {
 	$groupblog_default_admin_role  = groups_get_groupmeta ( $group_id, 'groupblog_default_admin_role' );
 	$groupblog_creator_role        = 'admin';
 
-	$user = new WP_User( $user_id );
-
-	$user_role = bp_groupblog_get_user_role( $user_id, $user->data->user_login, $blog_id );
+	// get user's blog role
+	$user_role = bp_groupblog_get_user_role( $user_id, false, $blog_id );
 
 	// Get the current user's group status. For efficiency, we try first to look at the
 	// current group object
@@ -356,6 +355,21 @@ function bp_groupblog_upgrade_user( $user_id, $group_id, $blog_id = false ) {
 		}
 	}
 
+	// change user status based on promotion / demotion
+	switch( bp_action_variable( 1 ) ) {
+		case 'promote' :
+			$user_group_status = bp_action_variable( 2 );
+			
+			break;
+
+		case 'demote' :
+		case 'unban' :
+			$user_group_status = 'member';
+
+			break;
+	}
+
+	// set the role
 	switch ( $user_group_status ) {
 		case 'admin' :
 			$default_role = $groupblog_default_admin_role;
@@ -435,9 +449,14 @@ add_action( 'groups_banned_member', 'bp_groupblog_remove_user' );
  * bp_groupblog_get_user_role( $user_id, $user_login, $blog_id )
  *
  * Reworked function to retrieve the users current role - by Boone
+ *
+ * @param int $user_id The user ID
+ * @param bool $user_login Deprecated. Don't use.
+ * @param int $blog_id The blog ID
+ * @return string The user's blog role
  */
-function bp_groupblog_get_user_role( $user_id, $user_login, $blog_id ) {
-	global $bp, $blog_id, $current_blog;
+function bp_groupblog_get_user_role( $user_id, $user_login = false, $blog_id ) {
+	global $bp, $current_blog;
 
 	if ( !$blog_id || !$user_id )
 		return false;
