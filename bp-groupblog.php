@@ -423,11 +423,9 @@ add_action( 'groups_accept_invite', 'bp_groupblog_changed_status_group', 10, 2 )
  * Called when user leaves, or is banned from, the group
  */
 function bp_groupblog_remove_user( $group_id, $user_id = false ) {
-	global $bp, $blog_id;
-
 	$blog_id = get_groupblog_blog_id( $group_id );
 
-	if ( !$user_id )
+	if ( ! $user_id )
 		$user_id = bp_loggedin_user_id();
 
 	$user = new WP_User( $user_id );
