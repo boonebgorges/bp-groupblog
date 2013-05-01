@@ -996,7 +996,7 @@ function bp_groupblog_validate_blog_signup() {
 			$message .= __( ' &raquo; Has to contain letters as well.', 'groupblog' );
 		bp_core_add_message( $message, 'error' );
 
-		$redirect_url = isset( $bp->action_variables[0] ) && 'step' == $bp->action_variables[0] ? trailingslashit( bp_loggedin_user_domain() . $bp->groups->slug . '/create/step/' . $bp->action_variables[1] ) : bp_get_group_permalink( groups_get_current_group() ) . '/admin/group-blog/';
+		$redirect_url = bp_is_current_action( 'create' ) ? trailingslashit( bp_get_groups_directory_permalink() . 'create/step/' . bp_action_variable( 1 ) ) : bp_get_group_permalink( groups_get_current_group() ) . '/admin/group-blog/';
 
 		$error_params = array(
 			'create_error'    => '4815162342',
@@ -1137,7 +1137,7 @@ function groupblog_screen_blog_content() {
 function groupblog_redirect_group_home() {
 	global $bp;
 
-	if ( $bp->current_component == $bp->groups->slug && $bp->is_single_item && 'home' == $bp->current_action ) {
+	if ( bp_is_group_home() ) {
 
 		$checks = get_site_option('bp_groupblog_blog_defaults_options');
 
