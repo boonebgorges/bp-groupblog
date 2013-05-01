@@ -1027,40 +1027,6 @@ function bp_groupblog_validate_blog_signup() {
 }
 
 /**
- * bp_groupblog_create_blog( $group_id )
- *
- * We know everything is final and now are ready to create the blog at group complete stage.
- */
-function bp_groupblog_create_blog( $group_id ) {
-	global $wpdb, $domain;
-
-	if ( ( groups_get_groupmeta ( $group_id, 'groupblog_enable_blog' ) != 1 ) || ( groups_get_groupmeta ( $group_id, 'groupblog_blog_id' ) != '' ) )
-		return;
-
-	$current_user = wp_get_current_user();
-	if( !is_user_logged_in() )
-		die();
-
-	$public = groups_get_groupmeta( $group_id, 'groupblog_public');
-	$blog_title = groups_get_groupmeta( $group_id, 'groupblog_title');
-	$path = groups_get_groupmeta( $group_id, 'groupblog_path');
-	$domain = groups_get_groupmeta( $group_id, 'groupblog_domain');
-
-	$meta = apply_filters('signup_create_blog_meta', array ('lang_id' => 1, 'public' => $public)); // depreciated
-	$meta = apply_filters( "add_signup_meta", $meta );
-
-	$groupblog_blog_id = wpmu_create_blog( $domain, $path, $blog_title, $current_user->id, $meta, $wpdb->siteid );
-
-	groups_update_groupmeta( $group_id, 'groupblog_blog_id', $groupblog_blog_id );
-	groups_update_groupmeta( $group_id, 'groupblog_public', '');
-	groups_update_groupmeta( $group_id, 'groupblog_title', '');
-	groups_update_groupmeta( $group_id, 'groupblog_path', '');
-	groups_update_groupmeta( $group_id, 'groupblog_domain', '');
-
-}
-add_action( 'groups_group_create_complete', 'bp_groupblog_create_blog' );
-
-/**
  * bp_groupblog_set_group_to_post_activity ( $activity )
  *
  * Record the blog activity for the group - by Luiz Armesto
