@@ -122,14 +122,14 @@ function bp_groupblog_setup_nav() {
 				)
 
 			) {
-			
+
 				// add a filter so plugins can change the name
 				$name = __( 'Blog', 'groupblog' );
 				$name = apply_filters( 'bp_groupblog_subnav_item_name', $name );
-				
+
 				// add a filter so plugins can change the slug
 				$slug = apply_filters( 'bp_groupblog_subnav_item_slug', 'blog' );
-				
+
 				bp_core_new_subnav_item(
 					array(
 						'name' => $name,
@@ -1073,7 +1073,7 @@ function bp_groupblog_set_group_to_post_activity( $activity ) {
 	$activity->item_id = (int)$group_id;
 	$activity->component = 'groups';
 	$activity->hide_sitewide = 0;
-	
+
 	// need to set type as new_groupblog_post (see bp_groupblog_posts() below) or filters won't work
 	$activity->type = 'new_groupblog_post';
 
