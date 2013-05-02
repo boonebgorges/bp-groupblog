@@ -1149,9 +1149,11 @@ function groupblog_redirect_group_home() {
 
 		$checks = get_site_option('bp_groupblog_blog_defaults_options');
 
-		if ( $checks['deep_group_integration'] ) {
-			$blog_details = get_blog_details( get_groupblog_blog_id(), true );
-			bp_core_redirect( $blog_details->siteurl );
+		$blog_id = get_groupblog_blog_id();
+
+		if ( $checks['deep_group_integration'] && ! empty( $blog_id ) ) {
+			$home_url = get_home_url( $blog_id );
+			bp_core_redirect( $home_url );
 		}
 	}
 }
