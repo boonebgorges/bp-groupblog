@@ -469,7 +469,7 @@ add_action( 'groups_leave_group', 'bp_groupblog_remove_user' );
  * @return string The user's blog role
  */
 function bp_groupblog_get_user_role( $user_id, $user_login = false, $blog_id ) {
-	global $bp, $wpdb;
+	global $wpdb;
 
 	// determine users role, if any, on this blog
 	$roles = get_user_meta( $user_id, $wpdb->get_blog_prefix( $blog_id ) . 'capabilities', true );
