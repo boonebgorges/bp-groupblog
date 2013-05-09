@@ -367,13 +367,18 @@ function bp_groupblog_upgrade_user( $user_id, $group_id, $blog_id = false ) {
 	switch( bp_action_variable( 1 ) ) {
 		case 'promote' :
 			$user_group_status = bp_action_variable( 2 );
-
 			break;
 
 		case 'demote' :
 		case 'unban' :
 			$user_group_status = 'member';
+			break;
 
+		// we don't remove users from blogs at the moment
+		// we give them the minimum role of 'subscriber'
+		case 'ban' :
+		case 'remove' :
+			$user_group_status = 'subscriber';
 			break;
 	}
 
@@ -469,7 +474,7 @@ add_action( 'groups_leave_group', 'bp_groupblog_remove_user' );
  * @return string The user's blog role
  */
 function bp_groupblog_get_user_role( $user_id, $user_login = false, $blog_id ) {
-	global $bp, $wpdb;
+	global $wpdb;
 
 	// determine users role, if any, on this blog
 	$roles = get_user_meta( $user_id, $wpdb->get_blog_prefix( $blog_id ) . 'capabilities', true );
@@ -1097,13 +1102,17 @@ function groupblog_screen_blog() {
 	if ( bp_is_groups_component() && bp_is_current_action( apply_filters( 'bp_groupblog_subnav_item_slug', 'blog' ) ) ) {
 
 		$checks = get_site_option('bp_groupblog_blog_defaults_options');
-		$home_url = get_home_url( get_groupblog_blog_id() );
+		$blog_id = get_groupblog_blog_id();
 
-		if ( isset( $checks['redirectblog'] ) && $checks['redirectblog'] == 1 ) {
-			bp_core_redirect( $home_url );
+		$home_url = ! empty( $blog_id ) ? get_home_url( get_groupblog_blog_id() ) : false;
 
-		} else if ( isset( $checks['redirectblog'] ) && $checks['redirectblog'] == 2 ) {
-			bp_core_redirect( $home_url . '/' . $checks['pageslug'] . '/' );
+		if ( isset( $checks['redirectblog'] ) && $checks['redirectblog'] == 1 && ! empty( $home_url ) ) {
+			wp_redirect( $home_url );
+			die();
+
+		} else if ( isset( $checks['redirectblog'] ) && $checks['redirectblog'] == 2 && ! empty( $home_url ) ) {
+			wp_redirect( $home_url . '/' . $checks['pageslug'] . '/' );
+			die();
 
 		} else {
 			if ( file_exists( locate_template( array( 'groupblog/blog.php' ) ) ) ) {
@@ -1141,8 +1150,10 @@ function groupblog_redirect_group_home() {
 
 		$checks = get_site_option('bp_groupblog_blog_defaults_options');
 
-		if ( $checks['deep_group_integration'] ) {
-			$home_url = get_home_url( get_groupblog_blog_id() );
+		$blog_id = get_groupblog_blog_id();
+
+		if ( $checks['deep_group_integration'] && ! empty( $blog_id ) ) {
+			$home_url = get_home_url( $blog_id );
 			bp_core_redirect( $home_url );
 		}
 	}
