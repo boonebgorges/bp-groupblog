@@ -1102,13 +1102,17 @@ function groupblog_screen_blog() {
 	if ( bp_is_groups_component() && bp_is_current_action( apply_filters( 'bp_groupblog_subnav_item_slug', 'blog' ) ) ) {
 
 		$checks = get_site_option('bp_groupblog_blog_defaults_options');
-		$home_url = get_home_url( get_groupblog_blog_id() );
+		$blog_id = get_groupblog_blog_id();
 
-		if ( isset( $checks['redirectblog'] ) && $checks['redirectblog'] == 1 ) {
-			bp_core_redirect( $home_url );
+		$home_url = ! empty( $blog_id ) ? get_home_url( get_groupblog_blog_id() ) : false;
 
-		} else if ( isset( $checks['redirectblog'] ) && $checks['redirectblog'] == 2 ) {
-			bp_core_redirect( $home_url . '/' . $checks['pageslug'] . '/' );
+		if ( isset( $checks['redirectblog'] ) && $checks['redirectblog'] == 1 && ! empty( $home_url ) ) {
+			wp_redirect( $home_url );
+			die();
+
+		} else if ( isset( $checks['redirectblog'] ) && $checks['redirectblog'] == 2 && ! empty( $home_url ) ) {
+			wp_redirect( $home_url . '/' . $checks['pageslug'] . '/' );
+			die();
 
 		} else {
 			if ( file_exists( locate_template( array( 'groupblog/blog.php' ) ) ) ) {
