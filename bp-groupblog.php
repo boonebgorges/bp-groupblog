@@ -1150,8 +1150,10 @@ function groupblog_redirect_group_home() {
 
 		$checks = get_site_option('bp_groupblog_blog_defaults_options');
 
-		if ( $checks['deep_group_integration'] ) {
-			$home_url = get_home_url( get_groupblog_blog_id() );
+		$blog_id = get_groupblog_blog_id();
+
+		if ( $checks['deep_group_integration'] && ! empty( $blog_id ) ) {
+			$home_url = get_home_url( $blog_id );
 			bp_core_redirect( $home_url );
 		}
 	}
