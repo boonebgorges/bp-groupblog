@@ -101,6 +101,9 @@ function bp_core_avatar_url() {
 
 == Changelog == 
 
+= 1.8.3 =
+* Improved CSS for theme previews
+
 = 1.8.2 =
 * Fixes problems with groupblog redirects
 * Ensures that blog roles are repaired when users are banned or removed from a group
