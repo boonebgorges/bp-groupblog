@@ -567,8 +567,6 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 
 	$blog_id = get_groupblog_blog_id();
 
-	$disabled = bp_groupblog_is_blog_enabled( $group_id ) ? '' : ' disabled="true" ';
-
 	?>
 
 	<div id="blog-details-fields">
@@ -610,11 +608,11 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 		<p><?php _e( 'Choose either one of your existing blogs or create a new one all together with the details displayed below.', 'groupblog' ); ?><br /><?php _e('Take care as you can only choose once.  Later you may still disable or enable the blog, but your choice is set.', 'groupblog' ); ?></p>
 
 		<p>
-			<input <?php echo $disabled ?> type="radio" value="no" name="groupblog-create-new" /><span>&nbsp;<?php _e( 'Use one of your own available blogs:', 'groupblog' ); ?>&nbsp;</span>
+			<input type="radio" value="no" name="groupblog-create-new" /><span>&nbsp;<?php _e( 'Use one of your own available blogs:', 'groupblog' ); ?>&nbsp;</span>
 
 			<?php $user_blogs = get_blogs_of_user( get_current_user_id() ) ?>
 
-			<select <?php echo $disabled ?> name="groupblog-blogid" id="groupblog-blogid">
+			<select name="groupblog-blogid" id="groupblog-blogid">
 				<option value="0"><?php _e( 'choose a blog', 'groupblog' ) ?></option>
 				<?php
 
@@ -628,7 +626,7 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 		</p>
 
 		<p>
-			<input <?php echo $disabled ?> type="radio" value="yes" name="groupblog-create-new" checked="checked" /><span>&nbsp;<?php _e( 'Or, create a new blog', 'groupblog' ); ?></span>
+			<input type="radio" value="yes" name="groupblog-create-new" checked="checked" /><span>&nbsp;<?php _e( 'Or, create a new blog', 'groupblog' ); ?></span>
 		</p>
 
 		<ul id="groupblog-details">
@@ -842,8 +840,6 @@ function bp_groupblog_signup_blog($blogname = '', $blog_title = '', $errors = ''
 	// Create or Edit screen
 	$group_id = bp_is_group_create() ? bp_get_new_group_id() : bp_get_current_group_id();
 
-	$disabled = !bp_groupblog_silent_add( $group_id ) || !bp_groupblog_is_blog_enabled( $group_id ) ? ' disabled="true" ' : '';
-
 	?>
 	<h2><?php _e( 'Group Blog', 'groupblog' ) ?></h2>
 	<?php
@@ -868,7 +864,7 @@ function bp_groupblog_signup_blog($blogname = '', $blog_title = '', $errors = ''
 			<p><?php _e( 'Enable blog posting to allow adding of group members to the blog with the roles set below.', 'groupblog' ); ?><br /><?php _e( 'When disabled, all members will temporarily be set to subscribers, disabling posting.', 'groupblog' ); ?></p>
 
 			<div class="checkbox">
-				<label><input<?php if ( !bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> type="checkbox" name="groupblog-silent-add" id="groupblog-silent-add" value="1"<?php if ( bp_groupblog_silent_add( $group_id ) ) { ?> checked="checked"<?php } ?>/> <?php _e( 'Enable member blog posting', 'groupblog' ); ?></label>
+				<label><input type="checkbox" name="groupblog-silent-add" id="groupblog-silent-add" value="1"<?php if ( bp_groupblog_silent_add( $group_id ) ) { ?> checked="checked"<?php } ?>/> <?php _e( 'Enable member blog posting', 'groupblog' ); ?></label>
 			</div>
 
 			<?php
@@ -886,25 +882,25 @@ function bp_groupblog_signup_blog($blogname = '', $blog_title = '', $errors = ''
 			?>
 
 			<label><strong><?php _e( 'Default Administrator Role:', 'groupblog' ); ?></strong></label>
-			<input type="radio" <?php checked( $groupblog_default_admin_role, 'administrator' ) ?> value="administrator" name="default-administrator"<?php echo $disabled ?> /><span>&nbsp;<?php _e( 'Administrator', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_admin_role, 'editor' ) ?> value="editor" name="default-administrator"<?php echo $disabled ?> /><span>&nbsp;<?php _e( 'Editor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_admin_role, 'author' ) ?> value="author" name="default-administrator"<?php echo $disabled ?> /><span>&nbsp;<?php _e( 'Author', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_admin_role, 'contributor' ) ?> value="contributor" name="default-administrator"<?php echo $disabled ?> /><span>&nbsp;<?php _e( 'Contributor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_admin_role, 'subscriber' ) ?> value="subscriber" name="default-administrator"<?php echo $disabled ?> /><span>&nbsp;<?php _e( 'Subscriber', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_admin_role, 'administrator' ) ?> value="administrator" name="default-administrator" /><span>&nbsp;<?php _e( 'Administrator', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_admin_role, 'editor' ) ?> value="editor" name="default-administrator" /><span>&nbsp;<?php _e( 'Editor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_admin_role, 'author' ) ?> value="author" name="default-administrator" /><span>&nbsp;<?php _e( 'Author', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_admin_role, 'contributor' ) ?> value="contributor" name="default-administrator" /><span>&nbsp;<?php _e( 'Contributor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_admin_role, 'subscriber' ) ?> value="subscriber" name="default-administrator" /><span>&nbsp;<?php _e( 'Subscriber', 'groupblog' ); ?>&nbsp;&nbsp;</span>
 
 			<label><strong><?php _e( 'Default Moderator Role:', 'groupblog' ); ?></strong></label>
-			<input type="radio" <?php checked( $groupblog_default_mod_role, 'administrator' ) ?> value="administrator" name="default-moderator"<?php echo $disabled ?> /><span>&nbsp;<?php _e( 'Administrator', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_mod_role, 'editor' ) ?> value="editor" name="default-moderator"<?php echo $disabled ?> /><span>&nbsp;<?php _e( 'Editor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_mod_role, 'author' ) ?> value="author" name="default-moderator"<?php echo $disabled ?> /><span>&nbsp;<?php _e( 'Author', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_mod_role, 'contributor' ) ?> value="contributor" name="default-moderator"<?php echo $disabled ?> /><span>&nbsp;<?php _e( 'Contributor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_mod_role, 'subscriber' ) ?> value="subscriber" name="default-moderator"<?php echo $disabled ?> /><span>&nbsp;<?php _e( 'Subscriber', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_mod_role, 'administrator' ) ?> value="administrator" name="default-moderator" /><span>&nbsp;<?php _e( 'Administrator', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_mod_role, 'editor' ) ?> value="editor" name="default-moderator" /><span>&nbsp;<?php _e( 'Editor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_mod_role, 'author' ) ?> value="author" name="default-moderator" /><span>&nbsp;<?php _e( 'Author', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_mod_role, 'contributor' ) ?> value="contributor" name="default-moderator" /><span>&nbsp;<?php _e( 'Contributor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_mod_role, 'subscriber' ) ?> value="subscriber" name="default-moderator" /><span>&nbsp;<?php _e( 'Subscriber', 'groupblog' ); ?>&nbsp;&nbsp;</span>
 
 			<label><strong><?php _e( 'Default Member Role:', 'groupblog' ); ?></strong></label>
-			<input type="radio" <?php checked( $groupblog_default_member_role, 'administrator' ) ?> value="administrator" name="default-member"<?php echo $disabled ?> /><span>&nbsp;<?php _e( 'Administrator', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_member_role, 'editor' ) ?> value="editor" name="default-member"<?php echo $disabled ?> /><span>&nbsp;<?php _e( 'Editor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_member_role, 'author' ) ?> value="author" name="default-member"<?php echo $disabled ?> /><span>&nbsp;<?php _e( 'Author', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_member_role, 'contributor' ) ?> value="contributor" name="default-member"<?php echo $disabled ?> /><span>&nbsp;<?php _e( 'Contributor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_member_role, 'subscriber' ) ?> value="subscriber" name="default-member"<?php echo $disabled ?> /><span>&nbsp;<?php _e( 'Subscriber', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_member_role, 'administrator' ) ?> value="administrator" name="default-member" /><span>&nbsp;<?php _e( 'Administrator', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_member_role, 'editor' ) ?> value="editor" name="default-member" /><span>&nbsp;<?php _e( 'Editor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_member_role, 'author' ) ?> value="author" name="default-member" /><span>&nbsp;<?php _e( 'Author', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_member_role, 'contributor' ) ?> value="contributor" name="default-member" /><span>&nbsp;<?php _e( 'Contributor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_member_role, 'subscriber' ) ?> value="subscriber" name="default-member" /><span>&nbsp;<?php _e( 'Subscriber', 'groupblog' ); ?>&nbsp;&nbsp;</span>
 
 			<div id="groupblog-member-roles">
 				<label><strong><?php _e( 'A bit about WordPress member roles:', 'groupblog' ); ?></strong></label>
