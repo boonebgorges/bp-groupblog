@@ -103,6 +103,7 @@ function bp_core_avatar_url() {
 
 = 1.8.3 =
 * Improved CSS for theme previews
+* Improves performance when setting up group with JS disabled
 
 = 1.8.2 =
 * Fixes problems with groupblog redirects
