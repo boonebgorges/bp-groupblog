@@ -1118,6 +1118,21 @@ function bp_groupblog_activity_can_comment( $retval ) {
 add_filter( 'bp_activity_can_comment', 'bp_groupblog_activity_can_comment' );
 
 /**
+ * Set the activity permalink for groupblog posts to the post permalink.
+ *
+ * @since 1.8.4
+ */
+function bp_groupblog_activity_permalink( $retval, $activity ) {
+	// not a groupblog post? stop now!
+	if ( $activity->type != 'new_groupblog_post' ) {
+		return $retval;
+	}
+
+	return $activity->primary_link;
+}
+add_filter( 'bp_activity_get_permalink', 'bp_groupblog_activity_permalink', 10, 2 );
+
+/**
  * bp_groupblog_posts()
  *
  * Add a filter option to the filter select box on group activity pages.
