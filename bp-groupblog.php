@@ -1031,50 +1031,106 @@ function bp_groupblog_validate_blog_signup() {
  */
 function bp_groupblog_set_group_to_post_activity( $activity ) {
 
-	if ( ( $activity->type != 'new_blog_post' ) ) return;
-
-	$blog_id = $activity->item_id;
-	$post_id = $activity->secondary_item_id;
-	$post = get_post( $post_id );
-
-	$group_id = get_groupblog_group_id( $blog_id );
-	if ( !$group_id ) return;
-	$group = groups_get_group( array( 'group_id' => $group_id ) );
-
-	// Verify if we already have the modified activity for this blog post
-	$id = bp_activity_get_activity_id( array(
-		'user_id' => $activity->user_id,
-		'type' => $activity->type,
-		'item_id' => $group_id,
-		'secondary_item_id' => $activity->secondary_item_id
-	) );
-
-	// if we don't have, verify if we have an original activity
-	if ( !$id ) {
-		$id = bp_activity_get_activity_id( array(
-			'user_id' => $activity->user_id,
-			'type' => $activity->type,
-			'item_id' => $activity->item_id,
-			'secondary_item_id' => $activity->secondary_item_id
-		) );
+	// sanity check!
+	if ( ! bp_is_active( 'groups' ) ) {
+		return;
 	}
 
-	// If we found an activity for this blog post then overwrite that to avoid have multiple activities for every blog post edit
-	if ( $id ) $activity->id = $id;
+	// stop if this activity item is not a blog post!
+	if ( $activity->type != 'new_blog_post' ) {
+		return;
+	}
+
+	$blog_id  = $activity->item_id;
+	$post_id  = $activity->secondary_item_id;
+	$group_id = get_groupblog_group_id( $blog_id );
+
+	// no group is attached to this blog, so stop now!
+	if ( ! $group_id ) {
+		return;
+	}
+
+	// fetch group data
+	$group = groups_get_group( array( 'group_id' => $group_id ) );
+
+	// fetch post data
+	$post = get_post( $post_id );
+
+	// Try to see if we are editing an existing groupblog post
+	$id = bp_activity_get_activity_id( array(
+		'type'              => 'new_groupblog_post',
+		'item_id'           => $group_id,
+		'secondary_item_id' => $post_id
+	) );
+
+	// This is an existing blog post!
+	if ( ! empty( $id ) ) {
+		$activity->id = $id;
+
+		// @todo just in case another user edited the original author's post?
+		//$activity->user_id = $post->post_author;
+
+		$activity->action = sprintf( __( '%s edited the blog post %s in the group %s:', 'groupblog'), bp_core_get_userlink( $post->post_author ), '<a href="' . get_permalink( $post->ID ) .'">' . esc_attr( $post->post_title ) . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_attr( $group->name ) . '</a>' );
+
+	// This is a new blog post!
+	} else {
+		$activity->action = sprintf( __( '%s wrote a new blog post %s in the group %s:', 'groupblog'), bp_core_get_userlink( $post->post_author ), '<a href="' . get_permalink( $post->ID ) .'">' . esc_attr( $post->post_title ) . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_attr( $group->name ) . '</a>' );
+	}
+
+	$activity->primary_link  = get_permalink( $post->ID );
 
 	// Replace the necessary values to display in group activity stream
-	$activity->action = sprintf( __( '%s wrote a new blog post %s in the group %s:', 'groupblog'), bp_core_get_userlink( $post->post_author ), '<a href="' . get_permalink( $post->ID ) .'">' . esc_attr( $post->post_title ) . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_attr( $group->name ) . '</a>' );
-	$activity->item_id = (int)$group_id;
-	$activity->component = 'groups';
-	$activity->hide_sitewide = 0;
+	$activity->item_id       = (int)$group_id;
+	$activity->component     = 'groups';
+
+	// use group's privacy settings for activity privacy
+	$activity->hide_sitewide = $group->status == 'public' ? 0 : 1;
 
 	// need to set type as new_groupblog_post (see bp_groupblog_posts() below) or filters won't work
 	$activity->type = 'new_groupblog_post';
 
 	remove_action( 'bp_activity_before_save', 'bp_groupblog_set_group_to_post_activity');
-	return $activity;
+
 }
 add_action( 'bp_activity_before_save', 'bp_groupblog_set_group_to_post_activity');
+
+/**
+ * See if users are able to comment to the activity entry of the groupblog post.
+ *
+ * @since 1.8.4
+ */
+function bp_groupblog_activity_can_comment( $retval ) {
+	if ( bp_get_activity_action_name() != 'new_groupblog_post' ) {
+		return $retval;
+	}
+
+	global $bp;
+
+	// get activity reply setting for blog posts
+	$cannot_blog_comment = isset( $bp->site_options['bp-disable-blogforum-comments'] ) ? $bp->site_options['bp-disable-blogforum-comments'] : false;
+
+	if ( $cannot_blog_comment ) {
+		return false;
+	} else {
+		return $retval;
+	}
+}
+add_filter( 'bp_activity_can_comment', 'bp_groupblog_activity_can_comment' );
+
+/**
+ * Set the activity permalink for groupblog posts to the post permalink.
+ *
+ * @since 1.8.4
+ */
+function bp_groupblog_activity_permalink( $retval, $activity ) {
+	// not a groupblog post? stop now!
+	if ( $activity->type != 'new_groupblog_post' ) {
+		return $retval;
+	}
+
+	return $activity->primary_link;
+}
+add_filter( 'bp_activity_get_permalink', 'bp_groupblog_activity_permalink', 10, 2 );
 
 /**
  * bp_groupblog_posts()
