@@ -1095,6 +1095,29 @@ function bp_groupblog_set_group_to_post_activity( $activity ) {
 add_action( 'bp_activity_before_save', 'bp_groupblog_set_group_to_post_activity');
 
 /**
+ * See if users are able to comment to the activity entry of the groupblog post.
+ *
+ * @since 1.8.4
+ */
+function bp_groupblog_activity_can_comment( $retval ) {
+	if ( bp_get_activity_action_name() != 'new_groupblog_post' ) {
+		return $retval;
+	}
+
+	global $bp;
+
+	// get activity reply setting for blog posts
+	$cannot_blog_comment = isset( $bp->site_options['bp-disable-blogforum-comments'] ) ? $bp->site_options['bp-disable-blogforum-comments'] : false;
+
+	if ( $cannot_blog_comment ) {
+		return false;
+	} else {
+		return $retval;
+	}
+}
+add_filter( 'bp_activity_can_comment', 'bp_groupblog_activity_can_comment' );
+
+/**
  * bp_groupblog_posts()
  *
  * Add a filter option to the filter select box on group activity pages.
