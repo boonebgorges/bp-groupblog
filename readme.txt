@@ -101,6 +101,11 @@ function bp_core_avatar_url() {
 
 == Changelog == 
 
+= 1.8.4 =
+* Fixes duplicate activity items on some setups
+* Allows activity commenting based on global bp-disable-blogforum-comments setting
+* Corrects activity link URL for groupblog activity items
+
 = 1.8.3 =
 * Improved CSS for theme previews
 * Improves performance when setting up group with JS disabled
