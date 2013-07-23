@@ -101,6 +101,9 @@ function bp_core_avatar_url() {
 
 == Changelog == 
 
+= 1.8.5 =
+* Improved compatibility with PHP 5.4+
+
 = 1.8.4 =
 * Fixes duplicate activity items on some setups
 * Allows activity commenting based on global bp-disable-blogforum-comments setting
