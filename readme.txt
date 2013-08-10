@@ -102,6 +102,7 @@ function bp_core_avatar_url() {
 == Changelog == 
 
 = 1.8.5 =
+* Delete groupblog activity item when the groupblog post is deleted
 * Improved compatibility with PHP 5.4+
 
 = 1.8.4 =
