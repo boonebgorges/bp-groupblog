@@ -1065,6 +1065,11 @@ function bp_groupblog_set_group_to_post_activity( $activity ) {
 
 	// This is an existing blog post!
 	if ( ! empty( $id ) ) {
+
+		if ( apply_filters( 'groupblog_skip_edit_activity', false ) ) {
+			return;
+		}
+
 		$activity->id = $id;
 
 		// @todo just in case another user edited the original author's post?
