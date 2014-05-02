@@ -1,7 +1,7 @@
 <?php
 
 define ( 'BP_GROUPBLOG_IS_INSTALLED', 1 );
-define ( 'BP_GROUPBLOG_VERSION', '1.8' );
+define ( 'BP_GROUPBLOG_VERSION', '1.8.6' );
 
 // Define default roles
 if ( !defined( 'BP_GROUPBLOG_DEFAULT_ADMIN_ROLE' ) )
@@ -652,11 +652,11 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 
 				<?php $blog_address = isset( $_GET['invalid_address'] ) ? urldecode( $_GET['invalid_address'] ) : bp_groupblog_sanitize_blog_name( $bp->groups->current_group->slug ) ?>
 
-				<?php 
+				<?php
 					// Don't suggest a subdomain if it's really long,
-					// since subdomains longer than 63 chars won't work. 
-					if (strlen($blog_address > 50)) $blog_address = ""; 
-				?> 
+					// since subdomains longer than 63 chars won't work.
+					if (strlen($blog_address > 50)) $blog_address = "";
+				?>
 
 				<?php if (is_subdomain_install()) : ?>
 					<span class="gbd-value"><em>http://</em><input name="blogname" type="text" id="blogname" value="<?php echo $blog_address; ?>" maxlength="50" /><em><?php echo $current_site->domain . $current_site->path ?></em></span>

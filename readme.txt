@@ -3,8 +3,8 @@ Contributors: MariusOoms, reblevins, boonebgorges
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7374704
 Tags: buddypress, groups, blogs, content
 Requires at least: WP 3.0 / BP 1.2
-Tested up to: WP 3.6 / BP 1.8
-Stable tag: 1.8.5
+Tested up to: WP 3.9 / BP 2.0.1
+Stable tag: 1.8.6
 
 BuddyPress Groupblog extends the group functionality by enabling the group to have a single blog associated with it.
 
