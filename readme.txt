@@ -101,6 +101,9 @@ function bp_core_avatar_url() {
 
 == Changelog == 
 
+= 1.8.7 =
+* Prevent fatal error when blogs or activity component is disabled
+
 = 1.8.6 =
 * Don't suggest blog domains longer than 63 characters, for better standards compliance
 
