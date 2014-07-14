@@ -1115,6 +1115,11 @@ add_action( 'bp_activity_before_save', 'bp_groupblog_set_group_to_post_activity'
  * @param int $user_id
  */
 function bp_groupblog_remove_post( $post_id, $blog_id = 0, $user_id = 0 ) {
+	// Bail if the activity or blogs components are not enabled
+	if ( ! bp_is_active( 'blogs' ) || ! bp_is_active( 'activity' ) ) {
+		return;
+	}
+
 	global $wpdb, $bp;
 
 	$post_id = (int) $post_id;
@@ -1145,7 +1150,6 @@ function bp_groupblog_remove_post( $post_id, $blog_id = 0, $user_id = 0 ) {
 }
 add_action( 'wp_trash_post', 'bp_groupblog_remove_post', 5 );
 add_action( 'delete_post', 'bp_groupblog_remove_post', 5 );
-
 
 /**
  * See if users are able to comment to the activity entry of the groupblog post.
