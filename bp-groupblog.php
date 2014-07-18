@@ -1196,7 +1196,7 @@ add_filter( 'bp_activity_get_permalink', 'bp_groupblog_activity_permalink', 10, 
  */
 function bp_groupblog_posts() { ?>
 
-	<option value="new_groupblog_post"><?php _e( 'Show Blog Posts', 'groupblog' ) ?></option><?php
+	<option value="new_groupblog_post"><?php _e( 'Blog Posts', 'groupblog' ) ?></option><?php
 
 }
 add_action( 'bp_group_activity_filter_options', 'bp_groupblog_posts' );
