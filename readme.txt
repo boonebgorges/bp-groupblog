@@ -101,6 +101,9 @@ function bp_core_avatar_url() {
 
 == Changelog == 
 
+= 1.8.8 =
+* Better wording for activity filter dropdown
+
 = 1.8.7 =
 * Prevent fatal error when blogs or activity component is disabled
 
