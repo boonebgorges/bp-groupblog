@@ -1152,6 +1152,43 @@ add_action( 'wp_trash_post', 'bp_groupblog_remove_post', 5 );
 add_action( 'delete_post', 'bp_groupblog_remove_post', 5 );
 
 /**
+ * Add "new_groupblog_post" activity type to "Posts" dropdown filter option.
+ *
+ * When the "Posts" option is selected in the activity dropdown filter, it
+ * only filters activity items by blog posts and not groupblog posts.  This
+ * function allows both types of blog posts to be filtered in activity loops.
+ *
+ * @since 1.8.9
+ *
+ * @param str $qs The querystring for the BP loop
+ * @param str $object The current object for the querystring
+ * @return array Modified querystring
+ */
+function bp_groupblog_override_new_blog_post_activity_filter( $qs, $object ) {
+	// not on the blogs object? stop now!
+	if ( $object != 'activity' ) {
+		return $qs;
+	}
+
+	// parse querystring into an array
+	$r = wp_parse_args( $qs );
+
+	if ( empty( $r['type'] ) || 'new_blog_post' !== $r['type'] ) {
+		return $qs;
+	}
+
+	// add the 'new_groupblog_post' type
+	// 'action' filters activity items by the 'type' column
+	$r['action'] .= ',new_groupblog_post';
+
+	// 'type' isn't used anywhere internally
+	unset( $r['type'] );
+
+	return $r;
+}
+add_filter( 'bp_ajax_querystring', 'bp_groupblog_override_new_blog_post_activity_filter', 20, 2 );
+
+/**
  * See if users are able to comment to the activity entry of the groupblog post.
  *
  * @since 1.8.4
