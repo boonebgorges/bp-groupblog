@@ -1177,9 +1177,11 @@ function bp_groupblog_override_new_blog_post_activity_filter( $qs, $object ) {
 		return $qs;
 	}
 
-	// add the 'new_groupblog_post' type
-	// 'action' filters activity items by the 'type' column
-	$r['action'] .= ',new_groupblog_post';
+	// add the 'new_groupblog_post' type if it doesn't exist
+	if ( false === strpos( $r['action'], 'new_groupblog_post' ) ) {
+		// 'action' filters activity items by the 'type' column
+		$r['action'] .= ',new_groupblog_post';
+	}
 
 	// 'type' isn't used anywhere internally
 	unset( $r['type'] );
