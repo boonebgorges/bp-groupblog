@@ -1186,7 +1186,8 @@ function bp_groupblog_override_new_blog_post_activity_filter( $qs, $object ) {
 	// 'type' isn't used anywhere internally
 	unset( $r['type'] );
 
-	return $r;
+	// return a querystring
+	return build_query( $r );
 }
 add_filter( 'bp_ajax_querystring', 'bp_groupblog_override_new_blog_post_activity_filter', 20, 2 );
 
