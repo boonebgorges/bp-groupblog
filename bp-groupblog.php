@@ -1069,6 +1069,15 @@ function bp_groupblog_set_group_to_post_activity( $activity ) {
 		'secondary_item_id' => $post_id
 	) );
 
+	// Only allow certain HTML tags in post titles. 
+	if ( ! empty( $post->post_title ) ) { 
+		$allowed_tags = array( 
+			'em' => array(),  
+			'strong' => array(), 
+		); 
+		$post->post_title = wp_kses( $post->post_title, $allowed_tags ); 
+	} 
+
 	// This is an existing blog post!
 	if ( ! empty( $id ) ) {
 
@@ -1081,11 +1090,11 @@ function bp_groupblog_set_group_to_post_activity( $activity ) {
 		// @todo just in case another user edited the original author's post?
 		//$activity->user_id = $post->post_author;
 
-		$activity->action = sprintf( __( '%s edited the blog post %s in the group %s:', 'groupblog'), bp_core_get_userlink( $post->post_author ), '<a href="' . get_permalink( $post->ID ) .'">' . esc_attr( $post->post_title ) . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_attr( $group->name ) . '</a>' );
+		$activity->action = sprintf( __( '%s edited the blog post %s in the group %s:', 'groupblog'), bp_core_get_userlink( $post->post_author ), '<a href="' . get_permalink( $post->ID ) .'">' . $post->post_title . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_attr( $group->name ) . '</a>' );
 
 	// This is a new blog post!
 	} else {
-		$activity->action = sprintf( __( '%s wrote a new blog post %s in the group %s:', 'groupblog'), bp_core_get_userlink( $post->post_author ), '<a href="' . get_permalink( $post->ID ) .'">' . esc_attr( $post->post_title ) . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_attr( $group->name ) . '</a>' );
+		$activity->action = sprintf( __( '%s wrote a new blog post %s in the group %s:', 'groupblog'), bp_core_get_userlink( $post->post_author ), '<a href="' . get_permalink( $post->ID ) .'">' . $post->post_title . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_attr( $group->name ) . '</a>' );
 	}
 
 	$activity->primary_link  = get_permalink( $post->ID );
