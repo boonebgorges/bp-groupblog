@@ -1,7 +1,7 @@
 <?php
 
 define ( 'BP_GROUPBLOG_IS_INSTALLED', 1 );
-define ( 'BP_GROUPBLOG_VERSION', '1.8.6' );
+define ( 'BP_GROUPBLOG_VERSION', '1.8.9' );
 
 // Define default roles
 if ( !defined( 'BP_GROUPBLOG_DEFAULT_ADMIN_ROLE' ) )
@@ -1069,14 +1069,14 @@ function bp_groupblog_set_group_to_post_activity( $activity ) {
 		'secondary_item_id' => $post_id
 	) );
 
-	// Only allow certain HTML tags in post titles. 
-	if ( ! empty( $post->post_title ) ) { 
-		$allowed_tags = array( 
-			'em' => array(),  
-			'strong' => array(), 
-		); 
-		$post->post_title = wp_kses( $post->post_title, $allowed_tags ); 
-	} 
+	// Only allow certain HTML tags in post titles.
+	if ( ! empty( $post->post_title ) ) {
+		$allowed_tags = array(
+			'em' => array(),
+			'strong' => array(),
+		);
+		$post->post_title = wp_kses( $post->post_title, $allowed_tags );
+	}
 
 	// This is an existing blog post!
 	if ( ! empty( $id ) ) {
