@@ -1,7 +1,7 @@
 <?php
 
 define ( 'BP_GROUPBLOG_IS_INSTALLED', 1 );
-define ( 'BP_GROUPBLOG_VERSION', '1.8.6' );
+define ( 'BP_GROUPBLOG_VERSION', '1.8.9' );
 
 // Define default roles
 if ( !defined( 'BP_GROUPBLOG_DEFAULT_ADMIN_ROLE' ) )
@@ -1069,6 +1069,15 @@ function bp_groupblog_set_group_to_post_activity( $activity ) {
 		'secondary_item_id' => $post_id
 	) );
 
+	// Only allow certain HTML tags in post titles.
+	if ( ! empty( $post->post_title ) ) {
+		$allowed_tags = array(
+			'em' => array(),
+			'strong' => array(),
+		);
+		$post->post_title = wp_kses( $post->post_title, $allowed_tags );
+	}
+
 	// This is an existing blog post!
 	if ( ! empty( $id ) ) {
 
@@ -1081,11 +1090,11 @@ function bp_groupblog_set_group_to_post_activity( $activity ) {
 		// @todo just in case another user edited the original author's post?
 		//$activity->user_id = $post->post_author;
 
-		$activity->action = sprintf( __( '%s edited the blog post %s in the group %s:', 'groupblog'), bp_core_get_userlink( $post->post_author ), '<a href="' . get_permalink( $post->ID ) .'">' . esc_attr( $post->post_title ) . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_attr( $group->name ) . '</a>' );
+		$activity->action = sprintf( __( '%s edited the blog post %s in the group %s:', 'groupblog'), bp_core_get_userlink( $post->post_author ), '<a href="' . get_permalink( $post->ID ) .'">' . $post->post_title . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_attr( $group->name ) . '</a>' );
 
 	// This is a new blog post!
 	} else {
-		$activity->action = sprintf( __( '%s wrote a new blog post %s in the group %s:', 'groupblog'), bp_core_get_userlink( $post->post_author ), '<a href="' . get_permalink( $post->ID ) .'">' . esc_attr( $post->post_title ) . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_attr( $group->name ) . '</a>' );
+		$activity->action = sprintf( __( '%s wrote a new blog post %s in the group %s:', 'groupblog'), bp_core_get_userlink( $post->post_author ), '<a href="' . get_permalink( $post->ID ) .'">' . $post->post_title . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_attr( $group->name ) . '</a>' );
 	}
 
 	$activity->primary_link  = get_permalink( $post->ID );
@@ -1150,6 +1159,46 @@ function bp_groupblog_remove_post( $post_id, $blog_id = 0, $user_id = 0 ) {
 }
 add_action( 'wp_trash_post', 'bp_groupblog_remove_post', 5 );
 add_action( 'delete_post', 'bp_groupblog_remove_post', 5 );
+
+/**
+ * Add "new_groupblog_post" activity type to "Posts" dropdown filter option.
+ *
+ * When the "Posts" option is selected in the activity dropdown filter, it
+ * only filters activity items by blog posts and not groupblog posts.  This
+ * function allows both types of blog posts to be filtered in activity loops.
+ *
+ * @since 1.8.9
+ *
+ * @param string $qs The querystring for the BP loop
+ * @param string $object The current object for the querystring
+ * @return string Modified querystring
+ */
+function bp_groupblog_override_new_blog_post_activity_filter( $qs, $object ) {
+	// not on the blogs object? stop now!
+	if ( $object != 'activity' ) {
+		return $qs;
+	}
+
+	// parse querystring into an array
+	$r = wp_parse_args( $qs );
+
+	if ( empty( $r['type'] ) || 'new_blog_post' !== $r['type'] ) {
+		return $qs;
+	}
+
+	// add the 'new_groupblog_post' type if it doesn't exist
+	if ( false === strpos( $r['action'], 'new_groupblog_post' ) ) {
+		// 'action' filters activity items by the 'type' column
+		$r['action'] .= ',new_groupblog_post';
+	}
+
+	// 'type' isn't used anywhere internally
+	unset( $r['type'] );
+
+	// return a querystring
+	return build_query( $r );
+}
+add_filter( 'bp_ajax_querystring', 'bp_groupblog_override_new_blog_post_activity_filter', 20, 2 );
 
 /**
  * See if users are able to comment to the activity entry of the groupblog post.
