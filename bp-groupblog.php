@@ -259,7 +259,17 @@ function groupblog_edit_base_settings( $groupblog_enable_blog, $groupblog_silent
 		bp_groupblog_member_join( $group_id );
 	}
 
-	do_action( 'groups_details_updated', $group_id );
+	/**
+	 * Fired after a group's details are updated.
+	 *
+	 * Hook signature changed in BuddyPress 2.2.0. Two new params added:
+	 * @see https://buddypress.trac.wordpress.org/changeset/9204
+	 *
+	 * @param int             $value          ID of the group.
+	 * @param BP_Groups_Group $old_group      Group object, before being modified.
+	 * @param bool            $notify_members Whether to send an email notification to members about the change.
+	 */
+	do_action( 'groups_details_updated', $group_id, new stdClass, null );
 
 	return true;
 }
