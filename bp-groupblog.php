@@ -259,7 +259,7 @@ function groupblog_edit_base_settings( $groupblog_enable_blog, $groupblog_silent
 		bp_groupblog_member_join( $group_id );
 	}
 
-	do_action( 'groups_details_updated', $group_id );
+	do_action( 'groupblog_details_updated', $group_id );
 
 	return true;
 }
