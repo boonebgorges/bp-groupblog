@@ -1162,10 +1162,8 @@ function bp_groupblog_set_group_to_post_activity( $activity, $args = array() ) {
 			return;
 		}
 
-		$activity->id = $id;
-
-		// @todo just in case another user edited the original author's post?
-		//$activity->user_id = $post->post_author;
+		$activity->id      = $id;
+		$activity->user_id = $post->post_author;
 
 		$activity->action = sprintf( __( '%s edited the blog post %s in the group %s:', 'groupblog'), bp_core_get_userlink( $post->post_author ), '<a href="' . get_permalink( $post->ID ) .'">' . $post->post_title . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_attr( $group->name ) . '</a>' );
 
