@@ -259,7 +259,7 @@ function groupblog_edit_base_settings( $groupblog_enable_blog, $groupblog_silent
 		bp_groupblog_member_join( $group_id );
 	}
 
-	do_action( 'groupblog_details_updated', $group_id );
+	do_action( 'groups_details_updated', $group_id );
 
 	return true;
 }
@@ -1031,43 +1031,120 @@ function bp_groupblog_validate_blog_signup() {
 }
 
 /**
+ * Detects a post edit and modifies the BP Groupblog activity entry if found.
+ *
+ * This is needed for BuddyPress 2.2+.  Older versions of BP continues to use
+ * the {@link bp_groupblog_set_group_to_post_activity()} function.
+ *
+ * @since 1.8.10
+ *
+ * @param string $new_status New status for the post.
+ * @param string $old_status Old status for the post.
+ * @param object $post       Post data.
+ */
+function bp_groupblog_catch_transition_post_type_status( $new_status, $old_status, $post ) {
+	// Only needed for >= BP 2.2
+	if ( ! function_exists( 'bp_activity_post_type_update' ) ) {
+		return;
+	}
+
+	// bail if not a blog post
+	if ( 'post' !== $post->post_type ) {
+		return;
+	}
+
+	// This is an edit.
+	if ( $new_status === $old_status ) {
+		// An edit of an existing post should update the existing activity item.
+		if ( $new_status == 'publish' ) {
+			$group_id = get_groupblog_group_id( get_current_blog_id() );
+
+			// Grab existing activity ID
+			$id = bp_activity_get_activity_id( array(
+				'component'         => 'groups',
+				'type'              => 'new_groupblog_post',
+				'item_id'           => $group_id,
+				'secondary_item_id' => $post->ID
+			) );
+
+			if ( empty( $id ) ) {
+				return;
+			}
+
+			// Grab activity item and modify some properties
+			$activity = new BP_Activity_Activity( $id );
+			$activity->content = $post->post_content;
+			$activity->date_recorded = bp_core_current_time();
+
+			// Pass activity to our edit function
+			bp_groupblog_set_group_to_post_activity( $activity, array(
+				'group_id' => $group_id,
+				'post'     => $post
+			) );
+		}
+
+		return;
+	}
+}
+add_action( 'transition_post_status', 'bp_groupblog_catch_transition_post_type_status', 10, 3 );
+
+/**
  * bp_groupblog_set_group_to_post_activity ( $activity )
  *
  * Record the blog activity for the group - by Luiz Armesto
+ *
+ * @since 1.8.10 Added $args parameter.
+ * @todo Move this functionality into bp_groupblog_catch_transition_post_type_status().
+ *
+ * @param BP_Activity_Activity $activity
+ * @param array $args {
+ *     Optional. Handy if you've already parsed the blog post and group ID.
+ *     @type WP_Post $post     The WP post object.
+ *     @type int     $group_id The group ID.
+ * }
  */
-function bp_groupblog_set_group_to_post_activity( $activity ) {
+function bp_groupblog_set_group_to_post_activity( $activity, $args = array() ) {
 
 	// sanity check!
 	if ( ! bp_is_active( 'groups' ) ) {
 		return;
 	}
 
-	// stop if this activity item is not a blog post!
-	if ( $activity->type != 'new_blog_post' ) {
-		return;
-	}
+	// If we've using this function outside the regular BP activity save process,
+	// set some variables
+	if ( ! empty( $args['post'] ) ) {
+		$post     = $args['post'];
+		$group_id = $args['group_id'];
+		$id       = $activity->id;
 
-	$blog_id  = $activity->item_id;
-	$post_id  = $activity->secondary_item_id;
-	$group_id = get_groupblog_group_id( $blog_id );
+	// Regular BP save routine
+	} else {
+		// stop if this activity item is not a blog post!
+		if ( $activity->type != 'new_blog_post' ) {
+			return;
+		}
 
-	// no group is attached to this blog, so stop now!
-	if ( ! $group_id ) {
-		return;
+		$blog_id  = $activity->item_id;
+		$post_id  = $activity->secondary_item_id;
+		$group_id = get_groupblog_group_id( $blog_id );
+
+		// no group is attached to this blog, so stop now!
+		if ( ! $group_id ) {
+			return;
+		}
+
+		$post = get_post( $post_id );
+
+		// Try to see if we are editing an existing groupblog post
+		$id = bp_activity_get_activity_id( array(
+			'type'              => 'new_groupblog_post',
+			'item_id'           => $group_id,
+			'secondary_item_id' => $post_id
+		) );
 	}
 
 	// fetch group data
 	$group = groups_get_group( array( 'group_id' => $group_id ) );
-
-	// fetch post data
-	$post = get_post( $post_id );
-
-	// Try to see if we are editing an existing groupblog post
-	$id = bp_activity_get_activity_id( array(
-		'type'              => 'new_groupblog_post',
-		'item_id'           => $group_id,
-		'secondary_item_id' => $post_id
-	) );
 
 	// Only allow certain HTML tags in post titles.
 	if ( ! empty( $post->post_title ) ) {
@@ -1078,7 +1155,7 @@ function bp_groupblog_set_group_to_post_activity( $activity ) {
 		$post->post_title = wp_kses( $post->post_title, $allowed_tags );
 	}
 
-	// This is an existing blog post!
+	// This is an existing blog post
 	if ( ! empty( $id ) ) {
 
 		if ( apply_filters( 'groupblog_skip_edit_activity', false ) ) {
@@ -1110,6 +1187,11 @@ function bp_groupblog_set_group_to_post_activity( $activity ) {
 	$activity->type = 'new_groupblog_post';
 
 	remove_action( 'bp_activity_before_save', 'bp_groupblog_set_group_to_post_activity');
+
+	// Using this function outside BP's save routine requires us to manually save
+	if ( ! empty( $args['post'] ) ) {
+		$activity->save();
+	}
 
 }
 add_action( 'bp_activity_before_save', 'bp_groupblog_set_group_to_post_activity');
