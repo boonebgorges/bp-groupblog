@@ -103,6 +103,7 @@ function bp_core_avatar_url() {
 
 = 1.8.10 =
 * Improved compatibility with BuddyPress 2.2.0
+* Removed duplicate CSS selector in nav item
 
 = 1.8.9 =
 * Allow some simple HTML in groupblog post titles in activity stream
