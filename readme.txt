@@ -3,8 +3,8 @@ Contributors: MariusOoms, reblevins, boonebgorges
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7374704
 Tags: buddypress, groups, blogs, content
 Requires at least: WP 3.0 / BP 1.2
-Tested up to: WP 4.1 / BP 2.2.0
-Stable tag: 1.8.10
+Tested up to: WP 4.1.1 / BP 2.2.1
+Stable tag: 1.8.11
 
 BuddyPress Groupblog extends the group functionality by enabling the group to have a single blog associated with it.
 
@@ -101,9 +101,10 @@ function bp_core_avatar_url() {
 
 == Changelog ==
 
-= 1.8.10 =
-* Improved compatibility with BuddyPress 2.2.0
+= 1.8.11 =
+=======
 * Removed duplicate CSS selector in nav item
+* Improved compatibility with BuddyPress 2.2.0
 
 = 1.8.9 =
 * Allow some simple HTML in groupblog post titles in activity stream
