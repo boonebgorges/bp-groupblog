@@ -139,7 +139,7 @@ function bp_groupblog_setup_nav() {
 						'parent_slug' => $parent_slug,
 						'screen_function' => 'groupblog_screen_blog',
 						'position' => 32,
-						'item_css_id' => 'group-blog'
+						'item_css_id' => 'nav-group-blog'
 					)
 				);
 			}
