@@ -103,6 +103,7 @@ function bp_core_avatar_url() {
 
 = 1.8.12 =
 * Improved accessibility for radio buttons
+* Update group last_activity when groupblog post is created
 
 = 1.8.11 =
 * Removed duplicate CSS selector in nav item
