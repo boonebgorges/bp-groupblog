@@ -1192,6 +1192,8 @@ function bp_groupblog_set_group_to_post_activity( $activity, $args = array() ) {
 		$activity->save();
 	}
 
+	// Update the last_active flag for the group.
+	groups_update_last_activity( $group_id );
 }
 add_action( 'bp_activity_before_save', 'bp_groupblog_set_group_to_post_activity');
 
