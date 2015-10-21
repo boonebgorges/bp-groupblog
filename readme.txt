@@ -101,6 +101,9 @@ function bp_core_avatar_url() {
 
 == Changelog ==
 
+= 1.8.12 =
+* Improved accessibility for radio buttons
+
 = 1.8.11 =
 * Removed duplicate CSS selector in nav item
 * Improved compatibility with BuddyPress 2.2.0
