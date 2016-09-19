@@ -106,7 +106,7 @@ function bp_groupblog_setup_nav() {
 
 		if ( !$checks['deep_group_integration'] ) {
 
-			$parent_slug = isset( $bp->bp_nav[$bp->groups->current_group->slug] ) ? $bp->groups->current_group->slug : $bp->groups->slug;
+			$parent_slug = bp_get_current_group_slug();
 
 			if (
 
