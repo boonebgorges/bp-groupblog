@@ -291,6 +291,36 @@ function bp_groupblog_member_join( $group_id ) {
 }
 
 /**
+ * Gets a group's groupblog settings.
+ *
+ * @since 1.8.13
+ *
+ * @return array
+ */
+function bp_groupblog_get_group_settings( $group_id ) {
+	$defaults = array(
+		'groupblog_silent_add'          => false,
+		'groupblog_default_member_role' => BP_GROUPBLOG_DEFAULT_MEMBER_ROLE,
+		'groupblog_default_mod_role'    => BP_GROUPBLOG_DEFAULT_MOD_ROLE,
+		'groupblog_default_admin_role'  => BP_GROUPBLOG_DEFAULT_ADMIN_ROLE,
+		'groupblog_enable_blog'         => false,
+		'groupblog_blog_id'             => null,
+	);
+
+	$r = array();
+	foreach ( $defaults as $key => $default_value ) {
+		$saved_value = groups_get_groupmeta( $group_id, $key, true );
+		if ( '' === $saved_value ) {
+			$r[ $key ] = $default_value;
+		} else {
+			$r[ $key ] = $saved_value;
+		}
+	}
+
+	return $r;
+}
+
+/**
  * bp_groupblog_upgrade_user( $user_id, $group_id, $blog_id )
  *
  * Subscribes user in question to blog in question
@@ -306,11 +336,16 @@ function bp_groupblog_upgrade_user( $user_id, $group_id, $blog_id = false ) {
 	if ( !$blog_id )
 		return;
 
+	$settings = bp_groupblog_get_group_settings( $group_id );
+	if ( ! $settings['groupblog_silent_add'] ) {
+		return;
+	}
+
 	// Set up some variables
-	$groupblog_silent_add 	       = groups_get_groupmeta ( $group_id, 'groupblog_silent_add' );
-	$groupblog_default_member_role = groups_get_groupmeta ( $group_id, 'groupblog_default_member_role' );
-	$groupblog_default_mod_role    = groups_get_groupmeta ( $group_id, 'groupblog_default_mod_role' );
-	$groupblog_default_admin_role  = groups_get_groupmeta ( $group_id, 'groupblog_default_admin_role' );
+	$groupblog_silent_add          = $settings['groupblog_silent_add'];
+	$groupblog_default_member_role = $settings['groupblog_default_member_role'];
+	$groupblog_default_mod_role    = $settings['groupblog_default_mod_role'];
+	$groupblog_default_admin_role  = $settings['groupblog_default_admin_role'];
 	$groupblog_creator_role        = 'admin';
 
 	// get user's blog role
