@@ -2,7 +2,7 @@
 Contributors: MariusOoms, reblevins, boonebgorges
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7374704
 Tags: buddypress, groups, blogs, content
-Requires at least: WP 3.0 / BP 1.2
+Requires at least: WP 3.0 / BP 1.5
 Tested up to: WP 4.3 / BP 2.4
 Stable tag: 1.8.12
 
@@ -100,6 +100,10 @@ function bp_core_avatar_url() {
 2. Screenshot of the group blog page.
 
 == Changelog ==
+
+= 1.8.13 =
+* Bumped BuddyPress version requirement to 1.5.
+* Improved compatibility with BP 2.6+
 
 = 1.8.12 =
 * Improved accessibility for radio buttons
