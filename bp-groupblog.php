@@ -450,10 +450,21 @@ add_action( 'groups_accept_invite',       'bp_groupblog_changed_status_group', 1
  * Called when user leaves.
  */
 function bp_groupblog_remove_user( $group_id, $user_id = false ) {
+	// Only modify site membership if the plugin is configured to do so.
+	$settings = bp_groupblog_get_group_settings( $group_id );
+	if ( ! $settings['groupblog_silent_add'] ) {
+		return;
+	}
+
 	$blog_id = get_groupblog_blog_id( $group_id );
 
 	if ( ! $user_id )
 		$user_id = bp_loggedin_user_id();
+
+	// Users with no existing role should not be modified.
+	if ( ! is_user_member_of_blog( $user_id, $blog_id ) ) {
+		return;
+	}
 
 	$user = new WP_User( $user_id );
 	$user->for_blog( $blog_id );
