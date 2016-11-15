@@ -247,6 +247,8 @@ function groupblog_edit_base_settings( $groupblog_enable_blog, $groupblog_silent
 
 	groups_update_groupmeta ( $group_id, 'groupblog_enable_blog', $groupblog_enable_blog );
 	groups_update_groupmeta ( $group_id, 'groupblog_blog_id', $groupblog_blog_id );
+	wp_cache_delete( $groupblog_blog_id, 'bp_groupblog_blog_group_ids' );
+
 	groups_update_groupmeta ( $group_id, 'groupblog_silent_add', $groupblog_silent_add );
 
   	groups_update_groupmeta ( $group_id, 'groupblog_default_admin_role', $groupblog_default_admin_role );
@@ -811,6 +813,7 @@ function bp_groupblog_process_uncouple() {
 
 		// Unset the groupblog ID
 		groups_update_groupmeta( bp_get_current_group_id(), 'groupblog_blog_id', '' );
+		wp_cache_delete( $blog_id, 'bp_groupblog_blog_group_ids' );
 
 		bp_core_add_message( __( 'Blog uncoupled.', 'groupblog' ) );
 
@@ -1412,6 +1415,8 @@ function bp_groupblog_delete_meta( $blog_id, $drop = false ) {
 
 	groups_update_groupmeta ( $group_id, 'groupblog_enable_blog', '' );
 	groups_update_groupmeta ( $group_id, 'groupblog_blog_id', '' );
+	wp_cache_delete( $blog_id, 'bp_groupblog_blog_group_ids' );
+
 	groups_update_groupmeta ( $group_id, 'groupblog_silent_add', '' );
 
   	groups_update_groupmeta ( $group_id, 'groupblog_default_admin_role', '' );
