@@ -8,6 +8,7 @@ Author: Rodney Blevins, Marius Ooms, Boone Gorges
 Version: 1.8.13
 License: (Groupblog: GNU General Public License 2.0 (GPL) http://www.gnu.org/licenses/gpl.html)
 Network: true
+Text Domain: bp-groupblog
 */
 
 /**
