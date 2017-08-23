@@ -1062,6 +1062,11 @@ function bp_groupblog_catch_transition_post_type_status( $new_status, $old_statu
 		return;
 	}
 
+	// But not needed for BP 2.5. See BP ticket #6834.
+	if ( function_exists( 'bp_register_post_types' ) ) {
+		return;
+	}
+
 	// bail if not a blog post
 	if ( 'post' !== $post->post_type ) {
 		return;
