@@ -1307,20 +1307,12 @@ add_filter( 'bp_ajax_querystring', 'bp_groupblog_override_new_blog_post_activity
  * @since 1.8.4
  */
 function bp_groupblog_activity_can_comment( $retval ) {
-	if ( bp_get_activity_action_name() != 'new_groupblog_post' ) {
+	if ( 'new_groupblog_post' !== bp_get_activity_action_name() && 'new_groupblog_comment' !== bp_get_activity_action_name() ) {
 		return $retval;
 	}
 
-	global $bp;
-
-	// get activity reply setting for blog posts
-	$cannot_blog_comment = isset( $bp->site_options['bp-disable-blogforum-comments'] ) ? $bp->site_options['bp-disable-blogforum-comments'] : false;
-
-	if ( $cannot_blog_comment ) {
-		return false;
-	} else {
-		return $retval;
-	}
+	// Explicitly disable activity commenting on groupblog items.
+	return false;
 }
 add_filter( 'bp_activity_can_comment', 'bp_groupblog_activity_can_comment' );
 
