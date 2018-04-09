@@ -1323,7 +1323,7 @@ add_filter( 'bp_activity_can_comment', 'bp_groupblog_activity_can_comment' );
  */
 function bp_groupblog_activity_permalink( $retval, $activity ) {
 	// not a groupblog post? stop now!
-	if ( $activity->type != 'new_groupblog_post' ) {
+	if ( $activity->type !== 'new_groupblog_post' && $activity->type !== 'new_groupblog_comment' ) {
 		return $retval;
 	}
 
