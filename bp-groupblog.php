@@ -1386,6 +1386,127 @@ function bp_groupblog_format_activity_action_new_groupblog_comment( $action, $ac
 }
 
 /**
+ * Hook to switch 'new_blog_comment' activity type to 'new_groupblog_comment'.
+ *
+ * We're going to be piggybacking off of BuddyPress' existing blog comment
+ * recording, but we're going to switch the activity type for groupblog
+ * comments to our custom 'new_groupblog_comment' so groups can view these
+ * items in their activity stream.
+ *
+ * @since 1.9.0
+ */
+add_action( 'bp_activity_before_save', function( $activity ) {
+	// We handle groupblog activities differently.
+	if ( 'new_blog_comment' !== $activity->type ) {
+		return;
+	}
+
+	/*
+	 * See if the blog is connected to a group.
+	 *
+	 * If so, switch the activity properties around.
+	 */
+	$group_id = get_groupblog_group_id( $activity->item_id );
+	if ( ! empty( $group_id ) ) {
+		$activity->component = 'groups';
+		$activity->type      = 'new_groupblog_comment';
+		$activity->item_id   = $group_id;
+
+		if ( ! $activity->hide_sitewide ) {
+			$group = groups_get_group( $group_id );
+			if ( 'public' !== $group->status ) {
+				$activity->hide_sitewide = true;
+			}
+		}
+	}
+} );
+
+/**
+ * Groupblog comment status transition listener.
+ *
+ * @since 1.9.0
+ *
+ * @param string $new_status New comment status.
+ * @param string $old_status Old comment status.
+ * @param object $comment    Comment object.
+ */
+function bp_groupblog_transition_comment_status( $new_status, $old_status, $comment ) {
+	$group_id = get_groupblog_group_id( get_current_blog_id() );
+	if ( empty( $group_id ) ) {
+		return;
+	}
+
+	buddypress()->activity->groupblog_temp_id = $group_id;
+
+	$post_type = get_post_type( $comment->comment_post_ID );
+	if ( 'post' !== $post_type ) {
+		return;
+	}
+
+	if ( in_array( $new_status, array( 'delete', 'hold' ) ) ) {
+		bp_activity_delete_by_item_id( array(
+			'item_id'           => $group_id,
+			'secondary_item_id' => $comment->comment_ID,
+			'component'         => 'groups',
+			'type'              => 'new_groupblog_comment',
+			'user_id'           => false,
+		) );
+
+		remove_action( 'transition_comment_status', 'bp_activity_transition_post_type_comment_status', 10 );
+		return;
+	}
+
+	add_filter( 'bp_activity_get_activity_id', '_bp_groupblog_set_activity_id_for_groupblog_comment', 10, 2 );
+	add_filter( 'bp_disable_blogforum_comments', '__return_true' );
+}
+add_action( 'transition_comment_status', 'bp_groupblog_transition_comment_status', 0, 3 );
+
+/**
+ * Set activity filters when posting groupblog comments.
+ *
+ * We need to hook into {@link bp_activity_post_type_comment()} to manipulate
+ * how BuddyPress records blog post comments into the activity stream.  This
+ * is mainly to handle existing activity items and to generate separate
+ * activity entries and not nested, activity comments.
+ *
+ * @since 1.9.0
+ */
+add_filter( 'bp_activity_post_pre_comment', function( $retval, $blog_id ) {
+	$group_id = get_groupblog_group_id( $blog_id );
+	if ( empty( $group_id ) ) {
+		return $retval;
+	}
+
+	buddypress()->activity->groupblog_temp_id = $group_id;
+
+	add_filter( 'bp_activity_get_activity_id', '_bp_groupblog_set_activity_id_for_groupblog_comment', 10, 2 );
+	add_filter( 'bp_disable_blogforum_comments', '__return_true' );
+
+	return $retval;
+}, 10, 2 );
+
+/**
+ * Helper function to fetch the activity ID for a groupblog comment.
+ *
+ * @since 1.9.0
+ *
+ * @param  int   $retval Activity ID.
+ * @param  array $r      Activity arguments used to fetch the activity ID.
+ * @return int
+ */
+function _bp_groupblog_set_activity_id_for_groupblog_comment( $retval, $r ) {
+	if ( empty( buddypress()->activity->groupblog_temp_id ) ) {
+		return $retval;
+	}
+
+	$r['component'] = 'groups';
+	$r['type'] = 'new_groupblog_comment';
+	$r['item_id'] = buddypress()->activity->groupblog_temp_id;
+
+	return BP_Activity_Activity::get_id( $r );
+}
+
+/**
  * Set the activity permalink for groupblog posts to the post permalink.
  *
  * @since 1.8.4
