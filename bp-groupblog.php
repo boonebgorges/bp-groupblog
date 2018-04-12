@@ -1317,6 +1317,75 @@ function bp_groupblog_activity_can_comment( $retval ) {
 add_filter( 'bp_activity_can_comment', 'bp_groupblog_activity_can_comment' );
 
 /**
+ * Register 'new_groupblog_comment' action with the activity component.
+ *
+ * @since 1.9.0
+ */
+add_action( 'bp_register_activity_actions', function() {
+	bp_activity_set_action(
+		'groups',
+		'new_groupblog_comment',
+		__( 'New groupblog comment', 'bp-groupblog' ),
+		'bp_groupblog_format_activity_action_new_groupblog_comment',
+		bp_is_user() ? __( 'Groupblog Comments', 'bp-groupblog' ) : __( 'Blog Comments', 'bp-groupblog' ),
+		array( 'activity', 'member', 'group' ),
+		0
+	);
+} );
+
+/**
+ * Action format Callback for our 'new_groupblog_comment' activity type.
+ *
+ * @since 1.9.0
+ */
+function bp_groupblog_format_activity_action_new_groupblog_comment( $action, $activity ) {
+	$blog_id = get_groupblog_blog_id( $activity->item_id );
+
+	$blog_url  = bp_blogs_get_blogmeta( $blog_id, 'url' );
+	$blog_name = bp_blogs_get_blogmeta( $blog_id, 'name' );
+
+	if ( empty( $blog_url ) || empty( $blog_name ) ) {
+		$blog_url  = get_home_url( $blog_id );
+		$blog_name = get_blog_option( $blog_id, 'blogname' );
+
+		bp_blogs_update_blogmeta( $blog_id, 'url', $blog_url );
+		bp_blogs_update_blogmeta( $blog_id, 'name', $blog_name );
+	}
+
+	$post_url   = bp_activity_get_meta( $activity->id, 'post_url' );
+	$post_title = bp_activity_get_meta( $activity->id, 'post_title' );
+
+	// Should only be empty at the time of post creation.
+	if ( empty( $post_url ) || empty( $post_title ) ) {
+		switch_to_blog( $blog_id );
+
+		$comment = get_comment( $activity->secondary_item_id );
+
+		if ( ! empty( $comment->comment_post_ID ) ) {
+			$post_url = add_query_arg( 'p', $comment->comment_post_ID, trailingslashit( $blog_url ) );
+			bp_activity_update_meta( $activity->id, 'post_url', $post_url );
+
+			$post = get_post( $comment->comment_post_ID );
+
+			if ( is_a( $post, 'WP_Post' ) ) {
+				$post_title = $post->post_title;
+				bp_activity_update_meta( $activity->id, 'post_title', $post_title );
+			}
+		}
+
+		restore_current_blog();
+	}
+
+	$post_link = '<a href="' . esc_url( $post_url ) . '">' . $post_title . '</a>';
+	$user_link = bp_core_get_userlink( $activity->user_id );
+
+	// Build the complete activity action string.
+	$action = sprintf( __( '%1$s commented on the post, %2$s, on the groupblog %3$s', 'buddypress' ), $user_link, $post_link, '<a href="' . esc_url( $blog_url ) . '">' . esc_html( $blog_name ) . '</a>' );
+
+	return $action;
+}
+
+/**
  * Set the activity permalink for groupblog posts to the post permalink.
  *
  * @since 1.8.4
