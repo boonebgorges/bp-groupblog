@@ -1486,6 +1486,76 @@ add_filter( 'bp_activity_post_pre_comment', function( $retval, $blog_id ) {
 }, 10, 2 );
 
 /**
+ * Delete corresponding activity item when groupblog comment is deleted.
+ *
+ * @since 1.9.0
+ *
+ * @param int $comment_id Blog comment ID.
+ */
+function bp_groupblog_delete_activity_on_delete_blog_comment( $comment_id ) {
+	$group_id = get_groupblog_group_id( get_current_blog_id() );
+	if ( empty( $group_id ) ) {
+		return;
+	}
+
+	$comment = get_comment( $comment_id );
+	$post_type = get_post_type( $comment->comment_post_ID );
+	if ( 'post' !== $post_type ) {
+		return;
+	}
+
+	bp_activity_delete_by_item_id( array(
+		'item_id'           => $group_id,
+		'secondary_item_id' => $comment_id,
+		'component'         => 'groups',
+		'type'              => 'new_groupblog_comment',
+		'user_id'           => false,
+	) );
+
+	remove_action( 'delete_comment', 'bp_activity_post_type_remove_comment', 10 );
+}
+add_action( 'delete_comment', 'bp_groupblog_delete_activity_on_delete_blog_comment', 0 );
+
+/**
+ * Delete corresponding post comments when groupblog activity item is deleted.
+ *
+ * @since 1.9.0
+ */
+add_action( 'bp_activity_after_delete', function( $activities ) {
+	$switched = false;
+	foreach ( $activities as $activity ) {
+		if ( 'groups' === $activity->component && 'new_groupblog_comment' === $activity->type ) {
+			$blog_id = get_groupblog_blog_id( $activity->item_id );
+
+			if ( ! $switched ) {
+				remove_action( 'transition_comment_status', 'bp_groupblog_transition_comment_status', 0 );
+				remove_action( 'transition_comment_status', 'bp_activity_transition_post_type_comment_status', 10 );
+				remove_action( 'delete_comment', 'bp_groupblog_delete_activity_on_delete_blog_comment', 0 );
+				remove_action( 'delete_comment', 'bp_activity_post_type_remove_comment', 10 );
+
+				if ( ! empty( $blog_id ) ) {
+					switch_to_blog( $blog_id );
+					$switched = true;
+				}
+			}
+
+			if ( ! empty( $blog_id ) ) {
+				wp_delete_comment( $activity->secondary_item_id, true );
+			}
+		}
+	}
+
+	if ( $switched ) {
+		restore_current_blog();
+
+		add_action( 'transition_comment_status', 'bp_groupblog_transition_comment_status', 0, 3 );
+		add_action( 'transition_comment_status', 'bp_activity_transition_post_type_comment_status', 10, 3 );
+		add_action( 'delete_comment', 'bp_groupblog_delete_activity_on_delete_blog_comment', 0 );
+		add_action( 'delete_comment', 'bp_activity_post_type_remove_comment', 10 );
+	}
+} );
+
+/**
  * Helper function to fetch the activity ID for a groupblog comment.
  *
  * @since 1.9.0
