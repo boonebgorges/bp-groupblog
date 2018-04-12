@@ -1573,7 +1573,16 @@ function _bp_groupblog_set_activity_id_for_groupblog_comment( $retval, $r ) {
 	$r['type'] = 'new_groupblog_comment';
 	$r['item_id'] = buddypress()->activity->groupblog_temp_id;
 
-	return BP_Activity_Activity::get_id( $r );
+	return BP_Activity_Activity::get_id(
+		$r['user_id'],
+		$r['component'],
+		$r['type'],
+		$r['item_id'],
+		$r['secondary_item_id'],
+		$r['action'],
+		$r['content'],
+		$r['date_recorded']
+	);
 }
 
 /**
