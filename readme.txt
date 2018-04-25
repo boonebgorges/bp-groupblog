@@ -10,7 +10,7 @@ BuddyPress Groupblog extends the group functionality by enabling the group to ha
 
 == Description ==
 
-Requires BuddyPress 1.7+.
+Requires BuddyPress 1.7+ and PHP 5.3+.
 
 The BuddyPress Groupblog plugin extends the group functionality by enabling each group to have a single blog associated with it. Group members are automatically added to the blog and will have blog roles as set by the groupblog admin settings.
 
@@ -102,6 +102,10 @@ function bp_core_avatar_url() {
 2. Screenshot of the group blog page.
 
 == Changelog ==
+
+= 1.9.0 =
+* Bumped PHP requirement to 5.3 and BuddyPress requirement to 1.7.
+* Added support for comment activity recording.
 
 = 1.8.13 =
 * Bumped BuddyPress version requirement to 1.5
