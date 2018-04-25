@@ -106,6 +106,7 @@ function bp_core_avatar_url() {
 = 1.9.0 =
 * Bumped PHP requirement to 5.3 and BuddyPress requirement to 1.7.
 * Added support for comment activity recording.
+* Fixed activity pagination on BP groupblog templates.
 
 = 1.8.13 =
 * Bumped BuddyPress version requirement to 1.5
