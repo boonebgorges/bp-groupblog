@@ -14,9 +14,9 @@
 		<?php endif; ?>
 	
 		<?php while ( bp_activities() ) : bp_the_activity(); ?>
-	
-			<?php include( locate_template( array( 'activity/entry.php' ), false ) ) ?>
-	
+
+			<?php bp_get_template_part( 'activity/entry' ); ?>
+
 		<?php endwhile; ?>
 	
 		<?php if ( empty( $_POST['page'] ) ) : ?>
