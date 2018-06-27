@@ -1360,7 +1360,7 @@ function groupblog_screen_blog() {
 				bp_core_load_template( apply_filters( 'groupblog_screen_blog', 'groupblog/blog' ) );
 				add_action( 'bp_screens', 'groupblog_screen_blog' );
 			}
-			else {
+			else if ( 0 != groups_get_current_group() ) {
 			 	add_action( 'bp_template_content', 'groupblog_screen_blog_content' );
 				bp_core_load_template( apply_filters( 'bp_core_template_plugin', 'groups/single/plugins' ) );
 			}
