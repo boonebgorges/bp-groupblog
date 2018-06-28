@@ -103,6 +103,9 @@ function bp_core_avatar_url() {
 
 == Changelog ==
 
+= 1.9.1 =
+* Fixed redirectblog behavior for hidden groups.
+
 = 1.9.0 =
 * Bumped PHP requirement to 5.3 and BuddyPress requirement to 1.7.
 * Added support for comment activity recording.
