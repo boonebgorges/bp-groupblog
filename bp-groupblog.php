@@ -473,7 +473,7 @@ function bp_groupblog_remove_user( $group_id, $user_id = false ) {
 	$user->set_role( 'subscriber' );
 	wp_cache_delete( $user_id, 'users' );
 }
-add_action( 'groups_leave_group', 'bp_groupblog_remove_user' );
+add_action( 'groups_leave_group', 'bp_groupblog_remove_user', 10, 2 );
 
 /**
  * bp_groupblog_get_user_role( $user_id, $user_login, $blog_id )
