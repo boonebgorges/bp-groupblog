@@ -1355,6 +1355,10 @@ function bp_groupblog_format_activity_action_new_groupblog_comment( $action, $ac
 	$post_url   = bp_activity_get_meta( $activity->id, 'post_url' );
 	$post_title = bp_activity_get_meta( $activity->id, 'post_title' );
 
+	if ( empty( $activity->user_id ) ) {
+		$anonymous = bp_activity_get_meta( $activity->id, 'anonymous_comment_author' );
+	}
+
 	// Should only be empty at the time of post creation.
 	if ( empty( $post_url ) || empty( $post_title ) ) {
 		switch_to_blog( $blog_id );
@@ -1373,11 +1377,22 @@ function bp_groupblog_format_activity_action_new_groupblog_comment( $action, $ac
 			}
 		}
 
+		if ( empty( $activity->user_id ) ) {
+			$anonymous = $comment->comment_author;
+			bp_activity_update_meta( $activity->id, 'anonymous_comment_author', $anonymous );
+		}
+
 		restore_current_blog();
 	}
 
 	$post_link = '<a href="' . esc_url( $post_url ) . '">' . $post_title . '</a>';
 	$user_link = bp_core_get_userlink( $activity->user_id );
+
+	if ( empty( $activity->user_id ) && ! empty( $anonymous ) ) {
+		$user_link = esc_attr( $anonymous );
+	} elseif ( empty( $activity->user_id ) ) {
+		$user_link = esc_html__( 'Anonymous user', 'bp-groupblog' );
+	}
 
 	// Build the complete activity action string.
 	$action = sprintf( __( '%1$s commented on the post, %2$s, on the groupblog %3$s', 'buddypress' ), $user_link, $post_link, '<a href="' . esc_url( $blog_url ) . '">' . esc_html( $blog_name ) . '</a>' );
