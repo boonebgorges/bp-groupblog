@@ -104,7 +104,9 @@ function bp_core_avatar_url() {
 == Changelog ==
 
 = 1.9.1 =
+* Fixed activity stream behavior for comments from non-logged-in comments.
 * Fixed redirectblog behavior for hidden groups.
+* Improved values passed to filters.
 
 = 1.9.0 =
 * Bumped PHP requirement to 5.3 and BuddyPress requirement to 1.7.
