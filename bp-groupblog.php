@@ -1580,7 +1580,8 @@ add_action( 'bp_activity_after_delete', function( $activities ) {
  * @return int
  */
 function _bp_groupblog_set_activity_id_for_groupblog_comment( $retval, $r ) {
-	if ( empty( buddypress()->activity->groupblog_temp_id ) ) {
+	$groupblog_temp_id = isset( buddypress()->activity->groupblog_temp_id ) ? buddypress()->activity->groupblog_temp_id : null;
+	if ( ! $groupblog_temp_id ) {
 		return $retval;
 	}
 
