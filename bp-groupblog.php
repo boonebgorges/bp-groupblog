@@ -1,7 +1,7 @@
 <?php
 
 define ( 'BP_GROUPBLOG_IS_INSTALLED', 1 );
-define ( 'BP_GROUPBLOG_VERSION', '1.8.12' );
+define ( 'BP_GROUPBLOG_VERSION', '1.9.0' );
 
 // Define default roles
 if ( !defined( 'BP_GROUPBLOG_DEFAULT_ADMIN_ROLE' ) )
@@ -106,7 +106,7 @@ function bp_groupblog_setup_nav() {
 
 		if ( !$checks['deep_group_integration'] ) {
 
-			$parent_slug = isset( $bp->bp_nav[$bp->groups->current_group->slug] ) ? $bp->groups->current_group->slug : $bp->groups->slug;
+			$parent_slug = bp_get_current_group_slug();
 
 			if (
 
@@ -247,6 +247,8 @@ function groupblog_edit_base_settings( $groupblog_enable_blog, $groupblog_silent
 
 	groups_update_groupmeta ( $group_id, 'groupblog_enable_blog', $groupblog_enable_blog );
 	groups_update_groupmeta ( $group_id, 'groupblog_blog_id', $groupblog_blog_id );
+	wp_cache_delete( $groupblog_blog_id, 'bp_groupblog_blog_group_ids' );
+
 	groups_update_groupmeta ( $group_id, 'groupblog_silent_add', $groupblog_silent_add );
 
   	groups_update_groupmeta ( $group_id, 'groupblog_default_admin_role', $groupblog_default_admin_role );
@@ -291,6 +293,36 @@ function bp_groupblog_member_join( $group_id ) {
 }
 
 /**
+ * Gets a group's groupblog settings.
+ *
+ * @since 1.8.13
+ *
+ * @return array
+ */
+function bp_groupblog_get_group_settings( $group_id ) {
+	$defaults = array(
+		'groupblog_silent_add'          => false,
+		'groupblog_default_member_role' => BP_GROUPBLOG_DEFAULT_MEMBER_ROLE,
+		'groupblog_default_mod_role'    => BP_GROUPBLOG_DEFAULT_MOD_ROLE,
+		'groupblog_default_admin_role'  => BP_GROUPBLOG_DEFAULT_ADMIN_ROLE,
+		'groupblog_enable_blog'         => false,
+		'groupblog_blog_id'             => null,
+	);
+
+	$r = array();
+	foreach ( $defaults as $key => $default_value ) {
+		$saved_value = groups_get_groupmeta( $group_id, $key, true );
+		if ( '' === $saved_value ) {
+			$r[ $key ] = $default_value;
+		} else {
+			$r[ $key ] = $saved_value;
+		}
+	}
+
+	return $r;
+}
+
+/**
  * bp_groupblog_upgrade_user( $user_id, $group_id, $blog_id )
  *
  * Subscribes user in question to blog in question
@@ -306,61 +338,30 @@ function bp_groupblog_upgrade_user( $user_id, $group_id, $blog_id = false ) {
 	if ( !$blog_id )
 		return;
 
+	$settings = bp_groupblog_get_group_settings( $group_id );
+	if ( ! $settings['groupblog_silent_add'] ) {
+		return;
+	}
+
 	// Set up some variables
-	$groupblog_silent_add 	       = groups_get_groupmeta ( $group_id, 'groupblog_silent_add' );
-	$groupblog_default_member_role = groups_get_groupmeta ( $group_id, 'groupblog_default_member_role' );
-	$groupblog_default_mod_role    = groups_get_groupmeta ( $group_id, 'groupblog_default_mod_role' );
-	$groupblog_default_admin_role  = groups_get_groupmeta ( $group_id, 'groupblog_default_admin_role' );
+	$groupblog_silent_add          = $settings['groupblog_silent_add'];
+	$groupblog_default_member_role = $settings['groupblog_default_member_role'];
+	$groupblog_default_mod_role    = $settings['groupblog_default_mod_role'];
+	$groupblog_default_admin_role  = $settings['groupblog_default_admin_role'];
 	$groupblog_creator_role        = 'admin';
 
 	// get user's blog role
 	$user_role = bp_groupblog_get_user_role( $user_id, false, $blog_id );
 
-	// Get the current user's group status. For efficiency, we try first to look at the
-	// current group object
-	if ( isset( $bp->groups->current_group->id ) && $group_id == $bp->groups->current_group->id ) {
-		// It's tricky to walk through the admin/mod lists over and over, so let's format
-		if ( empty( $bp->groups->current_group->adminlist ) ) {
-			$bp->groups->current_group->adminlist = array();
-			if ( isset( $bp->groups->current_group->admins ) ) {
-				foreach( (array)$bp->groups->current_group->admins as $admin ) {
-					if ( isset( $admin->user_id ) ) {
-						$bp->groups->current_group->adminlist[] = $admin->user_id;
-					}
-				}
-			}
-		}
-
-		if ( empty( $bp->groups->current_group->modlist ) ) {
-			$bp->groups->current_group->modlist = array();
-			if ( isset( $bp->groups->current_group->mods ) ) {
-				foreach( (array)$bp->groups->current_group->mods as $mod ) {
-					if ( isset( $mod->user_id ) ) {
-						$bp->groups->current_group->modlist[] = $mod->user_id;
-					}
-				}
-			}
-		}
-
-		if ( in_array( $user_id, $bp->groups->current_group->adminlist ) ) {
-			$user_group_status = 'admin';
-		} elseif ( in_array( $user_id, $bp->groups->current_group->modlist ) ) {
-			$user_group_status = 'mod';
-		} else {
-			// I'm assuming that if a user is passed to this function, they're a member
-			// Doing an actual lookup is costly. Try to look for an efficient method
-			$user_group_status = 'member';
-		}
+	// Get the current user's group status.
+	if ( groups_is_user_admin( $user_id, $group_id ) ) {
+		$user_group_status = 'admin';
+	} else if ( groups_is_user_mod( $user_id, $group_id ) ) {
+		$user_group_status = 'mod';
+	} else if ( groups_is_user_member( $user_id, $group_id ) ) {
+		$user_group_status = 'member';
 	} else {
-		if ( groups_is_user_admin ( $user_id, $group_id ) ) {
-			$user_group_status = 'admin';
-		} else if ( groups_is_user_mod ( $user_id, $group_id ) ) {
-			$user_group_status = 'mod';
-		} else if ( groups_is_user_member ( $user_id, $group_id ) ) {
-			$user_group_status = 'member';
-		} else {
-			return false;
-		}
+		return false;
 	}
 
 	// change user status based on promotion / demotion
@@ -451,10 +452,21 @@ add_action( 'groups_accept_invite',       'bp_groupblog_changed_status_group', 1
  * Called when user leaves.
  */
 function bp_groupblog_remove_user( $group_id, $user_id = false ) {
+	// Only modify site membership if the plugin is configured to do so.
+	$settings = bp_groupblog_get_group_settings( $group_id );
+	if ( ! $settings['groupblog_silent_add'] ) {
+		return;
+	}
+
 	$blog_id = get_groupblog_blog_id( $group_id );
 
 	if ( ! $user_id )
 		$user_id = bp_loggedin_user_id();
+
+	// Users with no existing role should not be modified.
+	if ( ! is_user_member_of_blog( $user_id, $blog_id ) ) {
+		return;
+	}
 
 	$user = new WP_User( $user_id );
 	$user->for_blog( $blog_id );
@@ -811,6 +823,7 @@ function bp_groupblog_process_uncouple() {
 
 		// Unset the groupblog ID
 		groups_update_groupmeta( bp_get_current_group_id(), 'groupblog_blog_id', '' );
+		wp_cache_delete( $blog_id, 'bp_groupblog_blog_group_ids' );
 
 		bp_core_add_message( __( 'Blog uncoupled.', 'groupblog' ) );
 
@@ -1046,6 +1059,11 @@ function bp_groupblog_validate_blog_signup() {
 function bp_groupblog_catch_transition_post_type_status( $new_status, $old_status, $post ) {
 	// Only needed for >= BP 2.2
 	if ( ! function_exists( 'bp_activity_post_type_update' ) ) {
+		return;
+	}
+
+	// But not needed for BP 2.5. See BP ticket #6834.
+	if ( function_exists( 'bp_register_post_types' ) ) {
 		return;
 	}
 
@@ -1289,22 +1307,298 @@ add_filter( 'bp_ajax_querystring', 'bp_groupblog_override_new_blog_post_activity
  * @since 1.8.4
  */
 function bp_groupblog_activity_can_comment( $retval ) {
-	if ( bp_get_activity_action_name() != 'new_groupblog_post' ) {
+	if ( 'new_groupblog_post' !== bp_get_activity_action_name() && 'new_groupblog_comment' !== bp_get_activity_action_name() ) {
 		return $retval;
 	}
 
-	global $bp;
-
-	// get activity reply setting for blog posts
-	$cannot_blog_comment = isset( $bp->site_options['bp-disable-blogforum-comments'] ) ? $bp->site_options['bp-disable-blogforum-comments'] : false;
-
-	if ( $cannot_blog_comment ) {
-		return false;
-	} else {
-		return $retval;
-	}
+	// Explicitly disable activity commenting on groupblog items.
+	return false;
 }
 add_filter( 'bp_activity_can_comment', 'bp_groupblog_activity_can_comment' );
+
+/**
+ * Register 'new_groupblog_comment' action with the activity component.
+ *
+ * @since 1.9.0
+ */
+add_action( 'bp_register_activity_actions', function() {
+	bp_activity_set_action(
+		'groups',
+		'new_groupblog_comment',
+		__( 'New groupblog comment', 'bp-groupblog' ),
+		'bp_groupblog_format_activity_action_new_groupblog_comment',
+		bp_is_user() ? __( 'Groupblog Comments', 'bp-groupblog' ) : __( 'Blog Comments', 'bp-groupblog' ),
+		array( 'activity', 'member', 'group' ),
+		0
+	);
+} );
+
+/**
+ * Action format Callback for our 'new_groupblog_comment' activity type.
+ *
+ * @since 1.9.0
+ */
+function bp_groupblog_format_activity_action_new_groupblog_comment( $action, $activity ) {
+	$blog_id = get_groupblog_blog_id( $activity->item_id );
+
+	$blog_url  = bp_blogs_get_blogmeta( $blog_id, 'url' );
+	$blog_name = bp_blogs_get_blogmeta( $blog_id, 'name' );
+
+	if ( empty( $blog_url ) || empty( $blog_name ) ) {
+		$blog_url  = get_home_url( $blog_id );
+		$blog_name = get_blog_option( $blog_id, 'blogname' );
+
+		bp_blogs_update_blogmeta( $blog_id, 'url', $blog_url );
+		bp_blogs_update_blogmeta( $blog_id, 'name', $blog_name );
+	}
+
+	$post_url   = bp_activity_get_meta( $activity->id, 'post_url' );
+	$post_title = bp_activity_get_meta( $activity->id, 'post_title' );
+
+	if ( empty( $activity->user_id ) ) {
+		$anonymous = bp_activity_get_meta( $activity->id, 'anonymous_comment_author' );
+	}
+
+	// Should only be empty at the time of post creation.
+	if ( empty( $post_url ) || empty( $post_title ) ) {
+		switch_to_blog( $blog_id );
+
+		$comment = get_comment( $activity->secondary_item_id );
+
+		if ( ! empty( $comment->comment_post_ID ) ) {
+			$post_url = add_query_arg( 'p', $comment->comment_post_ID, trailingslashit( $blog_url ) );
+			bp_activity_update_meta( $activity->id, 'post_url', $post_url );
+
+			$post = get_post( $comment->comment_post_ID );
+
+			if ( is_a( $post, 'WP_Post' ) ) {
+				$post_title = $post->post_title;
+				bp_activity_update_meta( $activity->id, 'post_title', $post_title );
+			}
+		}
+
+		if ( empty( $activity->user_id ) ) {
+			$anonymous = $comment->comment_author;
+			bp_activity_update_meta( $activity->id, 'anonymous_comment_author', $anonymous );
+		}
+
+		restore_current_blog();
+	}
+
+	$post_link = '<a href="' . esc_url( $post_url ) . '">' . $post_title . '</a>';
+	$user_link = bp_core_get_userlink( $activity->user_id );
+
+	if ( empty( $activity->user_id ) && ! empty( $anonymous ) ) {
+		$user_link = esc_attr( $anonymous );
+	} elseif ( empty( $activity->user_id ) ) {
+		$user_link = esc_html__( 'Anonymous user', 'bp-groupblog' );
+	}
+
+	// Build the complete activity action string.
+	$action = sprintf( __( '%1$s commented on the post, %2$s, on the groupblog %3$s', 'buddypress' ), $user_link, $post_link, '<a href="' . esc_url( $blog_url ) . '">' . esc_html( $blog_name ) . '</a>' );
+
+	return $action;
+}
+
+/**
+ * Hook to switch 'new_blog_comment' activity type to 'new_groupblog_comment'.
+ *
+ * We're going to be piggybacking off of BuddyPress' existing blog comment
+ * recording, but we're going to switch the activity type for groupblog
+ * comments to our custom 'new_groupblog_comment' so groups can view these
+ * items in their activity stream.
+ *
+ * @since 1.9.0
+ */
+add_action( 'bp_activity_before_save', function( $activity ) {
+	// We handle groupblog activities differently.
+	if ( 'new_blog_comment' !== $activity->type ) {
+		return;
+	}
+
+	/*
+	 * See if the blog is connected to a group.
+	 *
+	 * If so, switch the activity properties around.
+	 */
+	$group_id = get_groupblog_group_id( $activity->item_id );
+	if ( ! empty( $group_id ) ) {
+		$activity->component = 'groups';
+		$activity->type      = 'new_groupblog_comment';
+		$activity->item_id   = $group_id;
+
+		if ( ! $activity->hide_sitewide ) {
+			$group = groups_get_group( $group_id );
+			if ( 'public' !== $group->status ) {
+				$activity->hide_sitewide = true;
+			}
+		}
+	}
+} );
+
+/**
+ * Groupblog comment status transition listener.
+ *
+ * @since 1.9.0
+ *
+ * @param string $new_status New comment status.
+ * @param string $old_status Old comment status.
+ * @param object $comment    Comment object.
+ */
+function bp_groupblog_transition_comment_status( $new_status, $old_status, $comment ) {
+	$group_id = get_groupblog_group_id( get_current_blog_id() );
+	if ( empty( $group_id ) ) {
+		return;
+	}
+
+	buddypress()->activity->groupblog_temp_id = $group_id;
+
+	$post_type = get_post_type( $comment->comment_post_ID );
+	if ( 'post' !== $post_type ) {
+		return;
+	}
+
+	if ( in_array( $new_status, array( 'delete', 'hold' ) ) ) {
+		bp_activity_delete_by_item_id( array(
+			'item_id'           => $group_id,
+			'secondary_item_id' => $comment->comment_ID,
+			'component'         => 'groups',
+			'type'              => 'new_groupblog_comment',
+			'user_id'           => false,
+		) );
+
+		remove_action( 'transition_comment_status', 'bp_activity_transition_post_type_comment_status', 10 );
+		return;
+	}
+
+	add_filter( 'bp_activity_get_activity_id', '_bp_groupblog_set_activity_id_for_groupblog_comment', 10, 2 );
+	add_filter( 'bp_disable_blogforum_comments', '__return_true' );
+}
+add_action( 'transition_comment_status', 'bp_groupblog_transition_comment_status', 0, 3 );
+
+/**
+ * Set activity filters when posting groupblog comments.
+ *
+ * We need to hook into {@link bp_activity_post_type_comment()} to manipulate
+ * how BuddyPress records blog post comments into the activity stream.  This
+ * is mainly to handle existing activity items and to generate separate
+ * activity entries and not nested, activity comments.
+ *
+ * @since 1.9.0
+ */
+add_filter( 'bp_activity_post_pre_comment', function( $retval, $blog_id ) {
+	$group_id = get_groupblog_group_id( $blog_id );
+	if ( empty( $group_id ) ) {
+		return $retval;
+	}
+
+	buddypress()->activity->groupblog_temp_id = $group_id;
+
+	add_filter( 'bp_activity_get_activity_id', '_bp_groupblog_set_activity_id_for_groupblog_comment', 10, 2 );
+	add_filter( 'bp_disable_blogforum_comments', '__return_true' );
+
+	return $retval;
+}, 10, 2 );
+
+/**
+ * Delete corresponding activity item when groupblog comment is deleted.
+ *
+ * @since 1.9.0
+ *
+ * @param int $comment_id Blog comment ID.
+ */
+function bp_groupblog_delete_activity_on_delete_blog_comment( $comment_id ) {
+	$group_id = get_groupblog_group_id( get_current_blog_id() );
+	if ( empty( $group_id ) ) {
+		return;
+	}
+
+	$comment = get_comment( $comment_id );
+	$post_type = get_post_type( $comment->comment_post_ID );
+	if ( 'post' !== $post_type ) {
+		return;
+	}
+
+	bp_activity_delete_by_item_id( array(
+		'item_id'           => $group_id,
+		'secondary_item_id' => $comment_id,
+		'component'         => 'groups',
+		'type'              => 'new_groupblog_comment',
+		'user_id'           => false,
+	) );
+
+	remove_action( 'delete_comment', 'bp_activity_post_type_remove_comment', 10 );
+}
+add_action( 'delete_comment', 'bp_groupblog_delete_activity_on_delete_blog_comment', 0 );
+
+/**
+ * Delete corresponding post comments when groupblog activity item is deleted.
+ *
+ * @since 1.9.0
+ */
+add_action( 'bp_activity_after_delete', function( $activities ) {
+	$switched = false;
+	foreach ( $activities as $activity ) {
+		if ( 'groups' === $activity->component && 'new_groupblog_comment' === $activity->type ) {
+			$blog_id = get_groupblog_blog_id( $activity->item_id );
+
+			if ( ! $switched ) {
+				remove_action( 'transition_comment_status', 'bp_groupblog_transition_comment_status', 0 );
+				remove_action( 'transition_comment_status', 'bp_activity_transition_post_type_comment_status', 10 );
+				remove_action( 'delete_comment', 'bp_groupblog_delete_activity_on_delete_blog_comment', 0 );
+				remove_action( 'delete_comment', 'bp_activity_post_type_remove_comment', 10 );
+
+				if ( ! empty( $blog_id ) ) {
+					switch_to_blog( $blog_id );
+					$switched = true;
+				}
+			}
+
+			if ( ! empty( $blog_id ) ) {
+				wp_delete_comment( $activity->secondary_item_id, true );
+			}
+		}
+	}
+
+	if ( $switched ) {
+		restore_current_blog();
+
+		add_action( 'transition_comment_status', 'bp_groupblog_transition_comment_status', 0, 3 );
+		add_action( 'transition_comment_status', 'bp_activity_transition_post_type_comment_status', 10, 3 );
+		add_action( 'delete_comment', 'bp_groupblog_delete_activity_on_delete_blog_comment', 0 );
+		add_action( 'delete_comment', 'bp_activity_post_type_remove_comment', 10 );
+	}
+} );
+
+/**
+ * Helper function to fetch the activity ID for a groupblog comment.
+ *
+ * @since 1.9.0
+ *
+ * @param  int   $retval Activity ID.
+ * @param  array $r      Activity arguments used to fetch the activity ID.
+ * @return int
+ */
+function _bp_groupblog_set_activity_id_for_groupblog_comment( $retval, $r ) {
+	if ( empty( buddypress()->activity->groupblog_temp_id ) ) {
+		return $retval;
+	}
+
+	$r['component'] = 'groups';
+	$r['type'] = 'new_groupblog_comment';
+	$r['item_id'] = buddypress()->activity->groupblog_temp_id;
+
+	return BP_Activity_Activity::get_id(
+		$r['user_id'],
+		$r['component'],
+		$r['type'],
+		$r['item_id'],
+		$r['secondary_item_id'],
+		$r['action'],
+		$r['content'],
+		$r['date_recorded']
+	);
+}
 
 /**
  * Set the activity permalink for groupblog posts to the post permalink.
@@ -1313,7 +1607,7 @@ add_filter( 'bp_activity_can_comment', 'bp_groupblog_activity_can_comment' );
  */
 function bp_groupblog_activity_permalink( $retval, $activity ) {
 	// not a groupblog post? stop now!
-	if ( $activity->type != 'new_groupblog_post' ) {
+	if ( $activity->type !== 'new_groupblog_post' && $activity->type !== 'new_groupblog_comment' ) {
 		return $retval;
 	}
 
@@ -1412,6 +1706,8 @@ function bp_groupblog_delete_meta( $blog_id, $drop = false ) {
 
 	groups_update_groupmeta ( $group_id, 'groupblog_enable_blog', '' );
 	groups_update_groupmeta ( $group_id, 'groupblog_blog_id', '' );
+	wp_cache_delete( $blog_id, 'bp_groupblog_blog_group_ids' );
+
 	groups_update_groupmeta ( $group_id, 'groupblog_silent_add', '' );
 
   	groups_update_groupmeta ( $group_id, 'groupblog_default_admin_role', '' );
