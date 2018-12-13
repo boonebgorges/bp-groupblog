@@ -3,8 +3,8 @@ Contributors: MariusOoms, reblevins, boonebgorges
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7374704
 Tags: buddypress, groups, blogs, content
 Requires at least: 3.6
-Tested up to: 4.9
-Stable tag: 1.9.0
+Tested up to: 5.0
+Stable tag: 1.9.1
 
 BuddyPress Groupblog extends the group functionality by enabling the group to have a single blog associated with it.
 
@@ -107,6 +107,7 @@ function bp_core_avatar_url() {
 * Fixed activity stream behavior for comments from non-logged-in comments.
 * Fixed redirectblog behavior for hidden groups.
 * Improved values passed to filters.
+* PHP compatibility fixes.
 
 = 1.9.0 =
 * Bumped PHP requirement to 5.3 and BuddyPress requirement to 1.7.

@@ -1,7 +1,7 @@
 <?php
 
 define ( 'BP_GROUPBLOG_IS_INSTALLED', 1 );
-define ( 'BP_GROUPBLOG_VERSION', '1.9.0' );
+define ( 'BP_GROUPBLOG_VERSION', '1.9.1' );
 
 // Define default roles
 if ( !defined( 'BP_GROUPBLOG_DEFAULT_ADMIN_ROLE' ) )
@@ -740,21 +740,21 @@ function bp_groupblog_validate_blog_form() {
 							$newerrors->add('blogname', __("Only lowercase letters and numbers allowed", 'groupblog'));
 
 						}
-						continue;
+						break;
 					case 'Site name must be at least 4 characters.':
 						if( strlen( $result['blogname'] ) < $checks[minlength] && !is_super_admin() )
 						$newerrors->add('blogname',  __("Blog name must be at least " . $checks[minlength] . " characters", 'groupblog'));
-						continue;
+						break;
 					case "Sorry, site names may not contain the character &#8220;_&#8221;!":
 						if($checks['allowunderscores']!= 1) {
 							$newerrors->add('blogname', __("Sorry, blog names may not contain the character '_'!", 'groupblog'));
 						}
-						continue;
+						break;
 					case 'Sorry, site names must have letters too!':
 						if($checks['allownumeric'] != 1){
 							$newerrors->add('blogname', __("Sorry, blog names must have letters too!", 'groupblog'));
 						}
-						continue;
+						break;
 					default:
 						$newerrors->add('blogname', $subvalue);
 
@@ -1580,7 +1580,8 @@ add_action( 'bp_activity_after_delete', function( $activities ) {
  * @return int
  */
 function _bp_groupblog_set_activity_id_for_groupblog_comment( $retval, $r ) {
-	if ( empty( buddypress()->activity->groupblog_temp_id ) ) {
+	$groupblog_temp_id = isset( buddypress()->activity->groupblog_temp_id ) ? buddypress()->activity->groupblog_temp_id : null;
+	if ( ! $groupblog_temp_id ) {
 		return $retval;
 	}
 
