@@ -103,6 +103,9 @@ function bp_core_avatar_url() {
 
 == Changelog ==
 
+= 1.9.2 =
+* Allow query args for page butons on blog tab to be filtered.
+
 = 1.9.1 =
 * Fixed activity stream behavior for comments from non-logged-in comments.
 * Fixed redirectblog behavior for hidden groups.
