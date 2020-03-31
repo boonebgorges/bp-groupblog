@@ -1739,8 +1739,8 @@ function bp_groupblog_use_group_avatar_in_site_loop( $retval, $blog_id, $r ) {
 	}
 
 	// Already using a site icon, so bail.
-	$site_icon_alt = sprintf( esc_attr__( 'Site icon for %s', 'buddypress' ), bp_get_blog_name() );
-	if ( false !== strpos( $retval, $site_icon_alt ) ) {
+	$site_icon_thumb = bp_blogs_get_blogmeta( $blog_id, "site_icon_url_{$r['type']}" );
+	if ( ! empty( $site_icon_thumb ) ) {
 		return $retval;
 	}
 
@@ -1756,4 +1756,3 @@ function bp_groupblog_use_group_avatar_in_site_loop( $retval, $blog_id, $r ) {
 	) );
 }
 add_filter( 'bp_get_blog_avatar', 'bp_groupblog_use_group_avatar_in_site_loop', 10, 3 );
-
