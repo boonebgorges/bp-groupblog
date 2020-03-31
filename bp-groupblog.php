@@ -1739,8 +1739,8 @@ function bp_groupblog_use_group_avatar_in_site_loop( $retval, $blog_id, $r ) {
 	}
 
 	// Already using a site icon, so bail.
-	$site_icon_thumb = bp_blogs_get_blogmeta( $blog_id, "site_icon_url_{$r['type']}" );
-	if ( ! empty( $site_icon_thumb ) ) {
+	$site_icon = bp_blogs_get_blogmeta( $blog_id, "site_icon_url_{$r['type']}" );
+	if ( ! empty( $site_icon ) ) {
 		return $retval;
 	}
 
