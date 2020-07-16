@@ -1,7 +1,7 @@
 <?php
 
 define ( 'BP_GROUPBLOG_IS_INSTALLED', 1 );
-define ( 'BP_GROUPBLOG_VERSION', '1.9.0' );
+define ( 'BP_GROUPBLOG_VERSION', '1.9.2' );
 
 // Define default roles
 if ( !defined( 'BP_GROUPBLOG_DEFAULT_ADMIN_ROLE' ) )
@@ -740,21 +740,21 @@ function bp_groupblog_validate_blog_form() {
 							$newerrors->add('blogname', __("Only lowercase letters and numbers allowed", 'groupblog'));
 
 						}
-						continue;
+						break;
 					case 'Site name must be at least 4 characters.':
 						if( strlen( $result['blogname'] ) < $checks[minlength] && !is_super_admin() )
 						$newerrors->add('blogname',  __("Blog name must be at least " . $checks[minlength] . " characters", 'groupblog'));
-						continue;
+						break;
 					case "Sorry, site names may not contain the character &#8220;_&#8221;!":
 						if($checks['allowunderscores']!= 1) {
 							$newerrors->add('blogname', __("Sorry, blog names may not contain the character '_'!", 'groupblog'));
 						}
-						continue;
+						break;
 					case 'Sorry, site names must have letters too!':
 						if($checks['allownumeric'] != 1){
 							$newerrors->add('blogname', __("Sorry, blog names must have letters too!", 'groupblog'));
 						}
-						continue;
+						break;
 					default:
 						$newerrors->add('blogname', $subvalue);
 
@@ -1580,7 +1580,8 @@ add_action( 'bp_activity_after_delete', function( $activities ) {
  * @return int
  */
 function _bp_groupblog_set_activity_id_for_groupblog_comment( $retval, $r ) {
-	if ( empty( buddypress()->activity->groupblog_temp_id ) ) {
+	$groupblog_temp_id = isset( buddypress()->activity->groupblog_temp_id ) ? buddypress()->activity->groupblog_temp_id : null;
+	if ( ! $groupblog_temp_id ) {
 		return $retval;
 	}
 
@@ -1717,4 +1718,41 @@ function bp_groupblog_delete_meta( $blog_id, $drop = false ) {
 }
 add_action('delete_blog', 'bp_groupblog_delete_meta', 10, 1);
 
-?>
+/**
+ * Use the group avatar on the Site Directory page for groupblogs.
+ *
+ * If a site in the site loop is a groupblog, use the group logo only if
+ * the site doesn't already have a customized site icon.
+ *
+ * @since 1.9.2
+ *
+ * @param  string $retval  Current site avatar
+ * @param  int    $blog_id Site ID in loop
+ * @param  array  $r       Avatar arguments
+ * @return string
+ */
+function bp_groupblog_use_group_avatar_in_site_loop( $retval, $blog_id, $r ) {
+	// Not a groupblog? Bail.
+	$group_id = get_groupblog_group_id( $blog_id );
+	if ( empty( $group_id ) ) {
+		return $retval;
+	}
+
+	// Already using a site icon, so bail.
+	$site_icon = bp_blogs_get_blogmeta( $blog_id, "site_icon_url_{$r['type']}" );
+	if ( ! empty( $site_icon ) ) {
+		return $retval;
+	}
+
+	// Site is using the site admin's avatar, so switch to group logo.
+	return bp_core_fetch_avatar( array(
+		'item_id'    => $group_id,
+		'avatar_dir' => 'group-avatars',
+		'object'     => 'group',
+		'type'       => $r['type'],
+		'alt'        => 'Group logo',
+		'width'      => $r['width'],
+		'height'     => $r['height'],
+	) );
+}
+add_filter( 'bp_get_blog_avatar', 'bp_groupblog_use_group_avatar_in_site_loop', 10, 3 );
