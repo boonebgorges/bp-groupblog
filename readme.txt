@@ -3,8 +3,8 @@ Contributors: MariusOoms, reblevins, boonebgorges
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7374704
 Tags: buddypress, groups, blogs, content
 Requires at least: 3.6
-Tested up to: 5.0
-Stable tag: 1.9.1
+Tested up to: 5.5
+Stable tag: 1.9.2
 
 BuddyPress Groupblog extends the group functionality by enabling the group to have a single blog associated with it.
 
@@ -52,6 +52,7 @@ The BuddyPress Groupblog plugin extends the group functionality by enabling each
 == Changelog ==
 
 = 1.9.2 =
+* Use group avatar on Site Directory for groupblogs, rather than creator user avatar.
 * Allow query args for page butons on blog tab to be filtered.
 
 = 1.9.1 =
