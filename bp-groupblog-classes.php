@@ -94,6 +94,5 @@ class BP_Groupblog_Extension extends BP_Group_Extension {
 	}
 
 }
-bp_register_group_extension( 'BP_Groupblog_Extension' );
 
-?>
+bp_register_group_extension( 'BP_Groupblog_Extension' );

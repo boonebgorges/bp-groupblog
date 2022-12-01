@@ -12,21 +12,21 @@
 
 	<?php if ( bp_group_is_visible() && bp_groupblog_is_blog_enabled ( bp_get_group_id() ) ) : ?>
 
-		<?php switch_to_blog( get_groupblog_blog_id() ); ?>			  
+		<?php switch_to_blog( get_groupblog_blog_id() ); ?>
 
 		<?php do_action( 'bp_before_group_blog_content' ) ?>
 
 		<?php /********************* Start your custom content *********************/ ?>
 
 		<?php /* Uncomment to disable */ include( 'groupblog/inc/pages.php' ); ?>
-    <?php /* Uncomment to disable */ include( 'groupblog/inc/posts.php' ); ?>		
+    <?php /* Uncomment to disable */ include( 'groupblog/inc/posts.php' ); ?>
 
 		<?php /********************* End your custom content *********************/ ?>
 
 		<?php do_action( 'bp_after_group_blog_content' ) ?>
 
     <?php	restore_current_blog(); ?>
-    	
+
     <?php /* Uncomment to disable */ include( 'groupblog/inc/activity.php' ); ?>
 
 	<?php elseif ( !bp_group_is_visible() ) : ?>
@@ -39,7 +39,7 @@
 		</div>
 
 		<?php do_action( 'bp_after_group_status_message' ) ?>
-									
+
 	<?php endif;?>
-			
-<?php do_action( 'bp_after_group_blog_template' ) ?>			
+
+<?php do_action( 'bp_after_group_blog_template' ) ?>

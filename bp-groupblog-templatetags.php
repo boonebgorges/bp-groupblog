@@ -222,4 +222,3 @@ function bp_groupblog_admin_form_action( $page, $group = false ) {
 
 	echo apply_filters( 'bp_groupblog_admin_form_action', bp_group_permalink( $group, false ) . '/admin/' . $page );
 }
-?>

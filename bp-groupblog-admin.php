@@ -766,7 +766,3 @@ if ( version_compare( $GLOBALS['wp_version'], '5.1.0', '>=' ) ) {
 } else {
 	add_action( 'wpmu_new_blog', 'bp_groupblog_blog_defaults' );
 }
-
-/*******************************************************************/
-
-?>
