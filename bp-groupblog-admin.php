@@ -2,6 +2,27 @@
 
 /*** Wordpress Groupblog Admin Settings ********************************/
 
+/**
+ * Initializes a new site.
+ *
+ * The "wp_initialize_site" action has been available since WordPress 5.1.0.
+ *
+ * @since 1.9.2
+ *
+ * @param WP_Site $new_site The new site object.
+ * @param array $args The array of initialization arguments.
+ */
+function bp_groupblog_site_defaults( $new_site, $args ) {
+	bp_groupblog_blog_defaults( $new_site->blog_id );
+}
+
+/**
+ * Legacy initialization of a new site.
+ *
+ * The "wpmu_new_blog" action has been deprecated since WordPress 5.1.0.
+ *
+ * @param int $blog_id The numeric ID of the WordPress Blog.
+ */
 function bp_groupblog_blog_defaults( $blog_id ) {
 	global $bp, $wp_rewrite;
 
@@ -739,8 +760,12 @@ function bp_groupblog_management_page() {
 <?php
 }
 
-// When a new blog is created, set the options
-add_action( 'wpmu_new_blog', 'bp_groupblog_blog_defaults' );
+// When a new blog is created, set the options.
+if ( version_compare( $GLOBALS['wp_version'], '5.1.0', '>=' ) ) {
+	add_action( 'wp_initialize_site', 'bp_groupblog_site_defaults', 10, 2 );
+} else {
+	add_action( 'wpmu_new_blog', 'bp_groupblog_blog_defaults' );
+}
 
 /*******************************************************************/
 
