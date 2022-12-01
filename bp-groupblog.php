@@ -700,81 +700,103 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 function bp_groupblog_validate_blog_form() {
 
 	$user = '';
-	if ( is_user_logged_in() )
+	if ( is_user_logged_in() ) {
 		$user = wp_get_current_user();
+	}
 
-	$result =  wpmu_validate_blog_signup($_POST['blogname'], $_POST['blog_title'], $user);
+	$result = wpmu_validate_blog_signup( $_POST['blogname'], $_POST['blog_title'], $user );
 
 	$errors = $result['errors'];
 
-	// we only want to filter if there is an error
-	if (!is_object($errors)){
+	// We only want to filter if there is an error.
+	if ( ! is_object( $errors ) ) {
 		return $result;
 	}
 
+	$checks = get_site_option( 'bp_groupblog_blog_defaults_options' );
 
-	$checks = get_site_option('bp_groupblog_blog_defaults_options');
-
-	// create a new var to hold errors
+	// Create a new error object to hold errors.
 	$newerrors = new WP_Error();
 
-	// loop through the errors and look for the one we are concerned with
-	foreach ($errors->errors as $key => $value) {
-		// if the error is with the blog name, check to see which one
-		if ($key == 'blogname'){
+	// Loop through the errors and look for the one we are concerned with.
+	foreach ( $errors->errors as $key => $value ) {
 
-			foreach ($value as $subkey => $subvalue) {
+		// If the error is with the blog name, check to see which one.
+		if ( $key == 'blogname' ) {
 
-				switch ($subvalue){
+			foreach ( $value as $subkey => $subvalue ) {
+
+				// TODO: This isn't compatible with languages other than "en_*".
+				// Maybe "switch_to_locale()" might help?
+				switch ( $subvalue ) {
+
+					/*
+					 * Removed in WordPress 4.4.
+					 * @see https://github.com/WordPress/WordPress/commit/a0bbd154d93c20724b9e1f54d515468845870dc0
+					 */
 					case 'Only lowercase letters (a-z) and numbers are allowed.':
-
+					// Support WordPress 4.4 string.
+					case 'Site names can only contain lowercase letters (a-z) and numbers.':
 						$allowedchars = '';
-						if ($checks['allowdashes']== 1) $allowedchars .= '-';
-						if ($checks['allowunderscores'] == 1) $allowedchars .= '_';
+						if ( $checks['allowdashes'] == 1 ) {
+							$allowedchars .= '-';
+						}
+						if ( $checks['allowunderscores'] == 1 ) {
+							$allowedchars .= '_';
+						}
 
 						$allowed = '/[a-z0-9' . $allowedchars . ']+/';
 						preg_match( $allowed, $result['blogname'], $maybe );
-						if( $result['blogname'] != $maybe[0] ) {
+						if ( $result['blogname'] != $maybe[0] ) {
 
-							//still fails, so add an error to the object
-							$newerrors->add('blogname', __("Only lowercase letters and numbers allowed", 'groupblog'));
+							// Still fails, so add an error to the object.
+							$newerrors->add( 'blogname', __("Only lowercase letters and numbers allowed", 'groupblog') );
 
 						}
 						break;
+
 					case 'Site name must be at least 4 characters.':
-						if( strlen( $result['blogname'] ) < $checks[minlength] && !is_super_admin() )
-						$newerrors->add('blogname',  __("Blog name must be at least " . $checks[minlength] . " characters", 'groupblog'));
+						if ( strlen( $result['blogname'] ) < $checks['minlength'] && ! is_super_admin() ) {
+							$newerrors->add( 'blogname', __( "Blog name must be at least " . $checks['minlength'] . " characters", 'groupblog' ) );
+						}
 						break;
+
+					/*
+					 * Removed in WordPress 4.4.
+					 * @see https://github.com/WordPress/WordPress/commit/a0bbd154d93c20724b9e1f54d515468845870dc0
+					 */
 					case "Sorry, site names may not contain the character &#8220;_&#8221;!":
-						if($checks['allowunderscores']!= 1) {
-							$newerrors->add('blogname', __("Sorry, blog names may not contain the character '_'!", 'groupblog'));
+						if ( $checks['allowunderscores'] != 1 ) {
+							$newerrors->add( 'blogname', __( "Sorry, blog names may not contain the character '_'!", 'groupblog' ) );
 						}
 						break;
+
 					case 'Sorry, site names must have letters too!':
-						if($checks['allownumeric'] != 1){
-							$newerrors->add('blogname', __("Sorry, blog names must have letters too!", 'groupblog'));
+						if ( $checks['allownumeric'] != 1 ) {
+							$newerrors->add( 'blogname', __( "Sorry, blog names must have letters too!", 'groupblog' ) );
 						}
 						break;
+
 					default:
-						$newerrors->add('blogname', $subvalue);
+						$newerrors->add( 'blogname', $subvalue );
 
-				}// end switch
+				} // End switch.
 
-		}
+			}
 
-		}
-		else {
-			//Add all other errors into the error object, but they're in sub-arrays, so loop through to get the right stuff.
-			foreach ($value as $subkey => $subvalue) {
-				$newerrors->add($key, $subvalue);
+		} else {
+
+			// Add all other errors into the error object, but they're in sub-arrays, so loop through to get the right stuff.
+			foreach ( $value as $subkey => $subvalue ) {
+				$newerrors->add( $key, $subvalue );
 			}
 
 		}
 
 	}
 
-	//unset the error object from the results & rest it with our new errors
-	unset($result['errors']);
+	// Unset the error object from the results & reset it with our new errors.
+	unset( $result['errors'] );
 	$result['errors'] = $newerrors;
 
 	return $result;
@@ -997,7 +1019,7 @@ function bp_groupblog_validate_blog_signup() {
 	if( !is_user_logged_in() )
 		die();
 
-  // Re-validate user info.
+	// Re-validate user info.
 	$result = bp_groupblog_validate_blog_form();
 	extract($result);
 
