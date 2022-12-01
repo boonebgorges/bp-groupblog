@@ -178,7 +178,7 @@ function bp_groupblog_allow_group_admin_layout() {
 
 	$opt = get_site_option( 'bp_groupblog_blog_defaults_options' );
 
-	if ( ($opt['group_admin_layout'] == 1) && ($opt['theme'] == 'p2|p2-buddypress') )	{
+	if ( ! empty( $opt ) && $opt['group_admin_layout'] == 1 && $opt['theme'] == 'p2|p2-buddypress' )	{
 		return true;
 	} else {
 		return false;

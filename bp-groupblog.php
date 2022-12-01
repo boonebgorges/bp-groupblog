@@ -104,7 +104,7 @@ function bp_groupblog_setup_nav() {
 
 		$checks = get_site_option('bp_groupblog_blog_defaults_options');
 
-		if ( !$checks['deep_group_integration'] ) {
+		if ( ! empty( $checks['deep_group_integration'] ) ) {
 
 			$parent_slug = bp_get_current_group_slug();
 
@@ -792,9 +792,9 @@ function bp_groupblog_sanitize_blog_name( $group_name = '' ) {
 	$checks = get_site_option('bp_groupblog_blog_defaults_options');
 
 	$baddies = array ();
-	if ( $checks['allowdashes'] != '1' )
+	if ( ! empty( $checks['allowdashes'] ) && $checks['allowdashes'] != '1' )
 		$baddies[] = '-';
-	if ( $checks['allowunderscores'] != '1' )
+	if ( ! empty( $checks['allowunderscores'] ) && $checks['allowunderscores'] != '1' )
 		$baddies[] = '_';
 
 	$blog_address = str_replace ( $baddies, '', $group_name );
@@ -1003,7 +1003,7 @@ function bp_groupblog_validate_blog_signup() {
 
 	$checks = get_site_option( 'bp_groupblog_blog_defaults_options' );
 
-	if ( $errors->get_error_code() ) {
+	if ( ! empty( $checks ) && $errors->get_error_code() ) {
 		$message = '';
 		$message .= $errors->get_error_message('blogname') . '<br />';
 		$message .= __( ' We suggest adjusting the blog address below, in accordance with the following requirements:', 'groupblog' ) . '<br />';
@@ -1038,7 +1038,9 @@ function bp_groupblog_validate_blog_signup() {
 
 	$groupblog_blog_id = wpmu_create_blog( $domain, $path, $blog_title, $current_user->ID, $meta, $wpdb->siteid );
 
-	$errors = $filtered_results['errors'];
+	if ( ! empty( $filtered_results['errors'] ) ) {
+		$errors = $filtered_results['errors'];
+	}
 
 	return true;
 
@@ -1688,7 +1690,7 @@ function groupblog_redirect_group_home() {
 
 		$blog_id = get_groupblog_blog_id();
 
-		if ( $checks['deep_group_integration'] && ! empty( $blog_id ) ) {
+		if ( isset( $checks['deep_group_integration'] ) && $checks['deep_group_integration'] && ! empty( $blog_id ) ) {
 			$home_url = get_home_url( $blog_id );
 			bp_core_redirect( $home_url );
 		}
