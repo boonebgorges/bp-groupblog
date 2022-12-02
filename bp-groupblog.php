@@ -1,4 +1,9 @@
 <?php
+/**
+ * BuddyPress Groupblog main plugin file.
+ *
+ * @package BP_Groupblog
+ */
 
 define ( 'BP_GROUPBLOG_IS_INSTALLED', 1 );
 define ( 'BP_GROUPBLOG_VERSION', '1.9.2' );
@@ -48,7 +53,6 @@ register_activation_hook( __FILE__, 'bp_groupblog_setup' );
 /**
  * Require the necessary files. Wait until BP is finished loading, so we have access to everything
  *
- * @package BP Groupblog
  * @since 1.6
  */
 function bp_groupblog_includes() {
@@ -155,8 +159,6 @@ add_action( 'bp_setup_nav', 'bp_groupblog_setup_nav' );
  *
  * Since version 1.6, this function has been called directly by
  * BP_Groupblog_Extension::edit_screen_save()
- *
- * @package BP Groupblog
  */
 function groupblog_edit_settings() {
 	global $bp, $groupblog_blog_id, $errors, $filtered_results;

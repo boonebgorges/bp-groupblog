@@ -1,4 +1,10 @@
 <?php
+/**
+ * BuddyPress Groupblog template functions.
+ *
+ * @package BP_Groupblog
+ */
+
 function bp_groupblog_has_blog_posts() {
 	global $bp, $blog_posts_template;
 

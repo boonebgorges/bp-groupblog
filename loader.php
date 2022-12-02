@@ -1,20 +1,19 @@
 <?php
-
-/*
-Plugin Name: BP Groupblog
-Plugin URI: http://wordpress.org/extend/plugins/search.php?q=buddypress+groupblog
-Description: Automates and links WPMU blogs groups controlled by the group creator.
-Author: Rodney Blevins, Marius Ooms, Boone Gorges
-Version: 1.9.2
-License: (Groupblog: GNU General Public License 2.0 (GPL) http://www.gnu.org/licenses/gpl.html)
-Network: true
-Text Domain: bp-groupblog
-*/
+/**
+ * Plugin Name: BP Groupblog
+ * Plugin URI: http://wordpress.org/extend/plugins/search.php?q=buddypress+groupblog
+ * Description: Automates and links WPMU blogs groups controlled by the group creator.
+ * Author: Rodney Blevins, Marius Ooms, Boone Gorges
+ * Version: 1.9.2
+ * License: (Groupblog: GNU General Public License 2.0 (GPL) http://www.gnu.org/licenses/gpl.html)
+ * Network: true
+ * Text Domain: bp-groupblog
+ *
+ * @package BP_Groupblog
+ */
 
 /**
  * Loads BuddyPress Groupblog only when BP is active
- *
- * @package BP Groupblog
  * @since 1.6
  */
 function bp_groupblog_init() {

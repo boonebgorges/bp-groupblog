@@ -1,4 +1,9 @@
 <?php
+/**
+ * BuddyPress Groupblog styles and scripts.
+ *
+ * @package BP_Groupblog
+ */
 
 /**
  * bp_groupblog_add_admin_style()

@@ -1,4 +1,9 @@
 <?php
+/**
+ * BuddyPress Groupblog Group extension class.
+ *
+ * @package BP_Groupblog
+ */
 
 /**
  * Group API

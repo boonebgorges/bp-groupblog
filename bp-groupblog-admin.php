@@ -1,6 +1,9 @@
 <?php
-
-/*** Wordpress Groupblog Admin Settings ********************************/
+/**
+ * BuddyPress Groupblog Admin Settings.
+ *
+ * @package BP_Groupblog
+ */
 
 /**
  * Initializes a new site.

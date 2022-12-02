@@ -1,13 +1,17 @@
 <?php
 /**
+ * BuddyPress Groupblog blog tab template.
+ *
  * This is the plugin template that is loaded when visiting the 'blog tab' within the group.
  * To modify you can either use the provided hooks. You may also copy the whole groupblog over
  * to your active theme and completely re-theme the blog template.
  *
  * Includes: inc/pages.php, inc/posts.php, inc/activity.php
+ *
+ * @package BP_Groupblog
  */
-?>
 
+?>
 <?php do_action( 'bp_before_group_blog_template' ) ?>
 
 	<?php if ( bp_group_is_visible() && bp_groupblog_is_blog_enabled ( bp_get_group_id() ) ) : ?>
