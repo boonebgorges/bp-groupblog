@@ -738,10 +738,10 @@ function bp_groupblog_validate_blog_form() {
 					// Support WordPress 4.4 string.
 					case 'Site names can only contain lowercase letters (a-z) and numbers.':
 						$allowedchars = '';
-						if ( $checks['allowdashes'] == 1 ) {
+						if ( ! empty( $checks['allowdashes'] ) && $checks['allowdashes'] == 1 ) {
 							$allowedchars .= '-';
 						}
-						if ( $checks['allowunderscores'] == 1 ) {
+						if ( ! empty( $checks['allowunderscores'] ) && $checks['allowunderscores'] == 1 ) {
 							$allowedchars .= '_';
 						}
 
@@ -750,14 +750,20 @@ function bp_groupblog_validate_blog_form() {
 						if ( $result['blogname'] != $maybe[0] ) {
 
 							// Still fails, so add an error to the object.
-							$newerrors->add( 'blogname', __("Only lowercase letters and numbers allowed", 'groupblog') );
+							$newerrors->add( 'blogname', __( 'Only lowercase letters and numbers allowed.', 'groupblog' ) );
 
 						}
 						break;
 
 					case 'Site name must be at least 4 characters.':
-						if ( strlen( $result['blogname'] ) < $checks['minlength'] && ! is_super_admin() ) {
-							$newerrors->add( 'blogname', __( "Blog name must be at least " . $checks['minlength'] . " characters", 'groupblog' ) );
+						if ( ! is_super_admin() && ! empty( $checks['minlength'] ) && strlen( $result['blogname'] ) < $checks['minlength'] ) {
+							$newerrors->add( 'blogname',
+								sprintf(
+									/* translators: %d: The minimum number of characters for a blog name. */
+									__( 'Blog name must be at least %d characters.', 'groupblog' ),
+									(int) $checks['minlength']
+								)
+							);
 						}
 						break;
 
@@ -766,14 +772,20 @@ function bp_groupblog_validate_blog_form() {
 					 * @see https://github.com/WordPress/WordPress/commit/a0bbd154d93c20724b9e1f54d515468845870dc0
 					 */
 					case "Sorry, site names may not contain the character &#8220;_&#8221;!":
-						if ( $checks['allowunderscores'] != 1 ) {
-							$newerrors->add( 'blogname', __( "Sorry, blog names may not contain the character '_'!", 'groupblog' ) );
+						if ( ! empty( $checks['allowunderscores'] ) && $checks['allowunderscores'] != 1 ) {
+							$newerrors->add( 'blogname',
+								sprintf(
+									/* translators: %d: The minimum number of characters for a Site name. */
+									__( 'Sorry, blog names may not contain the character %s!', 'groupblog' ),
+									"'_"
+								)
+							);
 						}
 						break;
 
 					case 'Sorry, site names must have letters too!':
-						if ( $checks['allownumeric'] != 1 ) {
-							$newerrors->add( 'blogname', __( "Sorry, blog names must have letters too!", 'groupblog' ) );
+						if ( ! empty( $checks['allownumeric'] ) && $checks['allownumeric'] != 1 ) {
+							$newerrors->add( 'blogname', __( 'Sorry, blog names must have letters too!', 'groupblog' ) );
 						}
 						break;
 
