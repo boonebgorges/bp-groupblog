@@ -104,7 +104,7 @@ function bp_groupblog_setup_nav() {
 
 		$checks = get_site_option('bp_groupblog_blog_defaults_options');
 
-		if ( ! empty( $checks['deep_group_integration'] ) ) {
+		if ( empty( $checks['deep_group_integration'] ) ) {
 
 			$parent_slug = bp_get_current_group_slug();
 
@@ -1679,7 +1679,7 @@ function groupblog_screen_blog() {
 				bp_core_load_template( apply_filters( 'groupblog_screen_blog', 'groupblog/blog' ) );
 				add_action( 'bp_screens', 'groupblog_screen_blog' );
 			}
-			else if ( 0 != groups_get_current_group() ) {
+			else if ( ! empty( groups_get_current_group() ) ) {
 			 	add_action( 'bp_template_content', 'groupblog_screen_blog_content' );
 				bp_core_load_template( apply_filters( 'bp_core_template_plugin', 'groups/single/plugins' ) );
 			}
