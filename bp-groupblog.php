@@ -79,7 +79,7 @@ if ( version_compare( $bp_version, '1.3', '<' ) ) {
 /**
  * Add language support.
  */
-if ( file_exists( WP_PLUGIN_DIR . '/bp-groupblog/languages/bp-groupblog-' . get_locale() . '.mo' ) ) {
+if ( file_exists( WP_PLUGIN_DIR . '/bp-groupblog/languages/groupblog-' . get_locale() . '.mo' ) ) {
 	load_plugin_textdomain( 'bp-groupblog', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 }
 
