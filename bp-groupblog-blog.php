@@ -29,7 +29,7 @@
 
 		<?php do_action( 'bp_after_group_blog_content' ); ?>
 
-	<?php	restore_current_blog(); ?>
+	<?php restore_current_blog(); ?>
 
 	<?php /* Uncomment to disable */ include 'groupblog/inc/activity.php'; ?>
 

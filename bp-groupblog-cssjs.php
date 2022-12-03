@@ -16,11 +16,11 @@
  */
 function bp_groupblog_add_admin_style() {
 
-	// add css
+	// Add CSS.
 	wp_enqueue_style( 'bp-groupblog-admin-style', plugins_url() . '/bp-groupblog/inc/css/admin.css', array(), BP_GROUPBLOG_VERSION );
 	wp_enqueue_style( 'jQueryUISmoothness', plugins_url() . '/bp-groupblog/inc/smoothness/jquery-ui-smoothness.css', array(), BP_GROUPBLOG_VERSION );
 
-	// add javascripts
+	// Add javascripts.
 	wp_enqueue_script( 'bp-groupblog-admin-js', plugins_url() . '/bp-groupblog/inc/js/admin.js', array(), BP_GROUPBLOG_VERSION, false );
 	wp_enqueue_script( 'jquery-ui-core' );
 	wp_enqueue_script( 'jquery-ui-tabs' );

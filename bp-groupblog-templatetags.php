@@ -51,7 +51,7 @@ function bp_groupblog_blog_posts() {
  */
 function bp_groupblog_blog_post_name() {
 	global $blog_posts_template;
-	echo ''; // Example: $blog_posts_template->blog_post->name;
+	echo '';
 }
 
 /**
@@ -180,7 +180,7 @@ function get_groupblog_group_id( $blog_id ) {
 		return false;
 	}
 
-	// table_name_groupmeta is not defined on first install
+	// table_name_groupmeta is not defined on first install.
 	if ( ! isset( $bp->groups->table_name_groupmeta ) ) {
 		return false;
 	}
