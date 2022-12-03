@@ -1253,12 +1253,30 @@ function bp_groupblog_set_group_to_post_activity( $activity, $args = array() ) {
 		$activity->id      = $id;
 		$activity->user_id = $post->post_author;
 
-		$activity->action = sprintf( __( '%1$s edited the blog post %2$s in the group %3$s:', 'bp-groupblog' ), bp_core_get_userlink( $post->post_author ), '<a href="' . get_permalink( $post->ID ) . '">' . $post->post_title . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_attr( $group->name ) . '</a>' );
+		$action = sprintf( __( '%1$s edited the blog post %2$s in the group %3$s:', 'bp-groupblog' ), bp_core_get_userlink( $post->post_author ), '<a href="' . get_permalink( $post->ID ) . '">' . $post->post_title . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_attr( $group->name ) . '</a>' );
 
 	// This is a new blog post!
 	} else {
-		$activity->action = sprintf( __( '%1$s wrote a new blog post %2$s in the group %3$s:', 'bp-groupblog' ), bp_core_get_userlink( $post->post_author ), '<a href="' . get_permalink( $post->ID ) . '">' . $post->post_title . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_attr( $group->name ) . '</a>' );
+		$action = sprintf( __( '%1$s wrote a new blog post %2$s in the group %3$s:', 'bp-groupblog' ), bp_core_get_userlink( $post->post_author ), '<a href="' . get_permalink( $post->ID ) . '">' . $post->post_title . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_attr( $group->name ) . '</a>' );
 	}
+
+	// Build args for action filter.
+	$filter_args = [
+		'new_post' =>  ! empty( $id ) ? true : false,
+		'post' => $post,
+		'group' => $group,
+		'activity' => $activity,
+	];
+
+	/**
+	 * Filters the activity action string.
+	 *
+	 * @since 1.9.3
+	 *
+	 * @param str $action The complete activity action string.
+	 * @param array $filter_args The array of contextual variables.
+	 */
+	$activity->action = apply_filters( 'bp_groupblog_set_group_to_post_activity_action', $action, $filter_args );
 
 	$activity->primary_link = get_permalink( $post->ID );
 
@@ -1468,6 +1486,26 @@ function bp_groupblog_format_activity_action_new_groupblog_comment( $action, $ac
 
 	// Build the complete activity action string.
 	$action = sprintf( __( '%1$s commented on the post, %2$s, on the groupblog %3$s', 'bp-groupblog' ), $user_link, $post_link, '<a href="' . esc_url( $blog_url ) . '">' . esc_html( $blog_name ) . '</a>' );
+
+	// Build args for filter.
+	$args = [
+		'user_link' => $user_link,
+		'post_link' => $post_link,
+		'blog_url' => $blog_url,
+		'blog_name' => $blog_name,
+		'blog_id' => $blog_id,
+		'activity' => $activity,
+	];
+
+	/**
+	 * Filters the activity action string.
+	 *
+	 * @since 1.9.3
+	 *
+	 * @param str $action The complete activity action string.
+	 * @param array $args The array of contextual variables.
+	 */
+	$action = apply_filters( 'bp_groupblog_format_activity_action_new_groupblog_comment', $action, $args );
 
 	return $action;
 }
