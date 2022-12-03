@@ -14,16 +14,19 @@
 
 /**
  * Loads BuddyPress Groupblog only when BP is active
+ *
  * @since 1.6
  */
 function bp_groupblog_init() {
-	// BP Groupblog requires multisite
-	if ( !is_multisite() )
+	// BP Groupblog requires multisite.
+	if ( ! is_multisite() ) {
 		return;
+	}
 
-	if ( !bp_is_active( 'groups' ) )
+	if ( ! bp_is_active( 'groups' ) ) {
 		return;
+	}
 
-	require_once( dirname( __FILE__ ) . '/bp-groupblog.php' );
+	require_once dirname( __FILE__ ) . '/bp-groupblog.php';
 }
 add_action( 'bp_include', 'bp_groupblog_init' );

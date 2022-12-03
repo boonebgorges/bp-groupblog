@@ -37,38 +37,38 @@ function bp_groupblog_blog_post_pagination() {
 
 function bp_groupblog_show_enabled( $group_id ) {
 
-  if  ( groups_get_groupmeta ( $group_id, 'groupblog_enable_blog' ) == '1' ) {
+	if ( groups_get_groupmeta( $group_id, 'groupblog_enable_blog' ) == '1' ) {
 		echo ' checked="checked"';
-  }
+	}
 
 }
 
 function bp_groupblog_is_blog_enabled( $group_id ) {
 
-  if  ( groups_get_groupmeta ( $group_id, 'groupblog_enable_blog' ) == '1' ) {
-  	return true;
-  } else {
-  	return false;
-  }
+	if ( groups_get_groupmeta( $group_id, 'groupblog_enable_blog' ) == '1' ) {
+	  return true;
+	} else {
+	  return false;
+	}
 }
 
 function bp_groupblog_blog_exists( $group_id ) {
 
-  if  ( !groups_get_groupmeta ( $group_id, 'groupblog_blog_id' ) == '' ) {
-  	return true;
-  } else {
-  	return false;
-  }
+	if ( ! groups_get_groupmeta( $group_id, 'groupblog_blog_id' ) == '' ) {
+	  return true;
+	} else {
+	  return false;
+	}
 
 }
 
 function bp_groupblog_silent_add( $group_id ) {
 
-  if  ( !groups_get_groupmeta ( $group_id, 'groupblog_silent_add' ) == '' ) {
-  	return true;
-  } else {
-  	return false;
-  }
+	if ( ! groups_get_groupmeta( $group_id, 'groupblog_silent_add' ) == '' ) {
+	  return true;
+	} else {
+	  return false;
+	}
 
 }
 
@@ -82,15 +82,16 @@ function bp_groupblog_silent_add( $group_id ) {
 function groupblog_blog_id( $group_id = '' ) {
   echo get_groupblog_blog_id( $group_id );
 }
-	function get_groupblog_blog_id( $group_id = '' ) {
-		global $bp;
 
-		if (  $group_id == '' ) {
-			$group_id = $bp->groups->current_group->id;
-		}
+function get_groupblog_blog_id( $group_id = '' ) {
+	global $bp;
 
-		return groups_get_groupmeta( $group_id, 'groupblog_blog_id' );
+	if ( $group_id == '' ) {
+		$group_id = $bp->groups->current_group->id;
 	}
+
+	return groups_get_groupmeta( $group_id, 'groupblog_blog_id' );
+}
 
 /*
  * groupblog_group_id()
@@ -101,28 +102,35 @@ function groupblog_blog_id( $group_id = '' ) {
 function groupblog_group_id( $blog_id ) {
 	echo get_groupblog_group_id( $blog_id );
 }
-	function get_groupblog_group_id( $blog_id ) {
-		global $bp, $wpdb;
 
-		if ( !isset( $blog_id ) )
-			return;
+function get_groupblog_group_id( $blog_id ) {
+	global $bp, $wpdb;
 
-		// table_name_groupmeta is not defined on first install
-		if ( !isset( $bp->groups->table_name_groupmeta ) )
-			return;
-
-		$group_id = 0;
-
-		$cached = wp_cache_get( $blog_id, 'bp_groupblog_blog_group_ids' );
-		if ( false === $cached ) {
-			$group_id = (int) $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'groupblog_blog_id' AND meta_value = %s", $blog_id ) );
-			wp_cache_set( $blog_id, $group_id, 'bp_groupblog_blog_group_ids' );
-		} else {
-			$group_id = (int) $cached;
-		}
-
-		return $group_id;
+	if ( ! isset( $blog_id ) ) {
+		return;
 	}
+
+	// table_name_groupmeta is not defined on first install
+	if ( ! isset( $bp->groups->table_name_groupmeta ) ) {
+		return;
+	}
+
+	$group_id = 0;
+
+	$cached = wp_cache_get( $blog_id, 'bp_groupblog_blog_group_ids' );
+	if ( false === $cached ) {
+		$group_id = (int) $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'groupblog_blog_id' AND meta_value = %s", $blog_id
+			)
+		);
+		wp_cache_set( $blog_id, $group_id, 'bp_groupblog_blog_group_ids' );
+	} else {
+		$group_id = (int) $cached;
+	}
+
+	return $group_id;
+}
 
 /*
  * bp_groupblog_id()
@@ -133,11 +141,12 @@ function groupblog_group_id( $blog_id ) {
 function bp_groupblog_id() {
 	echo bp_get_groupblog_id();
 }
-	function bp_get_groupblog_id() {
-		global $current_blog;
 
-		return apply_filters( 'bp_get_groupblog_id', get_groupblog_group_id( $current_blog->blog_id ) );
-	}
+function bp_get_groupblog_id() {
+	global $current_blog;
+
+	return apply_filters( 'bp_get_groupblog_id', get_groupblog_group_id( $current_blog->blog_id ) );
+}
 
 /*
  * bp_groupblog_slug()
@@ -148,21 +157,23 @@ function bp_groupblog_id() {
 function bp_groupblog_slug() {
 	echo bp_get_groupblog_slug();
 }
-	function bp_get_groupblog_slug() {
 
-		$group = groups_get_group( array( 'group_id' => bp_get_groupblog_id() ) );
-		return apply_filters( 'bp_get_groupblog_slug', $group->slug );
-	}
+function bp_get_groupblog_slug() {
+
+	$group = groups_get_group( array( 'group_id' => bp_get_groupblog_id() ) );
+	return apply_filters( 'bp_get_groupblog_slug', $group->slug );
+}
 
 function bp_groupblog_forum() {
  echo bp_get_groupblog_forum();
 }
-	function bp_get_groupblog_forum() {
-		global $bp;
 
-		$forum_id = groups_get_groupmeta( bp_get_groupblog_id(), 'forum_id' );
-		return apply_filters( 'bp_get_groupblog_forum', $forum_id );
-	}
+function bp_get_groupblog_forum() {
+	global $bp;
+
+	$forum_id = groups_get_groupmeta( bp_get_groupblog_id(), 'forum_id' );
+	return apply_filters( 'bp_get_groupblog_forum', $forum_id );
+}
 
 /*
  * bp_groupblog_admin_form_action()
@@ -170,7 +181,7 @@ function bp_groupblog_forum() {
  */
 function groupblog_current_layout() {
 
-	$checks = get_site_option('bp_groupblog_blog_defaults_options');
+	$checks = get_site_option( 'bp_groupblog_blog_defaults_options' );
 	$template_name = $checks['page_template_layout'];
 
 	return $template_name;
@@ -184,7 +195,7 @@ function bp_groupblog_allow_group_admin_layout() {
 
 	$opt = get_site_option( 'bp_groupblog_blog_defaults_options' );
 
-	if ( ! empty( $opt ) && $opt['group_admin_layout'] == 1 && $opt['theme'] == 'p2|p2-buddypress' )	{
+	if ( ! empty( $opt ) && $opt['group_admin_layout'] == 1 && $opt['theme'] == 'p2|p2-buddypress' ) {
 		return true;
 	} else {
 		return false;
@@ -210,8 +221,9 @@ function groupblog_locate_layout() {
 
 	$opt = get_site_option( 'bp_groupblog_blog_defaults_options' );
 
-	if ( ( $opt['group_admin_layout'] != 1 ) || !( $template_name = groups_get_groupmeta( bp_get_groupblog_id(), 'page_template_layout' ) ) )
+	if ( ( $opt['group_admin_layout'] != 1 ) || ! ( $template_name = groups_get_groupmeta( bp_get_groupblog_id(), 'page_template_layout' ) ) ) {
 		$template_name = $opt['page_template_layout'];
+	}
 
 	locate_template( array( 'groupblog/layouts/' . $template_name . '.php' ), true );
 }
@@ -223,8 +235,9 @@ function groupblog_locate_layout() {
 function bp_groupblog_admin_form_action( $page, $group = false ) {
 	global $bp, $groups_template;
 
-	if ( !$group )
+	if ( ! $group ) {
 		$group =& $groups_template->group;
+	}
 
 	echo apply_filters( 'bp_groupblog_admin_form_action', bp_group_permalink( $group, false ) . '/admin/' . $page );
 }
