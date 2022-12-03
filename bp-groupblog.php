@@ -79,8 +79,8 @@ if ( version_compare( $bp_version, '1.3', '<' ) ) {
 /**
  * Add language support.
  */
-if ( file_exists( WP_PLUGIN_DIR . '/bp-groupblog/languages/groupblog-' . get_locale() . '.mo' ) ) {
-	load_plugin_textdomain( 'groupblog', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+if ( file_exists( WP_PLUGIN_DIR . '/bp-groupblog/languages/bp-groupblog-' . get_locale() . '.mo' ) ) {
+	load_plugin_textdomain( 'bp-groupblog', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 }
 
 /**
@@ -134,7 +134,7 @@ function bp_groupblog_setup_nav() {
 			) {
 
 				// add a filter so plugins can change the name
-				$name = __( 'Blog', 'groupblog' );
+				$name = __( 'Blog', 'bp-groupblog' );
 				$name = apply_filters( 'bp_groupblog_subnav_item_name', $name );
 
 				// add a filter so plugins can change the slug
@@ -183,7 +183,7 @@ function groupblog_edit_settings() {
 				// They're using an existing blog, so we try to assign that to $groupblog_blog_id
 				if ( ! ( $groupblog_blog_id = $_POST['groupblog-blogid'] ) ) {
 					// They forgot to choose a blog, so send them back and make them do it!
-					bp_core_add_message( __( 'Please choose one of your blogs from the drop-down menu.' . $group_id, 'groupblog' ), 'error' );
+					bp_core_add_message( __( 'Please choose one of your blogs from the drop-down menu.' . $group_id, 'bp-groupblog' ), 'error' );
 					if ( bp_is_action_variable( 'step', 0 ) ) {
 						bp_core_redirect( trailingslashit( $bp->loggedin_user->domain . $bp->groups->slug . '/create/step/' . $bp->action_variables[1] ) );
 					} else {
@@ -215,9 +215,9 @@ function groupblog_edit_settings() {
 	}
 
 	if ( ! groupblog_edit_base_settings( $settings['groupblog-enable-blog'], $settings['groupblog-silent-add'], $settings['default-administrator'], $settings['default-moderator'], $settings['default-member'], $settings['page_template_layout'], $group_id, $groupblog_blog_id ) ) {
-		bp_core_add_message( __( 'There was an error creating your group blog, please try again.', 'groupblog' ), 'error' );
+		bp_core_add_message( __( 'There was an error creating your group blog, please try again.', 'bp-groupblog' ), 'error' );
 	} else {
-		bp_core_add_message( __( 'Group details were successfully updated.', 'groupblog' ) );
+		bp_core_add_message( __( 'Group details were successfully updated.', 'bp-groupblog' ) );
 	}
 
 	do_action( 'groupblog_details_edited', $bp->groups->current_group->id );
@@ -566,7 +566,7 @@ function bp_groupblog_create_screen_save() {
 		// They're using an existing blog, so we try to assign that to $groupblog_blog_id
 		if ( ! ( $groupblog_blog_id = $_POST['groupblog-blogid'] ) ) {
 			// They forgot to choose a blog, so send them back and make them do it!
-			bp_core_add_message( __( 'Please choose one of your blogs from the drop-down menu.' . $group_id, 'groupblog' ), 'error' );
+			bp_core_add_message( __( 'Please choose one of your blogs from the drop-down menu.' . $group_id, 'bp-groupblog' ), 'error' );
 			bp_core_redirect( trailingslashit( $bp->loggedin_user->domain . $bp->groups->slug . '/create/step/' . $bp->action_variables[1] ) );
 		}
 	} else {
@@ -575,7 +575,7 @@ function bp_groupblog_create_screen_save() {
 	}
 
 	if ( ! groupblog_edit_base_settings( $enable_group_blog, $silent_add, $groupblog_default_admin_role, $groupblog_default_mod_role, $groupblog_default_member_role, $page_template_layout, $groupblog_group_id, $groupblog_blog_id ) ) {
-		bp_core_add_message( __( 'There was an error creating your group blog, please try again.', 'groupblog' ), 'error' );
+		bp_core_add_message( __( 'There was an error creating your group blog, please try again.', 'bp-groupblog' ), 'error' );
 		bp_core_redirect( trailingslashit( $bp->loggedin_user->domain . $bp->groups->slug . '/create/step/' . $bp->action_variables[1] ) );
 	}
 }
@@ -602,14 +602,14 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 	<?php if ( ! $groupblog_create_screen && $blog_id != '' ) : ?>
 		<?php /* We're showing the admin form */ ?>
 		<?php $blog_details = get_blog_details( get_groupblog_blog_id(), true ); ?>
-		<label for="blog_title"><strong><?php _e( 'Blog Title:', 'groupblog' ); ?></strong></label>
+		<label for="blog_title"><strong><?php _e( 'Blog Title:', 'bp-groupblog' ); ?></strong></label>
 		<?php if ( $errmsg = $errors->get_error_message( 'blog_title' ) ) { ?>
 			<p class="error"><?php echo $errmsg; ?></p>
 		<?php } ?>
 		<p><?php echo $blog_details->blogname; ?></p>
 		<input name="blog_title" type="hidden" id="blog_title" value="<?php echo $blog_details->blogname; ?>" />
 
-		<label for="blogname"><strong><?php _e( 'Blog Address:', 'groupblog' ); ?></strong></label>
+		<label for="blogname"><strong><?php _e( 'Blog Address:', 'bp-groupblog' ); ?></strong></label>
 		<?php if ( $errmsg = $errors->get_error_message( 'blogname' ) ) : ?>
 			<p class="error"><?php echo $errmsg; ?></p>
 		<?php endif ?>
@@ -618,11 +618,11 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 		<input name="blogname" type="hidden" id="blogname" value="<?php echo $blog_details->siteurl; ?>" maxlength="50" />
 
 		<div id="uncouple-blog">
-			<label for="uncouple"><?php printf( __( 'Uncouple the blog "%1$s" from the group "%2$s":', 'groupblog' ), $blog_details->blogname, $bp->groups->current_group->name ); ?></label>
+			<label for="uncouple"><?php printf( __( 'Uncouple the blog "%1$s" from the group "%2$s":', 'bp-groupblog' ), $blog_details->blogname, $bp->groups->current_group->name ); ?></label>
 
-			<p class="description"><?php printf( __( '<strong>Note:</strong> Uncoupling will remove the blog from your group&#8217;s navigation and prevent future synchronization of group members and blog authors, but it will not remove change blog permissions for any current member. Visit <a href="%1$s">the Users panel</a> if you&#8217;d like to remove users from the blog.', 'groupblog' ), $blog_details->siteurl . '/wp-admin/users.php' ); ?></p>
+			<p class="description"><?php printf( __( '<strong>Note:</strong> Uncoupling will remove the blog from your group&#8217;s navigation and prevent future synchronization of group members and blog authors, but it will not remove change blog permissions for any current member. Visit <a href="%1$s">the Users panel</a> if you&#8217;d like to remove users from the blog.', 'bp-groupblog' ), $blog_details->siteurl . '/wp-admin/users.php' ); ?></p>
 
-			<a class="button" href="<?php echo wp_nonce_url( bp_get_group_permalink( $bp->groups->current_group ) . 'admin/group-blog/uncouple', 'groupblog-uncouple' ); ?>"><?php _e( 'Uncouple', 'groupblog' ); ?></a>
+			<a class="button" href="<?php echo wp_nonce_url( bp_get_group_permalink( $bp->groups->current_group ) . 'admin/group-blog/uncouple', 'groupblog-uncouple' ); ?>"><?php _e( 'Uncouple', 'bp-groupblog' ); ?></a>
 
 		</div>
 
@@ -633,15 +633,15 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 	<?php else : ?>
 		<?php /* Showing the create screen form */ ?>
 
-		<p><?php _e( 'Choose either one of your existing blogs or create a new one all together with the details displayed below.', 'groupblog' ); ?><br /><?php _e( 'Take care as you can only choose once.  Later you may still disable or enable the blog, but your choice is set.', 'groupblog' ); ?></p>
+		<p><?php _e( 'Choose either one of your existing blogs or create a new one all together with the details displayed below.', 'bp-groupblog' ); ?><br /><?php _e( 'Take care as you can only choose once.  Later you may still disable or enable the blog, but your choice is set.', 'bp-groupblog' ); ?></p>
 
 		<p>
-			<label for="groupblog-create-new-no"><input type="radio" value="no" name="groupblog-create-new" id="groupblog-create-new-no" /><span>&nbsp;<?php _e( 'Use one of your own available blogs:', 'groupblog' ); ?>&nbsp;</span>
+			<label for="groupblog-create-new-no"><input type="radio" value="no" name="groupblog-create-new" id="groupblog-create-new-no" /><span>&nbsp;<?php _e( 'Use one of your own available blogs:', 'bp-groupblog' ); ?>&nbsp;</span>
 
 			<?php $user_blogs = get_blogs_of_user( get_current_user_id() ); ?>
 
 			<select name="groupblog-blogid" id="groupblog-blogid">
-				<option value="0"><?php _e( 'choose a blog', 'groupblog' ); ?></option>
+				<option value="0"><?php _e( 'choose a blog', 'bp-groupblog' ); ?></option>
 				<?php
 
 				foreach ( (array) $user_blogs as $user_blog ) {
@@ -657,12 +657,12 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 		</p>
 
 		<p>
-			<label for="groupblog-create-new-yes"><input type="radio" value="yes" name="groupblog-create-new" id="groupblog-create-new-yes" checked="checked" /><span>&nbsp;<?php _e( 'Or, create a new blog', 'groupblog' ); ?></label></span>
+			<label for="groupblog-create-new-yes"><input type="radio" value="yes" name="groupblog-create-new" id="groupblog-create-new-yes" checked="checked" /><span>&nbsp;<?php _e( 'Or, create a new blog', 'bp-groupblog' ); ?></label></span>
 		</p>
 
 		<ul id="groupblog-details">
 			<li>
-				<label class="groupblog-label" for="blog_title"><strong><?php _e( 'Blog Title:', 'groupblog' ); ?></strong></label>
+				<label class="groupblog-label" for="blog_title"><strong><?php _e( 'Blog Title:', 'bp-groupblog' ); ?></strong></label>
 
 				<?php if ( $errmsg = $errors->get_error_message( 'blog_title' ) ) : ?>
 					<span class="error"><?php echo $errmsg; ?></span>
@@ -676,7 +676,7 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 			</li>
 
 			<li>
-				<label class="groupblog-label" for="blogname"><strong><?php _e( 'Blog Address:', 'groupblog' ); ?></strong></label>
+				<label class="groupblog-label" for="blogname"><strong><?php _e( 'Blog Address:', 'bp-groupblog' ); ?></strong></label>
 				<?php if ( $errmsg = $errors->get_error_message( 'blogname' ) ) : ?>
 					<span class="error"><?php echo $errmsg; ?></span>
 				<?php endif ?>
@@ -770,7 +770,7 @@ function bp_groupblog_validate_blog_form() {
 						if ( $result['blogname'] != $maybe[0] ) {
 
 							// Still fails, so add an error to the object.
-							$newerrors->add( 'blogname', __( 'Only lowercase letters and numbers allowed.', 'groupblog' ) );
+							$newerrors->add( 'blogname', __( 'Only lowercase letters and numbers allowed.', 'bp-groupblog' ) );
 
 						}
 						break;
@@ -780,7 +780,7 @@ function bp_groupblog_validate_blog_form() {
 							$newerrors->add( 'blogname',
 								sprintf(
 									/* translators: %d: The minimum number of characters for a blog name. */
-									__( 'Blog name must be at least %d characters.', 'groupblog' ),
+									__( 'Blog name must be at least %d characters.', 'bp-groupblog' ),
 									(int) $checks['minlength']
 								)
 							);
@@ -796,7 +796,7 @@ function bp_groupblog_validate_blog_form() {
 							$newerrors->add( 'blogname',
 								sprintf(
 									/* translators: %d: The minimum number of characters for a Site name. */
-									__( 'Sorry, blog names may not contain the character %s!', 'groupblog' ),
+									__( 'Sorry, blog names may not contain the character %s!', 'bp-groupblog' ),
 									"'_"
 								)
 							);
@@ -805,7 +805,7 @@ function bp_groupblog_validate_blog_form() {
 
 					case 'Sorry, site names must have letters too!':
 						if ( ! empty( $checks['allownumeric'] ) && $checks['allownumeric'] != 1 ) {
-							$newerrors->add( 'blogname', __( 'Sorry, blog names must have letters too!', 'groupblog' ) );
+							$newerrors->add( 'blogname', __( 'Sorry, blog names must have letters too!', 'bp-groupblog' ) );
 						}
 						break;
 
@@ -868,7 +868,7 @@ function bp_groupblog_process_uncouple() {
 		check_admin_referer( 'groupblog-uncouple' );
 
 		if ( ! bp_group_is_admin() ) {
-			bp_core_add_message( __( 'You must be a group admin to perform this action.', 'groupblog' ), 'error' );
+			bp_core_add_message( __( 'You must be a group admin to perform this action.', 'bp-groupblog' ), 'error' );
 			bp_core_redirect( bp_get_group_permalink( groups_get_current_group() ) );
 		}
 
@@ -881,7 +881,7 @@ function bp_groupblog_process_uncouple() {
 		groups_update_groupmeta( bp_get_current_group_id(), 'groupblog_blog_id', '' );
 		wp_cache_delete( $blog_id, 'bp_groupblog_blog_group_ids' );
 
-		bp_core_add_message( __( 'Blog uncoupled.', 'groupblog' ) );
+		bp_core_add_message( __( 'Blog uncoupled.', 'bp-groupblog' ) );
 
 		// Redirect to the groupblog admin
 		bp_core_redirect( bp_get_group_permalink( groups_get_current_group() ) . 'admin/group-blog' );
@@ -921,14 +921,14 @@ function bp_groupblog_signup_blog( $blogname = '', $blog_title = '', $errors = '
 	$group_id = bp_is_group_create() ? bp_get_new_group_id() : bp_get_current_group_id();
 
 	?>
-	<h2><?php _e( 'Group Blog', 'groupblog' ); ?></h2>
+	<h2><?php _e( 'Group Blog', 'bp-groupblog' ); ?></h2>
 	<?php if ( ! $groupblog_create_screen ) { ?>
 		<input type="hidden" name="stage" value="gimmeanotherblog" />
 		<?php do_action( 'signup_hidden_fields' ); ?>
 	<?php } ?>
 
 		<div class="checkbox">
-			<label><input type="checkbox" name="groupblog-enable-blog" id="groupblog-enable-blog" value="1"<?php bp_groupblog_show_enabled( $group_id ); ?>/> <?php _e( 'Enable group blog', 'groupblog' ); ?></label>
+			<label><input type="checkbox" name="groupblog-enable-blog" id="groupblog-enable-blog" value="1"<?php bp_groupblog_show_enabled( $group_id ); ?>/> <?php _e( 'Enable group blog', 'bp-groupblog' ); ?></label>
 		</div>
 
 		<?php bp_groupblog_show_blog_form( $blogname, $blog_title, $errors ); ?>
@@ -937,12 +937,12 @@ function bp_groupblog_signup_blog( $blogname = '', $blog_title = '', $errors = '
 
 		<div id="groupblog-member-options">
 
-			<h3><?php _e( 'Member Options', 'groupblog' ); ?></h3>
+			<h3><?php _e( 'Member Options', 'bp-groupblog' ); ?></h3>
 
-			<p><?php _e( 'Enable blog posting to allow adding of group members to the blog with the roles set below.', 'groupblog' ); ?><br /><?php _e( 'When disabled, all members will temporarily be set to subscribers, disabling posting.', 'groupblog' ); ?></p>
+			<p><?php _e( 'Enable blog posting to allow adding of group members to the blog with the roles set below.', 'bp-groupblog' ); ?><br /><?php _e( 'When disabled, all members will temporarily be set to subscribers, disabling posting.', 'bp-groupblog' ); ?></p>
 
 			<div class="checkbox">
-				<label><input type="checkbox" name="groupblog-silent-add" id="groupblog-silent-add" value="1" <?php if ( bp_groupblog_silent_add( $group_id ) ) { ?>checked="checked"<?php } ?>/> <?php _e( 'Enable member blog posting', 'groupblog' ); ?></label>
+				<label><input type="checkbox" name="groupblog-silent-add" id="groupblog-silent-add" value="1" <?php if ( bp_groupblog_silent_add( $group_id ) ) { ?>checked="checked"<?php } ?>/> <?php _e( 'Enable member blog posting', 'bp-groupblog' ); ?></label>
 			</div>
 
 			<?php
@@ -959,35 +959,35 @@ function bp_groupblog_signup_blog( $blogname = '', $blog_title = '', $errors = '
 			}
 			?>
 
-			<label><strong><?php _e( 'Default Administrator Role:', 'groupblog' ); ?></strong></label>
-			<input type="radio" <?php checked( $groupblog_default_admin_role, 'administrator' ); ?> value="administrator" name="default-administrator" /><span>&nbsp;<?php _e( 'Administrator', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_admin_role, 'editor' ); ?> value="editor" name="default-administrator" /><span>&nbsp;<?php _e( 'Editor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_admin_role, 'author' ); ?> value="author" name="default-administrator" /><span>&nbsp;<?php _e( 'Author', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_admin_role, 'contributor' ); ?> value="contributor" name="default-administrator" /><span>&nbsp;<?php _e( 'Contributor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_admin_role, 'subscriber' ); ?> value="subscriber" name="default-administrator" /><span>&nbsp;<?php _e( 'Subscriber', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<label><strong><?php _e( 'Default Administrator Role:', 'bp-groupblog' ); ?></strong></label>
+			<input type="radio" <?php checked( $groupblog_default_admin_role, 'administrator' ); ?> value="administrator" name="default-administrator" /><span>&nbsp;<?php _e( 'Administrator', 'bp-groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_admin_role, 'editor' ); ?> value="editor" name="default-administrator" /><span>&nbsp;<?php _e( 'Editor', 'bp-groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_admin_role, 'author' ); ?> value="author" name="default-administrator" /><span>&nbsp;<?php _e( 'Author', 'bp-groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_admin_role, 'contributor' ); ?> value="contributor" name="default-administrator" /><span>&nbsp;<?php _e( 'Contributor', 'bp-groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_admin_role, 'subscriber' ); ?> value="subscriber" name="default-administrator" /><span>&nbsp;<?php _e( 'Subscriber', 'bp-groupblog' ); ?>&nbsp;&nbsp;</span>
 
-			<label><strong><?php _e( 'Default Moderator Role:', 'groupblog' ); ?></strong></label>
-			<input type="radio" <?php checked( $groupblog_default_mod_role, 'administrator' ); ?> value="administrator" name="default-moderator" /><span>&nbsp;<?php _e( 'Administrator', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_mod_role, 'editor' ); ?> value="editor" name="default-moderator" /><span>&nbsp;<?php _e( 'Editor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_mod_role, 'author' ); ?> value="author" name="default-moderator" /><span>&nbsp;<?php _e( 'Author', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_mod_role, 'contributor' ); ?> value="contributor" name="default-moderator" /><span>&nbsp;<?php _e( 'Contributor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_mod_role, 'subscriber' ); ?> value="subscriber" name="default-moderator" /><span>&nbsp;<?php _e( 'Subscriber', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<label><strong><?php _e( 'Default Moderator Role:', 'bp-groupblog' ); ?></strong></label>
+			<input type="radio" <?php checked( $groupblog_default_mod_role, 'administrator' ); ?> value="administrator" name="default-moderator" /><span>&nbsp;<?php _e( 'Administrator', 'bp-groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_mod_role, 'editor' ); ?> value="editor" name="default-moderator" /><span>&nbsp;<?php _e( 'Editor', 'bp-groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_mod_role, 'author' ); ?> value="author" name="default-moderator" /><span>&nbsp;<?php _e( 'Author', 'bp-groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_mod_role, 'contributor' ); ?> value="contributor" name="default-moderator" /><span>&nbsp;<?php _e( 'Contributor', 'bp-groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_mod_role, 'subscriber' ); ?> value="subscriber" name="default-moderator" /><span>&nbsp;<?php _e( 'Subscriber', 'bp-groupblog' ); ?>&nbsp;&nbsp;</span>
 
-			<label><strong><?php _e( 'Default Member Role:', 'groupblog' ); ?></strong></label>
-			<input type="radio" <?php checked( $groupblog_default_member_role, 'administrator' ); ?> value="administrator" name="default-member" /><span>&nbsp;<?php _e( 'Administrator', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_member_role, 'editor' ); ?> value="editor" name="default-member" /><span>&nbsp;<?php _e( 'Editor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_member_role, 'author' ); ?> value="author" name="default-member" /><span>&nbsp;<?php _e( 'Author', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_member_role, 'contributor' ); ?> value="contributor" name="default-member" /><span>&nbsp;<?php _e( 'Contributor', 'groupblog' ); ?>&nbsp;&nbsp;</span>
-			<input type="radio" <?php checked( $groupblog_default_member_role, 'subscriber' ); ?> value="subscriber" name="default-member" /><span>&nbsp;<?php _e( 'Subscriber', 'groupblog' ); ?>&nbsp;&nbsp;</span>
+			<label><strong><?php _e( 'Default Member Role:', 'bp-groupblog' ); ?></strong></label>
+			<input type="radio" <?php checked( $groupblog_default_member_role, 'administrator' ); ?> value="administrator" name="default-member" /><span>&nbsp;<?php _e( 'Administrator', 'bp-groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_member_role, 'editor' ); ?> value="editor" name="default-member" /><span>&nbsp;<?php _e( 'Editor', 'bp-groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_member_role, 'author' ); ?> value="author" name="default-member" /><span>&nbsp;<?php _e( 'Author', 'bp-groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_member_role, 'contributor' ); ?> value="contributor" name="default-member" /><span>&nbsp;<?php _e( 'Contributor', 'bp-groupblog' ); ?>&nbsp;&nbsp;</span>
+			<input type="radio" <?php checked( $groupblog_default_member_role, 'subscriber' ); ?> value="subscriber" name="default-member" /><span>&nbsp;<?php _e( 'Subscriber', 'bp-groupblog' ); ?>&nbsp;&nbsp;</span>
 
 			<div id="groupblog-member-roles">
-				<label><strong><?php _e( 'A bit about WordPress member roles:', 'groupblog' ); ?></strong></label>
+				<label><strong><?php _e( 'A bit about WordPress member roles:', 'bp-groupblog' ); ?></strong></label>
 				<ul id="groupblog-members">
-					<li><?php _e( 'Administrator', 'groupblog' ); ?> - <?php _e( 'Somebody who has access to all the administration features.', 'groupblog' ); ?></li>
-					<li><?php _e( 'Editor', 'groupblog' ); ?> - <?php _e( "Somebody who can publish posts, manage posts as well as manage other people's posts, etc.", 'groupblog' ); ?></li>
-					<li><?php _e( 'Author', 'groupblog' ); ?> - <?php _e( 'Somebody who can publish and manage their own posts.', 'groupblog' ); ?></li>
-					<li><?php _e( 'Contributor', 'groupblog' ); ?> - <?php _e( 'Somebody who can write and manage their posts but not publish posts.', 'groupblog' ); ?></li>
-					<li><?php _e( 'Subscriber', 'groupblog' ); ?> - <?php _e( 'Somebody who can read comments/comment/receive news letters, etc.', 'groupblog' ); ?></li>
+					<li><?php _e( 'Administrator', 'bp-groupblog' ); ?> - <?php _e( 'Somebody who has access to all the administration features.', 'bp-groupblog' ); ?></li>
+					<li><?php _e( 'Editor', 'bp-groupblog' ); ?> - <?php _e( "Somebody who can publish posts, manage posts as well as manage other people's posts, etc.", 'bp-groupblog' ); ?></li>
+					<li><?php _e( 'Author', 'bp-groupblog' ); ?> - <?php _e( 'Somebody who can publish and manage their own posts.', 'bp-groupblog' ); ?></li>
+					<li><?php _e( 'Contributor', 'bp-groupblog' ); ?> - <?php _e( 'Somebody who can write and manage their posts but not publish posts.', 'bp-groupblog' ); ?></li>
+					<li><?php _e( 'Subscriber', 'bp-groupblog' ); ?> - <?php _e( 'Somebody who can read comments/comment/receive news letters, etc.', 'bp-groupblog' ); ?></li>
 				</ul>
 			</div>
 
@@ -1005,9 +1005,9 @@ function bp_groupblog_signup_blog( $blogname = '', $blog_title = '', $errors = '
 
 			<div id="groupblog-layout-options">
 
-				<h3><?php _e( 'Select Layout', 'groupblog' ); ?></h3>
+				<h3><?php _e( 'Select Layout', 'bp-groupblog' ); ?></h3>
 
-				<p class="enabled"><?php _e( 'Please select a Layout which you would like to use for your Group Blog.', 'groupblog' ); ?></p>
+				<p class="enabled"><?php _e( 'Please select a Layout which you would like to use for your Group Blog.', 'bp-groupblog' ); ?></p>
 
 				<table class="enabled" id="availablethemes" cellspacing="0" cellpadding="0">
 					<tbody>
@@ -1015,14 +1015,14 @@ function bp_groupblog_signup_blog( $blogname = '', $blog_title = '', $errors = '
 						<td class="available-theme top left">
 							<?php echo '<img src="' . WP_PLUGIN_URL . '/bp-groupblog/inc/i/screenshot-mag.png">'; ?>
 							<br /><br />
-							<input<?php if ( ! bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> name="page_template_layout" id="page_template_layout"  value="magazine" type="radio" <?php if ( $page_template_layout == 'magazine' ) { echo 'checked="checked"'; } ?> /><label style="display:inline;"> <?php _e( 'Magazine', 'groupblog' ); ?></label>
-							<p class="description"><?php _e( 'Balanced template for groups with diverse postings.', 'groupblog' ); ?></p>
+							<input<?php if ( ! bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> name="page_template_layout" id="page_template_layout"  value="magazine" type="radio" <?php if ( $page_template_layout == 'magazine' ) { echo 'checked="checked"'; } ?> /><label style="display:inline;"> <?php _e( 'Magazine', 'bp-groupblog' ); ?></label>
+							<p class="description"><?php _e( 'Balanced template for groups with diverse postings.', 'bp-groupblog' ); ?></p>
 						</td>
 						<td class="available-theme top">
 							<?php echo '<img src="' . WP_PLUGIN_URL . '/bp-groupblog/inc/i/screenshot-micro.png">'; ?>
 							<br /><br />
-							<input<?php if ( ! bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> name="page_template_layout" id="page_template_layout"  value="microblog" type="radio" <?php if ( $page_template_layout == 'microblog' ) { echo 'checked="checked"'; } ?> /><label style="display:inline;"> <?php _e( 'Microblog', 'groupblog' ); ?></label>
-							<p class="description"><?php _e( 'Great for simple listing of posts in a chronological order.', 'groupblog' ); ?></p>
+							<input<?php if ( ! bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> name="page_template_layout" id="page_template_layout"  value="microblog" type="radio" <?php if ( $page_template_layout == 'microblog' ) { echo 'checked="checked"'; } ?> /><label style="display:inline;"> <?php _e( 'Microblog', 'bp-groupblog' ); ?></label>
+							<p class="description"><?php _e( 'Great for simple listing of posts in a chronological order.', 'bp-groupblog' ); ?></p>
 						</td>
 					</tr>
 					</tbody>
@@ -1036,7 +1036,7 @@ function bp_groupblog_signup_blog( $blogname = '', $blog_title = '', $errors = '
 
 		<?php if ( ! $groupblog_create_screen ) : ?>
 			<p>
-				<input id="save" type="submit" name="save" class="submit" value="<?php _e( 'Save Changes &raquo;', 'groupblog' ); ?>"/>
+				<input id="save" type="submit" name="save" class="submit" value="<?php _e( 'Save Changes &raquo;', 'bp-groupblog' ); ?>"/>
 			</p>
 		<?php endif; ?>
 
@@ -1068,13 +1068,13 @@ function bp_groupblog_validate_blog_signup() {
 	if ( ! empty( $checks ) && $errors->get_error_code() ) {
 		$message = '';
 		$message .= $errors->get_error_message( 'blogname' ) . '<br />';
-		$message .= __( ' We suggest adjusting the blog address below, in accordance with the following requirements:', 'groupblog' ) . '<br />';
+		$message .= __( ' We suggest adjusting the blog address below, in accordance with the following requirements:', 'bp-groupblog' ) . '<br />';
 		if ( $checks['allowunderscores'] != '1' || $checks['allowdashes'] != '1' ) {
-			$message .= __( ' &raquo; Only letters and numbers allowed.', 'groupblog' ) . '<br />';
+			$message .= __( ' &raquo; Only letters and numbers allowed.', 'bp-groupblog' ) . '<br />';
 		}
-		$message .= sprintf( __( ' &raquo; Must be at least %s characters.', 'groupblog' ), $checks['minlength'] ) . '<br />';
+		$message .= sprintf( __( ' &raquo; Must be at least %s characters.', 'bp-groupblog' ), $checks['minlength'] ) . '<br />';
 		if ( $checks['allownumeric'] != '1' ) {
-			$message .= __( ' &raquo; Has to contain letters as well.', 'groupblog' );
+			$message .= __( ' &raquo; Has to contain letters as well.', 'bp-groupblog' );
 		}
 		bp_core_add_message( $message, 'error' );
 
@@ -1253,11 +1253,11 @@ function bp_groupblog_set_group_to_post_activity( $activity, $args = array() ) {
 		$activity->id      = $id;
 		$activity->user_id = $post->post_author;
 
-		$activity->action = sprintf( __( '%1$s edited the blog post %2$s in the group %3$s:', 'groupblog' ), bp_core_get_userlink( $post->post_author ), '<a href="' . get_permalink( $post->ID ) . '">' . $post->post_title . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_attr( $group->name ) . '</a>' );
+		$activity->action = sprintf( __( '%1$s edited the blog post %2$s in the group %3$s:', 'bp-groupblog' ), bp_core_get_userlink( $post->post_author ), '<a href="' . get_permalink( $post->ID ) . '">' . $post->post_title . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_attr( $group->name ) . '</a>' );
 
 	// This is a new blog post!
 	} else {
-		$activity->action = sprintf( __( '%1$s wrote a new blog post %2$s in the group %3$s:', 'groupblog' ), bp_core_get_userlink( $post->post_author ), '<a href="' . get_permalink( $post->ID ) . '">' . $post->post_title . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_attr( $group->name ) . '</a>' );
+		$activity->action = sprintf( __( '%1$s wrote a new blog post %2$s in the group %3$s:', 'bp-groupblog' ), bp_core_get_userlink( $post->post_author ), '<a href="' . get_permalink( $post->ID ) . '">' . $post->post_title . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_attr( $group->name ) . '</a>' );
 	}
 
 	$activity->primary_link = get_permalink( $post->ID );
@@ -1466,7 +1466,7 @@ function bp_groupblog_format_activity_action_new_groupblog_comment( $action, $ac
 	}
 
 	// Build the complete activity action string.
-	$action = sprintf( __( '%1$s commented on the post, %2$s, on the groupblog %3$s', 'buddypress' ), $user_link, $post_link, '<a href="' . esc_url( $blog_url ) . '">' . esc_html( $blog_name ) . '</a>' );
+	$action = sprintf( __( '%1$s commented on the post, %2$s, on the groupblog %3$s', 'bp-groupblog' ), $user_link, $post_link, '<a href="' . esc_url( $blog_url ) . '">' . esc_html( $blog_name ) . '</a>' );
 
 	return $action;
 }
@@ -1695,7 +1695,7 @@ add_filter( 'bp_activity_get_permalink', 'bp_groupblog_activity_permalink', 10, 
 function bp_groupblog_posts() {
 
 	?>
-	<option value="new_groupblog_post"><?php _e( 'Blog Posts', 'groupblog' ); ?></option>
+	<option value="new_groupblog_post"><?php _e( 'Blog Posts', 'bp-groupblog' ); ?></option>
 	<?php
 
 }

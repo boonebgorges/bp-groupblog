@@ -81,7 +81,7 @@ function bp_groupblog_blog_defaults( $blog_id ) {
 				'post_name' => $options['pageslug'], // The name (slug) for your post
 				'post_title' => $options['pagetitle'], //The title of your post.
 				'post_type' => 'page', //Sometimes you want to post a page.
-				'post_content' => __( '<p><strong>This page has been created automatically by the BuddyPress GroupBlog plugin.</strong></p><p>Please contact the site admin if you see this message instead of your blog posts. Possible solution: please advise your site admin to create the <a href="http://codex.wordpress.org/Pages#Creating_Your_Own_Page_Templates">page template</a> needed for the BuddyPress GroupBlog plugin.<p>', 'groupblog' ), //The full text of the post.
+				'post_content' => __( '<p><strong>This page has been created automatically by the BuddyPress GroupBlog plugin.</strong></p><p>Please contact the site admin if you see this message instead of your blog posts. Possible solution: please advise your site admin to create the <a href="http://codex.wordpress.org/Pages#Creating_Your_Own_Page_Templates">page template</a> needed for the BuddyPress GroupBlog plugin.<p>', 'bp-groupblog' ), //The full text of the post.
 			);
 			$blog_page_id = wp_insert_post( $blog_page );
 
@@ -234,7 +234,7 @@ function bp_groupblog_update_defaults() {
 								'post_name' => $newoptions['pageslug'], // The name (slug) for your post
 								'post_title' => $newoptions['pagetitle'], //The title of your post.
 								'post_type' => 'page', //Sometimes you want to post a page.
-								'post_content' => __( '<p><strong>This page has been created automatically by the BuddyPress GroupBlog plugin.</strong></p><p>Please contact the site admin if you see this message instead of your blog posts. Possible solution: please advise your site admin to create the <a href="http://codex.wordpress.org/Pages#Creating_Your_Own_Page_Templates">page template</a> needed for the BuddyPress GroupBlog plugin.<p>', 'groupblog' ), //The full text of the post.
+								'post_content' => __( '<p><strong>This page has been created automatically by the BuddyPress GroupBlog plugin.</strong></p><p>Please contact the site admin if you see this message instead of your blog posts. Possible solution: please advise your site admin to create the <a href="http://codex.wordpress.org/Pages#Creating_Your_Own_Page_Templates">page template</a> needed for the BuddyPress GroupBlog plugin.<p>', 'bp-groupblog' ), //The full text of the post.
 							);
 							$blog_page_id = wp_insert_post( $blog_page );
 
@@ -326,8 +326,8 @@ function bp_groupblog_add_admin_menu() {
 	/* Add the administration tab under the "Site Admin" tab for site administrators */
 	$page = add_submenu_page(
 		$location,
-		__( 'GroupBlog Setup', 'groupblog' ),
-		'<span class="bp-groupblog-admin-menu-header">' . __( 'GroupBlog Setup', 'groupblog' ) . '&nbsp;&nbsp;&nbsp;</span>',
+		__( 'GroupBlog Setup', 'bp-groupblog' ),
+		'<span class="bp-groupblog-admin-menu-header">' . __( 'GroupBlog Setup', 'bp-groupblog' ) . '&nbsp;&nbsp;&nbsp;</span>',
 		'manage_options',
 		'bp_groupblog_management_page',
 		'bp_groupblog_management_page'
@@ -346,7 +346,7 @@ function bp_groupblog_management_page() {
 
 	// only allow site admins to come here.
 	if ( is_super_admin() == false ) {
-		wp_die( __( 'You do not have permission to access this page.', 'groupblog' ) );
+		wp_die( __( 'You do not have permission to access this page.', 'bp-groupblog' ) );
 	}
 
 	// process form submission
@@ -363,23 +363,23 @@ function bp_groupblog_management_page() {
 
 	<?php if ( $updated ) { ?>
 		<div id="message" class="updated fade">
-			<p><?php _e( 'Options saved.', 'groupblog' ); ?></p>
+			<p><?php _e( 'Options saved.', 'bp-groupblog' ); ?></p>
 		</div>
 	<?php } ?>
 
 	<div class="wrap" style="position: relative">
-		<h2><?php _e( 'BuddyPress GroupBlog Settings', 'groupblog' ); ?></h2>
+		<h2><?php _e( 'BuddyPress GroupBlog Settings', 'bp-groupblog' ); ?></h2>
 
 		<form name="bp-groupblog-setup" id="bp-groupblog-setup" action="" method="post">
 
 			<div id="tabctnr">
 				<ul class="tabnav">
-					<li><a href="#groupblog_default_theme"><?php _e( 'Theme', 'groupblog' ); ?></a></li>
-					<li><a href="#groupblog_landing_page"><?php _e( 'Redirect', 'groupblog' ); ?></a></li>
-					<li><a href="#groupblog_template_layout"><?php _e( 'Layout', 'groupblog' ); ?></a></li>
-					<li><a href="#groupblog_default_blog_settings"><?php _e( 'Defaults', 'groupblog' ); ?></a></li>
-					<li><a href="#groupblog_validation_settings"><?php _e( 'Validation', 'groupblog' ); ?></a></li>
-					<li><a href="#groupblog_about"><?php _e( 'About', 'groupblog' ); ?></a></li>
+					<li><a href="#groupblog_default_theme"><?php _e( 'Theme', 'bp-groupblog' ); ?></a></li>
+					<li><a href="#groupblog_landing_page"><?php _e( 'Redirect', 'bp-groupblog' ); ?></a></li>
+					<li><a href="#groupblog_template_layout"><?php _e( 'Layout', 'bp-groupblog' ); ?></a></li>
+					<li><a href="#groupblog_default_blog_settings"><?php _e( 'Defaults', 'bp-groupblog' ); ?></a></li>
+					<li><a href="#groupblog_validation_settings"><?php _e( 'Validation', 'bp-groupblog' ); ?></a></li>
+					<li><a href="#groupblog_about"><?php _e( 'About', 'bp-groupblog' ); ?></a></li>
 				</ul>
 
 				<div id='groupblog_default_theme'>
@@ -446,12 +446,12 @@ function bp_groupblog_management_page() {
 					natcasesort( $theme_names );
 					?>
 
-					<h3><?php _e( 'Default Theme', 'groupblog' ); ?></h3>
+					<h3><?php _e( 'Default Theme', 'bp-groupblog' ); ?></h3>
 
 					<div id="select-theme">
-						<label for="theme"><?php _e( 'Select the default theme for new groupblogs:', 'groupblog' ); ?></label>
+						<label for="theme"><?php _e( 'Select the default theme for new groupblogs:', 'bp-groupblog' ); ?></label>
 						<select id="theme" name="theme" size="1">
-							<optgroup label="<?php echo esc_attr( __( 'GroupBlog Themes:', 'groupblog' ) ); ?>">
+							<optgroup label="<?php echo esc_attr( __( 'GroupBlog Themes:', 'bp-groupblog' ) ); ?>">
 								<?php
 
 								$groupblog_themes_options = '';
@@ -475,12 +475,12 @@ function bp_groupblog_management_page() {
 								if ( ! empty( $groupblog_themes_options ) ) {
 									echo $groupblog_themes_options;
 								} else {
-									echo '<option value="" disabled="disabled">' . __( 'No groupblog-enabled themes available', 'groupblog' ) . '</option>';
+									echo '<option value="" disabled="disabled">' . __( 'No groupblog-enabled themes available', 'bp-groupblog' ) . '</option>';
 								}
 
 								?>
 							</optgroup>
-							<optgroup label="<?php echo esc_attr( __( 'Regular Themes:', 'groupblog' ) ); ?>">
+							<optgroup label="<?php echo esc_attr( __( 'Regular Themes:', 'bp-groupblog' ) ); ?>">
 								<?php
 
 								$non_groupblog_themes_options = '';
@@ -504,13 +504,13 @@ function bp_groupblog_management_page() {
 								if ( ! empty( $non_groupblog_themes_options ) ) {
 									echo $non_groupblog_themes_options;
 								} else {
-									echo '<option value="" disabled="disabled">' . __( 'No regular themes available', 'groupblog' ) . '</option>';
+									echo '<option value="" disabled="disabled">' . __( 'No regular themes available', 'bp-groupblog' ) . '</option>';
 								}
 
 								?>
 							</optgroup>
 
-							<option value="" <?php selected( $current_groupblog_theme, '' ); ?>><?php _e( '- None selected -', 'groupblog' ); ?></option>
+							<option value="" <?php selected( $current_groupblog_theme, '' ); ?>><?php _e( '- None selected -', 'bp-groupblog' ); ?></option>
 
 						</select>
 					</div>
@@ -568,36 +568,36 @@ function bp_groupblog_management_page() {
 				</div>
 				<div id='groupblog_landing_page'>
 
-					<h3><?php _e( 'Default Landing Page', 'groupblog' ); ?></h3>
+					<h3><?php _e( 'Default Landing Page', 'bp-groupblog' ); ?></h3>
 
-					<p><?php _e( 'The page that is linked to from the "Blog" tab of the Group navigation. Selecting "Disabled" will use the buddypress template included in the plugin, no redirect will take place. The "Home Page" setting will create a redirect to the blog front page. The "Template Page" setting will create a redirect to the blog template page, additionally when using this setting you can choose a specific page template layout in the next tab.', 'groupblog' ); ?></p>
+					<p><?php _e( 'The page that is linked to from the "Blog" tab of the Group navigation. Selecting "Disabled" will use the buddypress template included in the plugin, no redirect will take place. The "Home Page" setting will create a redirect to the blog front page. The "Template Page" setting will create a redirect to the blog template page, additionally when using this setting you can choose a specific page template layout in the next tab.', 'bp-groupblog' ); ?></p>
 					<table class="form-table">
 						<tbody>
 							<tr>
-								<th><?php _e( 'Redirect Enabled to:', 'groupblog' ); ?></th>
+								<th><?php _e( 'Redirect Enabled to:', 'bp-groupblog' ); ?></th>
 								<td>
-									<label><input class="info-off" name="bp_groupblog_redirect_blog" id="bp_groupblog_redirect_blog"  value="0" type="radio" <?php if ( isset( $opt['redirectblog'] ) && $opt['redirectblog'] == 0 ) { echo 'checked="checked"';} ?>> <?php _e( 'Disabled', 'groupblog' ); ?></label>
+									<label><input class="info-off" name="bp_groupblog_redirect_blog" id="bp_groupblog_redirect_blog"  value="0" type="radio" <?php if ( isset( $opt['redirectblog'] ) && $opt['redirectblog'] == 0 ) { echo 'checked="checked"';} ?>> <?php _e( 'Disabled', 'bp-groupblog' ); ?></label>
 								</td>
 							</tr>
 							<tr>
 								<th></th>
 								<td>
-									<label><input class="info-off" name="bp_groupblog_redirect_blog" id="bp_groupblog_redirect_blog"  value="1" type="radio" <?php if ( isset( $opt['redirectblog'] ) && $opt['redirectblog'] == 1 ) { echo 'checked="checked"';} ?>> <?php _e( 'Home Page', 'groupblog' ); ?></label>
+									<label><input class="info-off" name="bp_groupblog_redirect_blog" id="bp_groupblog_redirect_blog"  value="1" type="radio" <?php if ( isset( $opt['redirectblog'] ) && $opt['redirectblog'] == 1 ) { echo 'checked="checked"';} ?>> <?php _e( 'Home Page', 'bp-groupblog' ); ?></label>
 								</td>
 							<tr>
 								<th></th>
 								<td>
-									<label><input class="info-on" name="bp_groupblog_redirect_blog" id="bp_groupblog_redirect_blog"  value="2" type="radio"<?php if ( isset( $opt['redirectblog'] ) && $opt['redirectblog'] == 2 ) { echo 'checked="checked"'; } ?>> <?php _e( 'Page Template Title: ', 'groupblog' ); ?></label>
+									<label><input class="info-on" name="bp_groupblog_redirect_blog" id="bp_groupblog_redirect_blog"  value="2" type="radio"<?php if ( isset( $opt['redirectblog'] ) && $opt['redirectblog'] == 2 ) { echo 'checked="checked"'; } ?>> <?php _e( 'Page Template Title: ', 'bp-groupblog' ); ?></label>
 									<input name="bp_groupblog_page_title" id="bp_groupblog_page_title" value="<?php echo ( isset( $opt['pagetitle'] ) ? $opt['pagetitle'] : '' ); ?>" size="10" type="text" />
-									<span class="notice" id="redirect_notice" style="display:none;"> <?php _e( 'All existing Group Blogs will be automatically updated on each change.', 'groupblog' ); ?></span>
-									<p class="info"><?php _e( 'The "Template Page" option will create a page on group blogs and links to a template file within your theme. Don\'t worry about the name you choose, we\'ll make sure your page finds it way to the template file. For custom themes make sure to <a href="http://codex.wordpress.org/Pages#Creating_Your_Own_Page_Templates">create</a> this template file manually.', 'groupblog' ); ?>
+									<span class="notice" id="redirect_notice" style="display:none;"> <?php _e( 'All existing Group Blogs will be automatically updated on each change.', 'bp-groupblog' ); ?></span>
+									<p class="info"><?php _e( 'The "Template Page" option will create a page on group blogs and links to a template file within your theme. Don\'t worry about the name you choose, we\'ll make sure your page finds it way to the template file. For custom themes make sure to <a href="http://codex.wordpress.org/Pages#Creating_Your_Own_Page_Templates">create</a> this template file manually.', 'bp-groupblog' ); ?>
 									</p>
 								</td>
 							</tr>
 							<tr>
-								<th><?php _e( 'Redirect Group Home:', 'groupblog' ); ?></th>
+								<th><?php _e( 'Redirect Group Home:', 'bp-groupblog' ); ?></th>
 								<td>
-									<label for="deep_group_integration"><input name="deep_group_integration" type="checkbox" id="deep_group_integration" value="1" <?php if ( isset( $opt['deep_group_integration'] ) && $opt['deep_group_integration'] == 1 ) { echo 'checked="checked"';} ?> /> <?php _e( 'Yes, redirect Group Home to Blog Home', 'groupblog' ); ?></label><p><?php _e( 'This option will take control of the GROUP home page and redirects it to the BLOG home page. This will enable posting from the group Home using P2 instead of the BuddyPress form.', 'groupblog' ); ?></p>
+									<label for="deep_group_integration"><input name="deep_group_integration" type="checkbox" id="deep_group_integration" value="1" <?php if ( isset( $opt['deep_group_integration'] ) && $opt['deep_group_integration'] == 1 ) { echo 'checked="checked"';} ?> /> <?php _e( 'Yes, redirect Group Home to Blog Home', 'bp-groupblog' ); ?></label><p><?php _e( 'This option will take control of the GROUP home page and redirects it to the BLOG home page. This will enable posting from the group Home using P2 instead of the BuddyPress form.', 'bp-groupblog' ); ?></p>
 								</td>
 							</tr>
 						</tbody>
@@ -607,11 +607,11 @@ function bp_groupblog_management_page() {
 				<div id='groupblog_template_layout'>
 					<?php if ( isset( $opt['theme'] ) && $opt['theme'] == 'p2|p2-buddypress' ) { ?>
 
-						<h3><?php _e( 'Template Page Layout', 'groupblog' ); ?></h3>
+						<h3><?php _e( 'Template Page Layout', 'bp-groupblog' ); ?></h3>
 
-						<p class="disabled"><?php _e( 'Please select the option "Template Page" on the Redirect tab in order to choose a layout.', 'groupblog' ); ?></p>
+						<p class="disabled"><?php _e( 'Please select the option "Template Page" on the Redirect tab in order to choose a layout.', 'bp-groupblog' ); ?></p>
 
-						<p class="enabled"><?php _e( 'Please select a Layout which you would like to use for your Group Blog. Additionally, incombination with "Redirect Group Home" setting you can set this as your Group Home page.', 'groupblog' ); ?></p>
+						<p class="enabled"><?php _e( 'Please select a Layout which you would like to use for your Group Blog. Additionally, incombination with "Redirect Group Home" setting you can set this as your Group Home page.', 'bp-groupblog' ); ?></p>
 
 						<table class="enabled" id="availablethemes" cellspacing="0" cellpadding="0">
 							<tbody>
@@ -619,14 +619,14 @@ function bp_groupblog_management_page() {
 									<td class="available-theme top left">
 										<?php echo '<img src="' . WP_PLUGIN_URL . '/bp-groupblog/inc/i/screenshot-mag.png">'; ?>
 										<div class="clear"></div>
-										<input name="page_template_layout" id="page_template_layout"  value="magazine" type="radio" <?php if ( isset( $opt['page_template_layout'] ) && $opt['page_template_layout'] == 'magazine' ) { echo 'checked="checked"'; } ?> /><h3 style="display:inline;"> <?php _e( 'Magazine', 'groupblog' ); ?></h3>
-										<p class="description"><?php _e( 'Balanced template for groups with diverse postings.', 'groupblog' ); ?></p>
+										<input name="page_template_layout" id="page_template_layout"  value="magazine" type="radio" <?php if ( isset( $opt['page_template_layout'] ) && $opt['page_template_layout'] == 'magazine' ) { echo 'checked="checked"'; } ?> /><h3 style="display:inline;"> <?php _e( 'Magazine', 'bp-groupblog' ); ?></h3>
+										<p class="description"><?php _e( 'Balanced template for groups with diverse postings.', 'bp-groupblog' ); ?></p>
 									</td>
 									<td class="available-theme top">
 										<?php echo '<img src="' . WP_PLUGIN_URL . '/bp-groupblog/inc/i/screenshot-micro.png">'; ?>
 										<div class="clear"></div>
-										<input name="page_template_layout" id="page_template_layout"  value="microblog" type="radio" <?php if ( isset( $opt['page_template_layout'] ) && $opt['page_template_layout'] == 'microblog' ) { echo 'checked="checked"'; } ?> /><h3 style="display:inline;"> <?php _e( 'Microblog', 'groupblog' ); ?></h3>
-										<p class="description"><?php _e( 'Great for simple listing of posts in a chronological order.', 'groupblog' ); ?></p>
+										<input name="page_template_layout" id="page_template_layout"  value="microblog" type="radio" <?php if ( isset( $opt['page_template_layout'] ) && $opt['page_template_layout'] == 'microblog' ) { echo 'checked="checked"'; } ?> /><h3 style="display:inline;"> <?php _e( 'Microblog', 'bp-groupblog' ); ?></h3>
+										<p class="description"><?php _e( 'Great for simple listing of posts in a chronological order.', 'bp-groupblog' ); ?></p>
 									</td>
 								</tr>
 							</tbody>
@@ -635,58 +635,58 @@ function bp_groupblog_management_page() {
 						<table class="form-table enabled">
 							<tbody>
 								<tr>
-									<th><?php _e( 'Group admin layout control:', 'groupblog' ); ?></th>
+									<th><?php _e( 'Group admin layout control:', 'bp-groupblog' ); ?></th>
 									<td>
-										<label for="group_admin_layout"><input name="group_admin_layout" type="checkbox" id="group_admin_layout" value="1" <?php if ( isset( $opt['group_admin_layout'] ) && $opt['group_admin_layout'] == 1 ) { echo 'checked="checked"'; } ?> /> <?php _e( 'Allow group admins to select the layout for their group themselves.', 'groupblog' ); ?></label>
+										<label for="group_admin_layout"><input name="group_admin_layout" type="checkbox" id="group_admin_layout" value="1" <?php if ( isset( $opt['group_admin_layout'] ) && $opt['group_admin_layout'] == 1 ) { echo 'checked="checked"'; } ?> /> <?php _e( 'Allow group admins to select the layout for their group themselves.', 'bp-groupblog' ); ?></label>
 								  </td>
 								</tr>
 							</tbody>
 						</table>
 					<?php } else { ?>
-						<h3><?php _e( 'Template Page Layout', 'groupblog' ); ?></h3>
+						<h3><?php _e( 'Template Page Layout', 'bp-groupblog' ); ?></h3>
 
-						<p><?php _e( 'Layout options are only available for the "P2 BuddyPress" Theme. Please select the "P2 Buddypress" theme on the "Theme" tab in order to choose a layout. Additionally the Redirect option needs to be set to "Template Page".', 'groupblog' ); ?></p>
+						<p><?php _e( 'Layout options are only available for the "P2 BuddyPress" Theme. Please select the "P2 Buddypress" theme on the "Theme" tab in order to choose a layout. Additionally the Redirect option needs to be set to "Template Page".', 'bp-groupblog' ); ?></p>
 					<?php } ?>
 				</div>
 				<div id='groupblog_default_blog_settings'>
 
-					<h3><?php _e( 'Default Blog Settings', 'groupblog' ); ?></h3>
+					<h3><?php _e( 'Default Blog Settings', 'bp-groupblog' ); ?></h3>
 
 					<table class="form-table">
 						<tbody>
 							<tr valign="top">
-								<th><?php _e( 'Default Post Category:', 'groupblog' ); ?></th>
+								<th><?php _e( 'Default Post Category:', 'bp-groupblog' ); ?></th>
 								<td>
-									<input name="default_cat_name" type="text" id="default_cat_name" size="30" value="<?php echo ( isset( $opt['default_cat_name'] ) ? $opt['default_cat_name'] : '' ); ?>"  /> <?php _e( '(Overwrites "Uncategorized")', 'groupblog' ); ?>
+									<input name="default_cat_name" type="text" id="default_cat_name" size="30" value="<?php echo ( isset( $opt['default_cat_name'] ) ? $opt['default_cat_name'] : '' ); ?>"  /> <?php _e( '(Overwrites "Uncategorized")', 'bp-groupblog' ); ?>
 								</td>
 							</tr>
 							<tr valign="top">
-								<th><?php _e( 'Default Link Category:', 'groupblog' ); ?></th>
+								<th><?php _e( 'Default Link Category:', 'bp-groupblog' ); ?></th>
 								<td>
-									<input name="default_link_cat" type="text" id="default_link_cat" size="30" value="<?php echo ( isset( $opt['default_link_cat'] ) ? $opt['default_link_cat'] : '' ); ?>"  /> <?php _e( '(Overwrites "Blogroll")', 'groupblog' ); ?>
+									<input name="default_link_cat" type="text" id="default_link_cat" size="30" value="<?php echo ( isset( $opt['default_link_cat'] ) ? $opt['default_link_cat'] : '' ); ?>"  /> <?php _e( '(Overwrites "Blogroll")', 'bp-groupblog' ); ?>
 								</td>
 							</tr>
 							<tr>
-								<th><?php _e( 'Set First Post to Draft', 'groupblog' ); ?></th>
+								<th><?php _e( 'Set First Post to Draft', 'bp-groupblog' ); ?></th>
 								<td>
 									<label for="delete_first_post">
-										<input name="delete_first_post" type="checkbox" id="delete_first_post" value="1" <?php if ( isset( $opt['delete_first_post'] ) && $opt['delete_first_post'] == 1 ) { echo 'checked="checked"'; } ?> /> <?php _e( 'Yes', 'groupblog' ); ?> <?php _e( '(Default Post "Hello World")', 'groupblog' ); ?>
+										<input name="delete_first_post" type="checkbox" id="delete_first_post" value="1" <?php if ( isset( $opt['delete_first_post'] ) && $opt['delete_first_post'] == 1 ) { echo 'checked="checked"'; } ?> /> <?php _e( 'Yes', 'bp-groupblog' ); ?> <?php _e( '(Default Post "Hello World")', 'bp-groupblog' ); ?>
 									</label>
 								</td>
 							</tr>
 							<tr>
-								<th><?php _e( 'Delete Initial Comment', 'groupblog' ); ?></th>
+								<th><?php _e( 'Delete Initial Comment', 'bp-groupblog' ); ?></th>
 								<td>
 									<label for="delete_first_comment">
-										<input name="delete_first_comment" type="checkbox" id="delete_first_comment" value="1" <?php if ( isset( $opt['delete_first_comment'] ) && $opt['delete_first_comment'] == 1 ) { echo 'checked="checked"'; } ?> /> <?php _e( 'Yes', 'groupblog' ); ?>
+										<input name="delete_first_comment" type="checkbox" id="delete_first_comment" value="1" <?php if ( isset( $opt['delete_first_comment'] ) && $opt['delete_first_comment'] == 1 ) { echo 'checked="checked"'; } ?> /> <?php _e( 'Yes', 'bp-groupblog' ); ?>
 									</label>
 								</td>
 							</tr>
 							<tr>
-								<th><?php _e( 'Delete Blogroll Links', 'groupblog' ); ?></th>
+								<th><?php _e( 'Delete Blogroll Links', 'bp-groupblog' ); ?></th>
 								<td>
 									<label for="delete_blogroll_links">
-										<input name="delete_blogroll_links" type="checkbox" id="delete_blogroll_links" value="1" <?php if ( isset( $opt['delete_blogroll_links'] ) && $opt['delete_blogroll_links'] == 1 ) { echo 'checked="checked"'; } ?> /> <?php _e( 'Yes', 'groupblog' ); ?>
+										<input name="delete_blogroll_links" type="checkbox" id="delete_blogroll_links" value="1" <?php if ( isset( $opt['delete_blogroll_links'] ) && $opt['delete_blogroll_links'] == 1 ) { echo 'checked="checked"'; } ?> /> <?php _e( 'Yes', 'bp-groupblog' ); ?>
 									</label>
 								</td>
 							</tr>
@@ -696,16 +696,16 @@ function bp_groupblog_management_page() {
 				</div>
 				<div id='groupblog_validation_settings'>
 
-					<h3><?php _e( 'Validation Settings', 'groupblog' ); ?></h3>
+					<h3><?php _e( 'Validation Settings', 'bp-groupblog' ); ?></h3>
 
-					<div><?php _e( 'Change the default WordPress blog validation settings.', 'groupblog' ); ?></div>
+					<div><?php _e( 'Change the default WordPress blog validation settings.', 'bp-groupblog' ); ?></div>
 					<table class="form-table">
 						<tbody>
 							<tr>
-								<th><?php _e( 'Allow:', 'groupblog' ); ?></th>
+								<th><?php _e( 'Allow:', 'bp-groupblog' ); ?></th>
 								<td>
 									<label for="bp_groupblog_allowdashes">
-										<input name="bp_groupblog_allowdashes" type="checkbox" id="bp_groupblog_allowdashes" value="1" <?php if ( isset( $opt['allowdashes'] ) && $opt['allowdashes'] == 1 ) { echo 'checked="checked"'; } ?> /> <?php _e( 'Dashes', 'groupblog' ); ?> <?php _e( '(Default: Not Allowed)', 'groupblog' ); ?>
+										<input name="bp_groupblog_allowdashes" type="checkbox" id="bp_groupblog_allowdashes" value="1" <?php if ( isset( $opt['allowdashes'] ) && $opt['allowdashes'] == 1 ) { echo 'checked="checked"'; } ?> /> <?php _e( 'Dashes', 'bp-groupblog' ); ?> <?php _e( '(Default: Not Allowed)', 'bp-groupblog' ); ?>
 									</label>
 								</td>
 							</tr>
@@ -713,7 +713,7 @@ function bp_groupblog_management_page() {
 								<th></th>
 								<td>
 									<label for="bp_groupblog_allowunderscores">
-										<input name="bp_groupblog_allowunderscores" type="checkbox" id="bp_groupblog_allowunderscores" value="1" <?php if ( isset( $opt['allowunderscores'] ) && $opt['allowunderscores'] == 1 ) { echo 'checked="checked"'; } ?> /> <?php _e( 'Underscores', 'groupblog' ); ?> <?php _e( '(Default: Not Allowed)', 'groupblog' ); ?>
+										<input name="bp_groupblog_allowunderscores" type="checkbox" id="bp_groupblog_allowunderscores" value="1" <?php if ( isset( $opt['allowunderscores'] ) && $opt['allowunderscores'] == 1 ) { echo 'checked="checked"'; } ?> /> <?php _e( 'Underscores', 'bp-groupblog' ); ?> <?php _e( '(Default: Not Allowed)', 'bp-groupblog' ); ?>
 								   </label>
 								</td>
 							</tr>
@@ -721,14 +721,14 @@ function bp_groupblog_management_page() {
 								<th></th>
 								<td>
 									<label for="bp_groupblog_allownumeric">
-										<input name="bp_groupblog_allownumeric" type="checkbox" id="bp_groupblog_allownumeric" value="1" <?php if ( isset( $opt['allownumeric'] ) && $opt['allownumeric'] == 1 ) { echo 'checked="checked"'; } ?> /> <?php _e( 'All Numeric Names', 'groupblog' ); ?> <?php _e( '(Default: Not Allowed)', 'groupblog' ); ?>
+										<input name="bp_groupblog_allownumeric" type="checkbox" id="bp_groupblog_allownumeric" value="1" <?php if ( isset( $opt['allownumeric'] ) && $opt['allownumeric'] == 1 ) { echo 'checked="checked"'; } ?> /> <?php _e( 'All Numeric Names', 'bp-groupblog' ); ?> <?php _e( '(Default: Not Allowed)', 'bp-groupblog' ); ?>
 									</label>
 								</td>
 							</tr>
 							<tr>
-								<th><?php _e( 'Minimum Length:', 'groupblog' ); ?></th>
+								<th><?php _e( 'Minimum Length:', 'bp-groupblog' ); ?></th>
 								<td>
-									<input name="bp_groupblog_minlength" style="width: 10%;" id="bp_groupblog_minlenth" value="<?php echo ( isset( $opt['minlength'] ) ? $opt['minlength'] : '' ); ?>" size="10" type="text" /> <?php _e( '(Default: 4 Characters)', 'groupblog' ); ?>
+									<input name="bp_groupblog_minlength" style="width: 10%;" id="bp_groupblog_minlenth" value="<?php echo ( isset( $opt['minlength'] ) ? $opt['minlength'] : '' ); ?>" size="10" type="text" /> <?php _e( '(Default: 4 Characters)', 'bp-groupblog' ); ?>
 								</td>
 							</tr>
 						</tbody>
@@ -737,33 +737,33 @@ function bp_groupblog_management_page() {
 				</div>
 				<div id='groupblog_about'>
 
-					<h3><?php _e( 'About This Plugin', 'groupblog' ); ?></h3>
+					<h3><?php _e( 'About This Plugin', 'bp-groupblog' ); ?></h3>
 
 					<div>
-						<span class="indent"><strong><?php _e( 'Authors', 'groupblog' ); ?></strong></span>
+						<span class="indent"><strong><?php _e( 'Authors', 'bp-groupblog' ); ?></strong></span>
 						<span><a href="http://oomsonline.com">Marius Ooms</a> & <a href="http://blevins.nl">Rodney Blevins</a></span>
 					</div>
 					<div>
-						<span class="indent"><strong><?php _e( 'Donate', 'groupblog' ); ?></strong></span>
-						<span><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7374704"><?php _e( 'PayPal', 'groupblog' ); ?></a></span>
+						<span class="indent"><strong><?php _e( 'Donate', 'bp-groupblog' ); ?></strong></span>
+						<span><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7374704"><?php _e( 'PayPal', 'bp-groupblog' ); ?></a></span>
 					</div>
 					<div>
-						<span class="indent"><strong><?php _e( 'Support', 'groupblog' ); ?></strong></span>
-						<span><a href="http://buddypress.org/forums/"><?php _e( 'BuddyPress Forums', 'groupblog' ); ?></a> |
-						<a href="http://wordpress.org/tags/bp-groupblog?forum_id=10"><?php _e( 'WordPress Forums', 'groupblog' ); ?></a></span>
+						<span class="indent"><strong><?php _e( 'Support', 'bp-groupblog' ); ?></strong></span>
+						<span><a href="http://buddypress.org/forums/"><?php _e( 'BuddyPress Forums', 'bp-groupblog' ); ?></a> |
+						<a href="http://wordpress.org/tags/bp-groupblog?forum_id=10"><?php _e( 'WordPress Forums', 'bp-groupblog' ); ?></a></span>
 					</div>
 					<div>
-						<span class="indent"><strong><?php _e( 'Trac', 'groupblog' ); ?></strong></span>
-						<span><a href="http://plugins.trac.wordpress.org/log/bp-groupblog"><?php _e( 'Revision Log', 'groupblog' ); ?></a> | <a href="http://plugins.trac.wordpress.org/browser/bp-groupblog/"><?php _e( 'Trac Browser', 'groupblog' ); ?></a></span>
+						<span class="indent"><strong><?php _e( 'Trac', 'bp-groupblog' ); ?></strong></span>
+						<span><a href="http://plugins.trac.wordpress.org/log/bp-groupblog"><?php _e( 'Revision Log', 'bp-groupblog' ); ?></a> | <a href="http://plugins.trac.wordpress.org/browser/bp-groupblog/"><?php _e( 'Trac Browser', 'bp-groupblog' ); ?></a></span>
 					</div>
 					<div>
-						<span class="indent"><strong><?php _e( 'Rate', 'groupblog' ); ?></strong></span>
-						<span><a href="http://wordpress.org/extend/plugins/bp-groupblog/"><?php _e( 'Let everyone know! Only if you like it :)', 'groupblog' ); ?></a></span>
+						<span class="indent"><strong><?php _e( 'Rate', 'bp-groupblog' ); ?></strong></span>
+						<span><a href="http://wordpress.org/extend/plugins/bp-groupblog/"><?php _e( 'Let everyone know! Only if you like it :)', 'bp-groupblog' ); ?></a></span>
 					</div>
 					<hr />
 					<div>
-						<span class="indent"><strong><?php _e( 'Acknowledgement', 'groupblog' ); ?></strong></span>
-						<span><?php _e( 'Thanks goes out to the following people:', 'groupblog' ); ?></span>
+						<span class="indent"><strong><?php _e( 'Acknowledgement', 'bp-groupblog' ); ?></strong></span>
+						<span><?php _e( 'Thanks goes out to the following people:', 'bp-groupblog' ); ?></span>
 						<ul id="acknowledge">
 							<li><a href="http://buddypress.org/developers/apeatling/">Andy Peatling</a></li>
 							<li>Thijs Huijssoon</li>
@@ -780,7 +780,7 @@ function bp_groupblog_management_page() {
 
 			<p class="submit">
 				<input type="hidden" name="action" value="update" />
-				<input type="submit" name="Submit" class="button-primary" value="<?php _e( 'Save Changes', 'groupblog' ); ?>" />
+				<input type="submit" name="Submit" class="button-primary" value="<?php _e( 'Save Changes', 'bp-groupblog' ); ?>" />
 			</p>
 
 		</form>

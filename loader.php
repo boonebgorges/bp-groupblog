@@ -8,6 +8,7 @@
  * License: (Groupblog: GNU General Public License 2.0 (GPL) http://www.gnu.org/licenses/gpl.html)
  * Network: true
  * Text Domain: bp-groupblog
+ * Domain Path: /languages
  *
  * @package BP_Groupblog
  */

@@ -15,7 +15,7 @@ class BP_Groupblog_Extension extends BP_Group_Extension {
 	public function __construct() {
 		global $bp;
 
-		$this->name = __( 'Group Blog', 'groupblog' );
+		$this->name = __( 'Group Blog', 'bp-groupblog' );
 		$this->slug = 'group-blog';
 
 		$this->enable_create_step   = true;
