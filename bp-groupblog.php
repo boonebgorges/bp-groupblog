@@ -27,6 +27,11 @@ if ( ! defined( 'BP_GROUPBLOG_SLUG' ) ) {
 // Setup the groupblog theme directory
 //register_theme_directory( WP_PLUGIN_DIR . '/bp-groupblog/themes' );
 
+/**
+ * Plugin activation.
+ *
+ * @since 1.0
+ */
 function bp_groupblog_setup() {
 	global $wpdb;
 
@@ -55,7 +60,7 @@ function bp_groupblog_setup() {
 register_activation_hook( __FILE__, 'bp_groupblog_setup' );
 
 /**
- * Require the necessary files. Wait until BP is finished loading, so we have access to everything
+ * Require the necessary files. Wait until BP is finished loading, so we have access to everything.
  *
  * @since 1.6
  */
@@ -84,7 +89,9 @@ if ( file_exists( WP_PLUGIN_DIR . '/bp-groupblog/languages/groupblog-' . get_loc
 }
 
 /**
- * bp_groupblog_setup_globals()
+ * Set up globals.
+ *
+ * @since 1.6
  */
 function bp_groupblog_setup_globals() {
 	global $bp, $wpdb;
@@ -100,7 +107,9 @@ function bp_groupblog_setup_globals() {
 add_action( 'bp_setup_globals', 'bp_groupblog_setup_globals' );
 
 /**
- * bp_groupblog_setup_nav()
+ * Set up nav.
+ *
+ * @since 1.0
  */
 function bp_groupblog_setup_nav() {
 	global $bp, $current_blog;
@@ -164,6 +173,8 @@ add_action( 'bp_setup_nav', 'bp_groupblog_setup_nav' );
  *
  * Since version 1.6, this function has been called directly by
  * BP_Groupblog_Extension::edit_screen_save()
+ *
+ * @since 1.0
  */
 function groupblog_edit_settings() {
 	global $bp, $groupblog_blog_id, $errors, $filtered_results;
@@ -227,10 +238,10 @@ function groupblog_edit_settings() {
 }
 
 /**
- * groupblog_edit_base_settings()
- *
  * Updates the groupmeta with the blog_id, default roles and if it is enabled or not.
  * Initiating member permissions loop on save - by Boone
+ *
+ * @since 1.5
  */
 function groupblog_edit_base_settings( $groupblog_enable_blog, $groupblog_silent_add = null, $groupblog_default_admin_role, $groupblog_default_mod_role, $groupblog_default_member_role, $page_template_layout, $group_id, $groupblog_blog_id = null ) {
 	global $bp;
@@ -279,9 +290,9 @@ function groupblog_edit_base_settings( $groupblog_enable_blog, $groupblog_silent
 }
 
 /**
- * bp_groupblog_member_join( $group_id )
- *
  * Runs whenever member permissions are changed and saved - by Boone
+ *
+ * @since 1.3
  */
 function bp_groupblog_member_join( $group_id ) {
 	$params = array(
@@ -336,10 +347,11 @@ function bp_groupblog_get_group_settings( $group_id ) {
 }
 
 /**
- * bp_groupblog_upgrade_user( $user_id, $group_id, $blog_id )
- *
  * Subscribes user in question to blog in question
+ *
  * This code was initially inspired by Burt Adsit re-interpreted by Boone
+ *
+ * @since 1.3
  */
 function bp_groupblog_upgrade_user( $user_id, $group_id, $blog_id = false ) {
 	global $bp;
@@ -432,9 +444,9 @@ function bp_groupblog_upgrade_user( $user_id, $group_id, $blog_id = false ) {
 }
 
 /**
- * bp_groupblog_just_joined_group( $group_id, $user_id )
- *
  * Called when user joins group - by Boone
+ *
+ * @since 1.3
  */
 function bp_groupblog_just_joined_group( $group_id, $user_id ) {
 	bp_groupblog_upgrade_user( $user_id, $group_id );
@@ -442,12 +454,12 @@ function bp_groupblog_just_joined_group( $group_id, $user_id ) {
 add_action( 'groups_join_group', 'bp_groupblog_just_joined_group', 5, 2 );
 
 /*
- * bp_groupblog_changed_status_group( $user_id, $group_id )
- *
  * Called when user changes status in the group
  *
  * Variables ($user_id, $group_id) are switched around for these hooks,
- * therefore we put these in a sepperate function.
+ * therefore we put these in a separate function.
+ *
+ * @since 1.3
  */
 function bp_groupblog_changed_status_group( $user_id, $group_id ) {
 	bp_groupblog_upgrade_user( $user_id, $group_id );
@@ -462,9 +474,9 @@ add_action( 'groups_accept_invite',       'bp_groupblog_changed_status_group', 1
 
 
 /**
- * bp_groupblog_remove_user( $group_id, $user_id = false )
- *
  * Called when user leaves.
+ *
+ * @since 1.3
  */
 function bp_groupblog_remove_user( $group_id, $user_id = false ) {
 	// Only modify site membership if the plugin is configured to do so.
@@ -492,9 +504,9 @@ function bp_groupblog_remove_user( $group_id, $user_id = false ) {
 add_action( 'groups_leave_group', 'bp_groupblog_remove_user', 10, 2 );
 
 /**
- * bp_groupblog_get_user_role( $user_id, $user_login, $blog_id )
- *
  * Reworked function to retrieve the users current role - by Boone
+ *
+ * @since 1.3
  *
  * @param int $user_id The user ID
  * @param bool $user_login Deprecated. Don't use.
@@ -528,12 +540,12 @@ function bp_groupblog_get_user_role( $user_id, $user_login = false, $blog_id ) {
 }
 
 /**
- * bp_groupblog_create_screen_save()
- *
  * Saves the information from the BP group blog creation step.
- * TO-DO: groupblog-edit-settings is more efficient, rewrite this to be more like that one.
+ *
+ * TODO: groupblog-edit-settings is more efficient, rewrite this to be more like that one.
+ *
+ * @since 1.0
  */
-
 function bp_groupblog_create_screen_save() {
 	global $bp;
 	global $groupblog_blog_id, $groupblog_create_screen, $filtered_results;
@@ -581,10 +593,10 @@ function bp_groupblog_create_screen_save() {
 }
 
 /**
- * bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors = '' )
- *
  * Displays the blog signup form and takes the privacy settings from the
  * group privacy settings, where "private & hidden" equal "private".
+ *
+ * @since 1.0
  */
 function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors = '' ) {
 	global $bp, $groupblog_create_screen, $current_site;
@@ -713,9 +725,9 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 }
 
 /**
- * bp_groupblog_validate_blog_form()
- *
  * This function validates that the blog does not exist already, illegal names, etc...
+ *
+ * @since 1.0
  */
 function bp_groupblog_validate_blog_form() {
 
@@ -839,6 +851,7 @@ function bp_groupblog_validate_blog_form() {
  * Sanitizes a group name into a blog address, based on site settings
  *
  * @since 1.7
+ *
  * @param str $group_name
  * @return str $blog_address
  */
@@ -890,9 +903,9 @@ function bp_groupblog_process_uncouple() {
 add_action( 'bp_actions', 'bp_groupblog_process_uncouple', 1 );
 
 /**
- * bp_groupblog_signup_blog($blogname = '', $blog_title = '', $errors = '')
- *
  * This function is called from the template and initiates the blog creation.
+ *
+ * @since 1.0
  */
 function bp_groupblog_signup_blog( $blogname = '', $blog_title = '', $errors = '' ) {
 	global $current_user, $current_site, $groupblog_create_screen;
@@ -1044,9 +1057,9 @@ function bp_groupblog_signup_blog( $blogname = '', $blog_title = '', $errors = '
 }
 
 /**
- * bp_groupblog_validate_blog_signup()
- *
  * Final step before the blog gets created it needs to be validated
+ *
+ * @since 1.0
  */
 function bp_groupblog_validate_blog_signup() {
 	global $bp, $wpdb, $current_user, $blogname, $blog_title, $errors;
@@ -1757,9 +1770,9 @@ function bp_groupblog_posts() {
 add_action( 'bp_group_activity_filter_options', 'bp_groupblog_posts' );
 
 /**
- * groupblog_screen_blog()
- *
  * This screen gets called when the 'group blog' link is clicked.
+ *
+ * @since 1.0
  */
 function groupblog_screen_blog() {
 
@@ -1791,9 +1804,9 @@ function groupblog_screen_blog() {
 }
 
 /**
- * groupblog_screen_blog_content()
- *
  * Depending on the groupblog admin setup we load the correct template.
+ *
+ * @since 1.0
  */
 function groupblog_screen_blog_content() {
 	global $bp, $wp;
@@ -1802,9 +1815,9 @@ function groupblog_screen_blog_content() {
 }
 
 /**
- * groupblog_redirect_group_home()
- *
  * Redirect Group Home page to Blog Home page if set in admin settings.
+ *
+ * @since 1.0
  */
 function groupblog_redirect_group_home() {
 	global $bp;
@@ -1824,9 +1837,9 @@ function groupblog_redirect_group_home() {
 add_action( 'bp_init', 'groupblog_redirect_group_home' );
 
 /**
- * bp_groupblog_delete_meta( $blog_id, $drop = false )
- *
  * Clean up groupmeta after a blog gets deleted.
+ *
+ * @since 1.0
  */
 function bp_groupblog_delete_meta( $blog_id, $drop = false ) {
 

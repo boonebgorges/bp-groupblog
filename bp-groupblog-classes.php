@@ -9,9 +9,16 @@
  * Group Extension class.
  *
  * @see https://codex.buddypress.org/developer/group-extension-api/
+ *
+ * @since 1.0
  */
 class BP_Groupblog_Extension extends BP_Group_Extension {
 
+	/**
+	 * Constructor.
+	 *
+	 * @since 1.0
+	 */
 	public function __construct() {
 		global $bp;
 
@@ -30,7 +37,14 @@ class BP_Groupblog_Extension extends BP_Group_Extension {
 		$this->template_file     = 'groupblog/blog';
 	}
 
-	function create_screen( $group_id = null ) {
+	/**
+	 * Create screen.
+	 *
+	 * @since 1.0
+	 *
+	 * @param int $group_id The group ID.
+	 */
+	public function create_screen( $group_id = null ) {
 		global $bp, $groupblog_create_screen;
 
 		if ( ! bp_is_group_creation_step( $this->slug ) ) {
@@ -51,14 +65,28 @@ class BP_Groupblog_Extension extends BP_Group_Extension {
 		echo '<input type="hidden" name="groupblog-create-save" value="groupblog-create-save" />';
 	}
 
-	function create_screen_save( $group_id = null ) {
+	/**
+	 * Create screen save.
+	 *
+	 * @since 1.0
+	 *
+	 * @param int $group_id The group ID.
+	 */
+	public function create_screen_save( $group_id = null ) {
 		if ( isset( $_POST['save'] ) ) {
 			check_admin_referer( 'groups_create_save_' . $this->slug );
 			groupblog_edit_settings();
 		}
 	}
 
-	function edit_screen( $group_id = null ) {
+	/**
+	 * Edit screen.
+	 *
+	 * @since 1.0
+	 *
+	 * @param int $group_id The group ID.
+	 */
+	public function edit_screen( $group_id = null ) {
 		global $bp;
 
 		if ( ! bp_is_group_admin_screen( $this->slug ) ) {
@@ -74,29 +102,65 @@ class BP_Groupblog_Extension extends BP_Group_Extension {
 		do_action( 'bp_groupblog_edit_screen_markup' );
 	}
 
-	function edit_screen_save( $group_id = null ) {
+	/**
+	 * Edit screen save.
+	 *
+	 * @since 1.0
+	 *
+	 * @param int $group_id The group ID.
+	 */
+	public function edit_screen_save( $group_id = null ) {
 		if ( isset( $_POST['save'] ) ) {
 			check_admin_referer( 'groups_edit_save_' . $this->slug );
 			groupblog_edit_settings();
 		}
 	}
 
-	function nonce_fields_edit() {
+	/**
+	 * Edit screen nonce.
+	 *
+	 * @since 1.0
+	 */
+	public function nonce_fields_edit() {
 		$this->nonce_fields( 'edit' );
 	}
 
-	function nonce_fields_create() {
+	/**
+	 * Create screen nonce.
+	 *
+	 * @since 1.0
+	 */
+	public function nonce_fields_create() {
 		$this->nonce_fields( 'create' );
 	}
 
-	function nonce_fields( $type = 'edit' ) {
+	/**
+	 * Echoes nonce field.
+	 *
+	 * @since 1.0
+	 *
+	 * @param str $type The type of nonce field.
+	 */
+	public function nonce_fields( $type = 'edit' ) {
 		wp_nonce_field( 'groups_' . $type . '_save_' . $this->slug );
 	}
 
-	function widget_display() {
+	/**
+	 * Widget display.
+	 *
+	 * @since 1.0
+	 */
+	public function widget_display() {
 	}
 
-	function enable_nav_item() {
+	/**
+	 * Enable nav item.
+	 *
+	 * @since 1.0
+	 *
+	 * @return bool True if enabled, false otherwise.
+	 */
+	public function enable_nav_item() {
 		return bp_is_group() && groups_get_groupmeta( bp_get_current_group_id(), 'groupblog_enable_blog' );
 	}
 

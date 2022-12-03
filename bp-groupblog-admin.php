@@ -10,7 +10,7 @@
  *
  * The "wp_initialize_site" action has been available since WordPress 5.1.0.
  *
- * @since 1.9.2
+ * @since 1.9.3
  *
  * @param WP_Site $new_site The new site object.
  * @param array $args The array of initialization arguments.
@@ -25,6 +25,8 @@ function bp_groupblog_site_defaults( $new_site, $args ) {
  * The "wpmu_new_blog" action has been deprecated since WordPress 5.1.0.
  *
  * @param int $blog_id The numeric ID of the WordPress Blog.
+ *
+ * @since 1.0
  */
 function bp_groupblog_blog_defaults( $blog_id ) {
 	global $bp, $wp_rewrite;
@@ -102,6 +104,11 @@ function bp_groupblog_blog_defaults( $blog_id ) {
 	}
 }
 
+/**
+ * Updates the plugin defaults.
+ *
+ * @since 1.0
+ */
 function bp_groupblog_update_defaults() {
 
 	// retrieve the old landing page slug so we know which pages to delete
@@ -301,7 +308,9 @@ function bp_groupblog_update_defaults() {
 }
 
 /**
- * bp_groupblog_add_admin_menu()
+ * Adds the admin menu item.
+ *
+ * @since 1.4
  */
 function bp_groupblog_add_admin_menu() {
 	global $wpdb, $bp;
@@ -323,7 +332,7 @@ function bp_groupblog_add_admin_menu() {
 
 	}
 
-	/* Add the administration tab under the "Site Admin" tab for site administrators */
+	// Add the administration tab under the "Site Admin" tab for site administrators
 	$page = add_submenu_page(
 		$location,
 		__( 'GroupBlog Setup', 'bp-groupblog' ),
@@ -333,14 +342,21 @@ function bp_groupblog_add_admin_menu() {
 		'bp_groupblog_management_page'
 	);
 
-	// add styles only on bp-groupblog admin page, see:
-	// https://developer.wordpress.org/reference/functions/wp_enqueue_script/#Load_scripts_only_on_plugin_pages
+	/*
+	 * Add styles only on bp-groupblog admin page
+	 * @see https://developer.wordpress.org/reference/functions/wp_enqueue_script/#Load_scripts_only_on_plugin_pages
+	 */
 	add_action( 'admin_print_styles-' . $page, 'bp_groupblog_add_admin_style' );
 
 }
 
 add_action( bp_core_admin_hook(), 'bp_groupblog_add_admin_menu', 10 );
 
+/**
+ * Echoes the admin page.
+ *
+ * @since 1.4
+ */
 function bp_groupblog_management_page() {
 	global $wpdb;
 
