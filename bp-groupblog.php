@@ -1389,6 +1389,11 @@ function bp_groupblog_override_new_blog_post_activity_filter( $qs, $object ) {
 		return $qs;
 	}
 
+	// Calls from "bp_activity_heartbeat_last_recorded()" have no action key.
+	if ( empty( $r['action'] ) ) {
+		return $qs;
+	}
+
 	// add the 'new_groupblog_post' type if it doesn't exist
 	if ( false === strpos( $r['action'], 'new_groupblog_post' ) ) {
 		// 'action' filters activity items by the 'type' column
