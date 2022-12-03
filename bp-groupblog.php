@@ -1646,30 +1646,43 @@ add_action( 'bp_activity_after_delete', function( $activities ) {
  *
  * @since 1.9.0
  *
- * @param  int   $retval Activity ID.
- * @param  array $r      Activity arguments used to fetch the activity ID.
- * @return int
+ * @param  int   $activity_id Activity ID.
+ * @param  array $args        Activity arguments used to fetch the activity ID.
+ * @return int   $activity_id Activity ID.
  */
-function _bp_groupblog_set_activity_id_for_groupblog_comment( $retval, $r ) {
+function _bp_groupblog_set_activity_id_for_groupblog_comment( $activity_id, $args ) {
 	$groupblog_temp_id = isset( buddypress()->activity->groupblog_temp_id ) ? buddypress()->activity->groupblog_temp_id : null;
 	if ( ! $groupblog_temp_id ) {
-		return $retval;
+		return $activity_id;
 	}
 
-	$r['component'] = 'groups';
-	$r['type'] = 'new_groupblog_comment';
-	$r['item_id'] = buddypress()->activity->groupblog_temp_id;
+	$args['component'] = 'groups';
+	$args['type'] = 'new_groupblog_comment';
+	$args['item_id'] = buddypress()->activity->groupblog_temp_id;
 
-	return BP_Activity_Activity::get_id(
-		$r['user_id'],
-		$r['component'],
-		$r['type'],
-		$r['item_id'],
-		$r['secondary_item_id'],
-		$r['action'],
-		$r['content'],
-		$r['date_recorded']
-	);
+	// Check BuddyPress version before getting the activity ID.
+	if ( version_compare( bp_get_version(), '10.0.0', '>=' ) ) {
+
+		// BuddyPress 10 expects an array.
+		$activity_id = BP_Activity_Activity::get_id( $args );
+
+	} else {
+
+		// Legacy method.
+		$activity_id = BP_Activity_Activity::get_id(
+			$args['user_id'],
+			$args['component'],
+			$args['type'],
+			$args['item_id'],
+			$args['secondary_item_id'],
+			$args['action'],
+			$args['content'],
+			$args['date_recorded']
+		);
+
+	}
+
+	return $activity_id;
 }
 
 /**
