@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: BP Groupblog
- * Plugin URI: http://wordpress.org/extend/plugins/search.php?q=buddypress+groupblog
+ * Plugin URI: https://wordpress.org/plugins/bp-groupblog/
  * Description: Automates and links WPMU blogs groups controlled by the group creator.
  * Author: Rodney Blevins, Marius Ooms, Boone Gorges
  * Version: 1.9.2
