@@ -1392,7 +1392,7 @@ add_filter( 'bp_activity_can_comment', 'bp_groupblog_activity_can_comment' );
  *
  * @since 1.9.0
  */
-add_action( 'bp_register_activity_actions', function() {
+function bp_groupblog_register_activity_actions() {
 	bp_activity_set_action(
 		'groups',
 		'new_groupblog_comment',
@@ -1402,7 +1402,8 @@ add_action( 'bp_register_activity_actions', function() {
 		array( 'activity', 'member', 'group' ),
 		0
 	);
-} );
+}
+add_action( 'bp_register_activity_actions', 'bp_groupblog_register_activity_actions' );
 
 /**
  * Action format Callback for our 'new_groupblog_comment' activity type.
@@ -1481,7 +1482,7 @@ function bp_groupblog_format_activity_action_new_groupblog_comment( $action, $ac
  *
  * @since 1.9.0
  */
-add_action( 'bp_activity_before_save', function( $activity ) {
+function bp_groupblog_activity_before_save( $activity ) {
 	// We handle groupblog activities differently.
 	if ( 'new_blog_comment' !== $activity->type ) {
 		return;
@@ -1505,7 +1506,8 @@ add_action( 'bp_activity_before_save', function( $activity ) {
 			}
 		}
 	}
-} );
+}
+add_action( 'bp_activity_before_save', 'bp_groupblog_activity_before_save' );
 
 /**
  * Groupblog comment status transition listener.
@@ -1557,7 +1559,7 @@ add_action( 'transition_comment_status', 'bp_groupblog_transition_comment_status
  *
  * @since 1.9.0
  */
-add_filter( 'bp_activity_post_pre_comment', function( $retval, $blog_id ) {
+function bp_groupblog_activity_post_pre_comment( $retval, $blog_id ) {
 	$group_id = get_groupblog_group_id( $blog_id );
 	if ( empty( $group_id ) ) {
 		return $retval;
@@ -1569,7 +1571,8 @@ add_filter( 'bp_activity_post_pre_comment', function( $retval, $blog_id ) {
 	add_filter( 'bp_disable_blogforum_comments', '__return_true' );
 
 	return $retval;
-}, 10, 2 );
+}
+add_filter( 'bp_activity_post_pre_comment', 'bp_groupblog_activity_post_pre_comment', 10, 2 );
 
 /**
  * Delete corresponding activity item when groupblog comment is deleted.
@@ -1607,7 +1610,7 @@ add_action( 'delete_comment', 'bp_groupblog_delete_activity_on_delete_blog_comme
  *
  * @since 1.9.0
  */
-add_action( 'bp_activity_after_delete', function( $activities ) {
+function bp_groupblog_activity_after_delete( $activities ) {
 	$switched = false;
 	foreach ( $activities as $activity ) {
 		if ( 'groups' === $activity->component && 'new_groupblog_comment' === $activity->type ) {
@@ -1639,7 +1642,8 @@ add_action( 'bp_activity_after_delete', function( $activities ) {
 		add_action( 'delete_comment', 'bp_groupblog_delete_activity_on_delete_blog_comment', 0 );
 		add_action( 'delete_comment', 'bp_activity_post_type_remove_comment', 10 );
 	}
-} );
+}
+add_action( 'bp_activity_after_delete', 'bp_groupblog_activity_after_delete' );
 
 /**
  * Helper function to fetch the activity ID for a groupblog comment.
