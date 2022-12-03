@@ -81,7 +81,7 @@ function bp_groupblog_blog_defaults( $blog_id ) {
 				'post_name' => $options['pageslug'], // The name (slug) for your post
 				'post_title' => $options['pagetitle'], //The title of your post.
 				'post_type' => 'page', //Sometimes you want to post a page.
-				'post_content' => __( '<p><strong>This page has been created automatically by the BuddyPress GroupBlog plugin.</strong></p><p>Please contact the site admin if you see this message instead of your blog posts. Possible solution: please advise your site admin to create the <a href="http://codex.wordpress.org/Pages#Creating_Your_Own_Page_Templates">page template</a> needed for the BuddyPress GroupBlog plugin.<p>', 'bp-groupblog' ), //The full text of the post.
+				'post_content' => __( '<p><strong>This page has been created automatically by the BuddyPress GroupBlog plugin.</strong></p><p>Please contact the site admin if you see this message instead of your blog posts. Possible solution: please advise your site admin to create the <a href="https://wordpress.org/support/article/pages/">page template</a> needed for the BuddyPress GroupBlog plugin.<p>', 'bp-groupblog' ), //The full text of the post.
 			);
 			$blog_page_id = wp_insert_post( $blog_page );
 
@@ -234,7 +234,7 @@ function bp_groupblog_update_defaults() {
 								'post_name' => $newoptions['pageslug'], // The name (slug) for your post
 								'post_title' => $newoptions['pagetitle'], //The title of your post.
 								'post_type' => 'page', //Sometimes you want to post a page.
-								'post_content' => __( '<p><strong>This page has been created automatically by the BuddyPress GroupBlog plugin.</strong></p><p>Please contact the site admin if you see this message instead of your blog posts. Possible solution: please advise your site admin to create the <a href="http://codex.wordpress.org/Pages#Creating_Your_Own_Page_Templates">page template</a> needed for the BuddyPress GroupBlog plugin.<p>', 'bp-groupblog' ), //The full text of the post.
+								'post_content' => __( '<p><strong>This page has been created automatically by the BuddyPress GroupBlog plugin.</strong></p><p>Please contact the site admin if you see this message instead of your blog posts. Possible solution: please advise your site admin to create the <a href="https://wordpress.org/support/article/pages/">page template</a> needed for the BuddyPress GroupBlog plugin.<p>', 'bp-groupblog' ), //The full text of the post.
 							);
 							$blog_page_id = wp_insert_post( $blog_page );
 
@@ -334,7 +334,7 @@ function bp_groupblog_add_admin_menu() {
 	);
 
 	// add styles only on bp-groupblog admin page, see:
-	// http://codex.wordpress.org/Function_Reference/wp_enqueue_script#Load_scripts_only_on_plugin_pages
+	// https://developer.wordpress.org/reference/functions/wp_enqueue_script/#Load_scripts_only_on_plugin_pages
 	add_action( 'admin_print_styles-' . $page, 'bp_groupblog_add_admin_style' );
 
 }
@@ -590,7 +590,7 @@ function bp_groupblog_management_page() {
 									<label><input class="info-on" name="bp_groupblog_redirect_blog" id="bp_groupblog_redirect_blog"  value="2" type="radio"<?php if ( isset( $opt['redirectblog'] ) && $opt['redirectblog'] == 2 ) { echo 'checked="checked"'; } ?>> <?php _e( 'Page Template Title: ', 'bp-groupblog' ); ?></label>
 									<input name="bp_groupblog_page_title" id="bp_groupblog_page_title" value="<?php echo ( isset( $opt['pagetitle'] ) ? $opt['pagetitle'] : '' ); ?>" size="10" type="text" />
 									<span class="notice" id="redirect_notice" style="display:none;"> <?php _e( 'All existing Group Blogs will be automatically updated on each change.', 'bp-groupblog' ); ?></span>
-									<p class="info"><?php _e( 'The "Template Page" option will create a page on group blogs and links to a template file within your theme. Don\'t worry about the name you choose, we\'ll make sure your page finds it way to the template file. For custom themes make sure to <a href="http://codex.wordpress.org/Pages#Creating_Your_Own_Page_Templates">create</a> this template file manually.', 'bp-groupblog' ); ?>
+									<p class="info"><?php _e( 'The "Template Page" option will create a page on group blogs and links to a template file within your theme. Don\'t worry about the name you choose, we\'ll make sure your page finds it way to the template file. For custom themes make sure to <a href="https://wordpress.org/support/article/pages/">create</a> this template file manually.', 'bp-groupblog' ); ?>
 									</p>
 								</td>
 							</tr>
@@ -749,16 +749,16 @@ function bp_groupblog_management_page() {
 					</div>
 					<div>
 						<span class="indent"><strong><?php _e( 'Support', 'bp-groupblog' ); ?></strong></span>
-						<span><a href="http://buddypress.org/forums/"><?php _e( 'BuddyPress Forums', 'bp-groupblog' ); ?></a> |
-						<a href="http://wordpress.org/tags/bp-groupblog?forum_id=10"><?php _e( 'WordPress Forums', 'bp-groupblog' ); ?></a></span>
+						<span><a href="https://buddypress.org/support/"><?php _e( 'BuddyPress Forums', 'bp-groupblog' ); ?></a> |
+						<a href="https://wordpress.org/support/plugin/bp-groupblog/"><?php _e( 'WordPress Forums', 'bp-groupblog' ); ?></a></span>
 					</div>
 					<div>
 						<span class="indent"><strong><?php _e( 'Trac', 'bp-groupblog' ); ?></strong></span>
-						<span><a href="http://plugins.trac.wordpress.org/log/bp-groupblog"><?php _e( 'Revision Log', 'bp-groupblog' ); ?></a> | <a href="http://plugins.trac.wordpress.org/browser/bp-groupblog/"><?php _e( 'Trac Browser', 'bp-groupblog' ); ?></a></span>
+						<span><a href="https://plugins.trac.wordpress.org/log/bp-groupblog"><?php _e( 'Revision Log', 'bp-groupblog' ); ?></a> | <a href="https://plugins.trac.wordpress.org/browser/bp-groupblog/"><?php _e( 'Trac Browser', 'bp-groupblog' ); ?></a></span>
 					</div>
 					<div>
 						<span class="indent"><strong><?php _e( 'Rate', 'bp-groupblog' ); ?></strong></span>
-						<span><a href="http://wordpress.org/extend/plugins/bp-groupblog/"><?php _e( 'Let everyone know! Only if you like it :)', 'bp-groupblog' ); ?></a></span>
+						<span><a href="https://wordpress.org/plugins/bp-groupblog/"><?php _e( 'Let everyone know! Only if you like it :)', 'bp-groupblog' ); ?></a></span>
 					</div>
 					<hr />
 					<div>

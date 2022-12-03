@@ -6,9 +6,9 @@
  */
 
 /**
- * Group API
+ * Group Extension class.
  *
- * http://codex.buddypress.org/developer-docs/group-extension-api/
+ * @see https://codex.buddypress.org/developer/group-extension-api/
  */
 class BP_Groupblog_Extension extends BP_Group_Extension {
 

@@ -241,4 +241,4 @@ Updated language files
 * Initial release.
 
 = The changelog can also be found here: =
-http://plugins.trac.wordpress.org/log/bp-groupblog?verbose=on
+https://plugins.trac.wordpress.org/log/bp-groupblog?verbose=on
