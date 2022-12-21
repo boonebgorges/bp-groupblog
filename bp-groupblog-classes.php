@@ -8,7 +8,7 @@
 class BP_Groupblog_Extension extends BP_Group_Extension {
 
 	public function __construct() {
-		global $bp;
+		$bp = buddypress();
 
 		$this->name = __( 'Group Blog', 'groupblog' );
 		$this->slug = 'group-blog';
@@ -21,15 +21,16 @@ class BP_Groupblog_Extension extends BP_Group_Extension {
 		$this->nav_item_name     = 'Blog';
 		$this->nav_item_position = 30;
 		//$this->enable_nav_item   = $this->enable_nav_item();
-		$this->enable_nav_item	 = false;
-		$this->template_file     = 'groupblog/blog';
+		$this->enable_nav_item = false;
+		$this->template_file   = 'groupblog/blog';
 	}
 
 	function create_screen( $group_id = null ) {
-		global $bp, $groupblog_create_screen;
-
-		if ( !bp_is_group_creation_step( $this->slug ) )
+		global $groupblog_create_screen;
+		$bp = buddypress();
+		if ( ! bp_is_group_creation_step( $this->slug ) ) {
 			return false;
+		}
 
 		$groupblog_create_screen = true;
 
@@ -53,10 +54,11 @@ class BP_Groupblog_Extension extends BP_Group_Extension {
 	}
 
 	function edit_screen( $group_id = null ) {
-		global $bp;
+		$bp = buddypress();
 
-		if ( !bp_is_group_admin_screen( $this->slug ) )
+		if ( ! bp_is_group_admin_screen( $this->slug ) ) {
 			return false;
+		}
 
 		// Attach the nonce fields in a hook. Mainly for backward compatibility
 		add_action( 'signup_blogform', array( &$this, 'nonce_fields_edit' ) );
@@ -96,4 +98,4 @@ class BP_Groupblog_Extension extends BP_Group_Extension {
 }
 bp_register_group_extension( 'BP_Groupblog_Extension' );
 
-?>
+

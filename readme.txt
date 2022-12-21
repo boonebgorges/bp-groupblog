@@ -3,8 +3,8 @@ Contributors: MariusOoms, reblevins, boonebgorges
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7374704
 Tags: buddypress, groups, blogs, content
 Requires at least: 3.6
-Tested up to: 5.5
-Stable tag: 1.9.2
+Tested up to: 6.1.1
+Stable tag: 1.9.3
 
 BuddyPress Groupblog extends the group functionality by enabling the group to have a single blog associated with it.
 
@@ -50,6 +50,14 @@ The BuddyPress Groupblog plugin extends the group functionality by enabling each
 2. Screenshot of the group blog page.
 
 == Changelog ==
+
+= 1.9.3 =
+* Test with WordPress 6.1.1, BuddyPress 10.6 and PHP 8.1
+* Change arguments order of function groupblog_edit_base_settings()
+* Change arguments order of function bp_groupblog_get_user_role()
+* Remove some unnecessary globals
+* Some coding standards issues
+
 
 = 1.9.2 =
 * Use group avatar on Site Directory for groupblogs, rather than creator user avatar.
