@@ -253,7 +253,7 @@ function groupblog_edit_settings() {
  * @param int $group_id The group ID.
  * @param int $groupblog_blog_id The blog ID.
  */
-function groupblog_edit_base_settings( $groupblog_enable_blog, $groupblog_silent_add = null, $groupblog_default_admin_role, $groupblog_default_mod_role, $groupblog_default_member_role, $page_template_layout, $group_id, $groupblog_blog_id = null ) {
+function groupblog_edit_base_settings( $groupblog_enable_blog, $groupblog_silent_add, $groupblog_default_admin_role, $groupblog_default_mod_role, $groupblog_default_member_role, $page_template_layout, $group_id, $groupblog_blog_id = null ) {
 	global $bp;
 
 	$group_id = (int) $group_id;
@@ -539,7 +539,7 @@ add_action( 'groups_leave_group', 'bp_groupblog_remove_user', 10, 2 );
  * @param int $blog_id The blog ID.
  * @return string The user's blog role.
  */
-function bp_groupblog_get_user_role( $user_id, $user_login = false, $blog_id ) {
+function bp_groupblog_get_user_role( $user_id, $user_login, $blog_id ) {
 	global $wpdb;
 
 	// Determine users role, if any, on this blog.
