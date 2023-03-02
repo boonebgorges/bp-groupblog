@@ -180,6 +180,7 @@ function groupblog_edit_settings() {
 			if ( isset( $_POST['groupblog-create-new'] ) && 'yes' === $_POST['groupblog-create-new'] ) {
 				// Create a new blog and assign the blog id to the global $groupblog_blog_id.
 				if ( ! bp_groupblog_validate_blog_signup() ) {
+					// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 					$errors = $filtered_results['errors'];
 					bp_core_add_message( $errors );
 					$group_id = '';
@@ -1094,6 +1095,7 @@ function bp_groupblog_validate_blog_signup() {
 
 	$group_id = isset( $_COOKIE['bp_new_group_id'] ) ? $_COOKIE['bp_new_group_id'] : bp_get_current_group_id();
 
+	// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 	$current_user = wp_get_current_user();
 	if ( ! is_user_logged_in() ) {
 		die();
@@ -1101,6 +1103,7 @@ function bp_groupblog_validate_blog_signup() {
 
 	// Re-validate user info.
 	$result = bp_groupblog_validate_blog_form();
+	// phpcs:ignore WordPress.PHP.DontExtract.extract_extract
 	extract( $result );
 
 	$checks = get_site_option( 'bp_groupblog_blog_defaults_options' );
@@ -1149,6 +1152,7 @@ function bp_groupblog_validate_blog_signup() {
 	$groupblog_blog_id = wpmu_create_blog( $domain, $path, $blog_title, $current_user->ID, $meta, $wpdb->siteid );
 
 	if ( ! empty( $filtered_results['errors'] ) ) {
+		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 		$errors = $filtered_results['errors'];
 	}
 
