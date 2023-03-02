@@ -217,7 +217,7 @@ function groupblog_edit_settings() {
 
 	foreach ( $settings as $setting => $val ) {
 		if ( isset( $_POST[ $setting ] ) ) {
-			$settings[ $setting ] = $_POST[ $setting ];
+			$settings[ $setting ] = sanitize_text_field( wp_unslash( $_POST[ $setting ] ) );
 		}
 	}
 
@@ -576,15 +576,15 @@ function bp_groupblog_create_screen_save() {
 	}
 
 	// Set up some default roles.
-	$groupblog_default_admin_role  = isset( $_POST['default-administrator'] ) ? $_POST['default-administrator'] : BP_GROUPBLOG_DEFAULT_ADMIN_ROLE;
-	$groupblog_default_mod_role    = isset( $_POST['default-moderator'] ) ? $_POST['default-moderator'] : BP_GROUPBLOG_DEFAULT_MOD_ROLE;
-	$groupblog_default_member_role = isset( $_POST['default-member'] ) ? $_POST['default-member'] : BP_GROUPBLOG_DEFAULT_MEMBER_ROLE;
+	$groupblog_default_admin_role  = isset( $_POST['default-administrator'] ) ? sanitize_text_field( wp_unslash( $_POST['default-administrator'] ) ) : BP_GROUPBLOG_DEFAULT_ADMIN_ROLE;
+	$groupblog_default_mod_role    = isset( $_POST['default-moderator'] ) ? sanitize_text_field( wp_unslash( $_POST['default-moderator'] ) ) : BP_GROUPBLOG_DEFAULT_MOD_ROLE;
+	$groupblog_default_member_role = isset( $_POST['default-member'] ) ? sanitize_text_field( wp_unslash( $_POST['default-member'] ) ) : BP_GROUPBLOG_DEFAULT_MEMBER_ROLE;
 
 	// Set up some other values.
-	$groupblog_group_id   = isset( $_POST['group_id'] ) ? $_POST['group_id'] : bp_get_new_group_id();
-	$silent_add           = isset( $_POST['groupblog-silent-add'] ) ? $_POST['groupblog-silent-add'] : '';
-	$page_template_layout = isset( $_POST['page_template_layout'] ) ? $_POST['page_template_layout'] : '';
-	$enable_group_blog    = isset( $_POST['groupblog-enable-blog'] ) ? $_POST['groupblog-enable-blog'] : '';
+	$groupblog_group_id   = isset( $_POST['group_id'] ) ? (int) $_POST['group_id'] : bp_get_new_group_id();
+	$silent_add           = isset( $_POST['groupblog-silent-add'] ) ? sanitize_text_field( wp_unslash( $_POST['groupblog-silent-add'] ) ) : '';
+	$page_template_layout = isset( $_POST['page_template_layout'] ) ? sanitize_text_field( wp_unslash( $_POST['page_template_layout'] ) ) : '';
+	$enable_group_blog    = isset( $_POST['groupblog-enable-blog'] ) ? sanitize_text_field( wp_unslash( $_POST['groupblog-enable-blog'] ) ) : '';
 
 	if ( isset( $_POST['groupblog-create-new'] ) && 'yes' === $_POST['groupblog-create-new'] ) {
 		// Create a new blog and assign the blog id to the global $groupblog_blog_id.
@@ -704,7 +704,13 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 					<span class="error"><?php echo $errmsg; ?></span>
 				<?php endif ?>
 
-				<?php $blog_title = isset( $_GET['invalid_name'] ) ? urldecode( $_GET['invalid_name'] ) : $bp->groups->current_group->name; ?>
+				<?php
+				if ( isset( $_GET['invalid_name'] ) ) {
+					$blog_title = urldecode( sanitize_text_field( wp_unslash( $_GET['invalid_name'] ) ) );
+				} else {
+					$blog_title = bp_groupblog_sanitize_blog_name( $bp->groups->current_group->name );
+				}
+				?>
 
 				<span class="gbd-value">
 					<input name="blog_title" type="text" id="blog_title" value="<?php echo $blog_title; ?>" />
@@ -717,9 +723,13 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 					<span class="error"><?php echo $errmsg; ?></span>
 				<?php endif ?>
 
-				<?php $blog_address = isset( $_GET['invalid_address'] ) ? urldecode( $_GET['invalid_address'] ) : bp_groupblog_sanitize_blog_name( $bp->groups->current_group->slug ); ?>
-
 				<?php
+				if ( isset( $_GET['invalid_address'] ) ) {
+					$blog_address = urldecode( sanitize_text_field( wp_unslash( $_GET['invalid_address'] ) ) );
+				} else {
+					$blog_address = bp_groupblog_sanitize_blog_name( $bp->groups->current_group->slug );
+				}
+
 				// Don't suggest a subdomain if it's really long,
 				// since subdomains longer than 63 chars won't work.
 				if ( strlen( $blog_address > 50 ) ) {
@@ -1093,7 +1103,7 @@ function bp_groupblog_validate_blog_signup() {
 	global $bp, $wpdb, $current_user, $blogname, $blog_title, $errors;
 	global $groupblog_blog_id, $filtered_results;
 
-	$group_id = isset( $_COOKIE['bp_new_group_id'] ) ? $_COOKIE['bp_new_group_id'] : bp_get_current_group_id();
+	$group_id = isset( $_COOKIE['bp_new_group_id'] ) ? (int) $_COOKIE['bp_new_group_id'] : bp_get_current_group_id();
 
 	// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 	$current_user = wp_get_current_user();
