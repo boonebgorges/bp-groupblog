@@ -1896,14 +1896,12 @@ function groupblog_screen_blog() {
 			wp_redirect( $home_url . '/' . $checks['pageslug'] . '/' );
 			die();
 
-		} else {
-			if ( file_exists( locate_template( array( 'groupblog/blog.php' ) ) ) ) {
-				bp_core_load_template( apply_filters( 'groupblog_screen_blog', 'groupblog/blog' ) );
-				add_action( 'bp_screens', 'groupblog_screen_blog' );
-			} elseif ( ! empty( groups_get_current_group() ) ) {
-				add_action( 'bp_template_content', 'groupblog_screen_blog_content' );
-				bp_core_load_template( apply_filters( 'bp_core_template_plugin', 'groups/single/plugins' ) );
-			}
+		} elseif ( file_exists( locate_template( array( 'groupblog/blog.php' ) ) ) ) {
+			bp_core_load_template( apply_filters( 'groupblog_screen_blog', 'groupblog/blog' ) );
+			add_action( 'bp_screens', 'groupblog_screen_blog' );
+		} elseif ( ! empty( groups_get_current_group() ) ) {
+			add_action( 'bp_template_content', 'groupblog_screen_blog_content' );
+			bp_core_load_template( apply_filters( 'bp_core_template_plugin', 'groups/single/plugins' ) );
 		}
 	}
 }
