@@ -1147,6 +1147,7 @@ function bp_groupblog_validate_blog_signup() {
 		if ( 1 === (int) $checks['allowunderscores'] || 1 !== (int) $checks['allowdashes'] ) {
 			$message .= __( ' &raquo; Only letters and numbers allowed.', 'bp-groupblog' ) . '<br />';
 		}
+		// translators: Character count.
 		$message .= sprintf( __( ' &raquo; Must be at least %s characters.', 'bp-groupblog' ), $checks['minlength'] ) . '<br />';
 		if ( 1 === (int) $checks['allownumeric'] ) {
 			$message .= __( ' &raquo; Has to contain letters as well.', 'bp-groupblog' );
@@ -1335,10 +1336,12 @@ function bp_groupblog_set_group_to_post_activity( $activity, $args = array() ) {
 		$activity->id      = $id;
 		$activity->user_id = $post->post_author;
 
+		// translators: 1. User link; 2. Post link; 3. Group link.
 		$action = sprintf( __( '%1$s edited the blog post %2$s in the group %3$s:', 'bp-groupblog' ), bp_core_get_userlink( $post->post_author ), '<a href="' . get_permalink( $post->ID ) . '">' . $post->post_title . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_attr( $group->name ) . '</a>' );
 
 	} else {
 		// This is a new blog post.
+		// translators: 1. User link; 2. Post link; 3. Group link.
 		$action = sprintf( __( '%1$s wrote a new blog post %2$s in the group %3$s:', 'bp-groupblog' ), bp_core_get_userlink( $post->post_author ), '<a href="' . get_permalink( $post->ID ) . '">' . $post->post_title . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_attr( $group->name ) . '</a>' );
 	}
 
@@ -1584,6 +1587,7 @@ function bp_groupblog_format_activity_action_new_groupblog_comment( $action, $ac
 	}
 
 	// Build the complete activity action string.
+	// translators: 1. User link; 2. Post link; 3. Site lin.
 	$action = sprintf( __( '%1$s commented on the post, %2$s, on the groupblog %3$s', 'bp-groupblog' ), $user_link, $post_link, '<a href="' . esc_url( $blog_url ) . '">' . esc_html( $blog_name ) . '</a>' );
 
 	// Build args for filter.
