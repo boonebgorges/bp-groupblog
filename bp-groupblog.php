@@ -1449,13 +1449,13 @@ add_action( 'delete_post', 'bp_groupblog_remove_post', 5 );
  *
  * @since 1.8.9
  *
- * @param string $qs The querystring for the BP loop.
- * @param string $object The current object for the querystring.
+ * @param string $qs          The querystring for the BP loop.
+ * @param string $object_type The current object for the querystring.
  * @return string Modified querystring.
  */
-function bp_groupblog_override_new_blog_post_activity_filter( $qs, $object ) {
+function bp_groupblog_override_new_blog_post_activity_filter( $qs, $object_type ) {
 	// Not on the blogs object? stop now.
-	if ( $object != 'activity' ) {
+	if ( 'activity' !== $object_type ) {
 		return $qs;
 	}
 
