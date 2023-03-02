@@ -24,9 +24,6 @@ if ( ! defined( 'BP_GROUPBLOG_SLUG' ) ) {
 	define( 'BP_GROUPBLOG_SLUG', 'group-blog' );
 }
 
-// Setup the groupblog theme directory.
-//register_theme_directory( WP_PLUGIN_DIR . '/bp-groupblog/themes' );
-
 /**
  * Plugin activation.
  *
@@ -232,9 +229,6 @@ function groupblog_edit_settings() {
 	}
 
 	do_action( 'groupblog_details_edited', $bp->groups->current_group->id );
-
-	//bp_core_redirect( $bp->root_domain . '/' . $bp->current_component . '/' . $bp->current_item . '/admin/group-blog' );
-
 }
 
 /**
@@ -855,18 +849,14 @@ function bp_groupblog_validate_blog_form() {
 						$newerrors->add( 'blogname', $subvalue );
 
 				} // End switch.
-
 			}
-
 		} else {
 
 			// Add all other errors into the error object, but they're in sub-arrays, so loop through to get the right stuff.
 			foreach ( $value as $subkey => $subvalue ) {
 				$newerrors->add( $key, $subvalue );
 			}
-
 		}
-
 	}
 
 	// Unset the error object from the results & reset it with our new errors.
@@ -1157,7 +1147,6 @@ function bp_groupblog_validate_blog_signup() {
 	}
 
 	return true;
-
 }
 
 /**
@@ -1824,7 +1813,6 @@ function bp_groupblog_posts() {
 	?>
 	<option value="new_groupblog_post"><?php esc_html_e( 'Blog Posts', 'bp-groupblog' ); ?></option>
 	<?php
-
 }
 add_action( 'bp_group_activity_filter_options', 'bp_groupblog_posts' );
 
@@ -1916,7 +1904,6 @@ function bp_groupblog_delete_meta( $blog_id, $drop = false ) {
 	groups_update_groupmeta( $group_id, 'groupblog_default_admin_role', '' );
 	groups_update_groupmeta( $group_id, 'groupblog_default_mod_role', '' );
 	groups_update_groupmeta( $group_id, 'groupblog_default_member_role', '' );
-
 }
 add_action( 'delete_blog', 'bp_groupblog_delete_meta', 10, 1 );
 
