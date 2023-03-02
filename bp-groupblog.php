@@ -163,8 +163,6 @@ function bp_groupblog_setup_nav() {
 add_action( 'bp_setup_nav', 'bp_groupblog_setup_nav' );
 
 /**
- * groupblog_edit_settings()
- *
  * Save the blog-settings accessible only by the group admin or mod.
  *
  * Since version 1.6, this function has been called directly by
@@ -466,7 +464,7 @@ function bp_groupblog_just_joined_group( $group_id, $user_id ) {
 }
 add_action( 'groups_join_group', 'bp_groupblog_just_joined_group', 5, 2 );
 
-/*
+/**
  * Called when user changes status in the group
  *
  * Variables ($user_id, $group_id) are switched around for these hooks,
@@ -617,11 +615,11 @@ function bp_groupblog_create_screen_save() {
  *
  * @since 1.0
  *
- * @param str $blogname The name of the blog.
- * @param str $blogname The title of the blog.
- * @param str $errors The errors.
+ * @param string         $blogname   The name of the blog.
+ * @param string         $blog_title The title of the blog.
+ * @param WP_Error|false $errors     Error object.
  */
-function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors = '' ) {
+function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors = false ) {
 	global $bp, $groupblog_create_screen, $current_site;
 
 	// Get the group id, which is fetched differently depending on whether this is a group
@@ -862,11 +860,10 @@ function bp_groupblog_validate_blog_form() {
 	$result['errors'] = $newerrors;
 
 	return $result;
-
 }
 
 /**
- * Sanitizes a group name into a blog address, based on site settings
+ * Sanitizes a group name into a blog address, based on site settings.
  *
  * @since 1.7
  *
@@ -1227,8 +1224,8 @@ add_action( 'transition_post_status', 'bp_groupblog_catch_transition_post_type_s
  * @todo Move this functionality into bp_groupblog_catch_transition_post_type_status().
  *
  * @param BP_Activity_Activity $activity The activity object.
- * @param array $args {
- *     Optional. Handy if you've already parsed the blog post and group ID.
+ * @param array                $args {
+ *                    Optional. Handy if you've already parsed the blog post and group ID.
  *     @type WP_Post $post     The WP post object.
  *     @type int     $group_id The group ID.
  * }
@@ -1247,7 +1244,7 @@ function bp_groupblog_set_group_to_post_activity( $activity, $args = array() ) {
 		$group_id = $args['group_id'];
 		$id       = $activity->id;
 
-	// Regular BP save routine.
+		// Regular BP save routine.
 	} else {
 		// Stop if this activity item is not a blog post.
 		if ( 'new_blog_post' !== $activity->type ) {
@@ -1275,7 +1272,7 @@ function bp_groupblog_set_group_to_post_activity( $activity, $args = array() ) {
 		);
 	}
 
-	// Fetch group data/
+	// Fetch group data.
 	$group = groups_get_group( array( 'group_id' => $group_id ) );
 
 	// Only allow certain HTML tags in post titles.
@@ -1485,7 +1482,7 @@ add_action( 'bp_register_activity_actions', 'bp_groupblog_register_activity_acti
  *
  * @since 1.9.0
  *
- * @param str $action The action.
+ * @param str    $action   The action.
  * @param object $activity The activity object.
  * @return str $action The modified action.
  */
@@ -1904,10 +1901,9 @@ add_action( 'bp_init', 'groupblog_redirect_group_home' );
  *
  * @since 1.0
  *
- * @param int  $blog_id The blog ID.
- * @param bool $drop Unused.
+ * @param int $blog_id The blog ID.
  */
-function bp_groupblog_delete_meta( $blog_id, $drop = false ) {
+function bp_groupblog_delete_meta( $blog_id ) {
 
 	$group_id = get_groupblog_group_id( $blog_id );
 
