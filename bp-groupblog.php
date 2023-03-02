@@ -173,20 +173,21 @@ add_action( 'bp_setup_nav', 'bp_groupblog_setup_nav' );
 function groupblog_edit_settings() {
 	global $bp, $groupblog_blog_id, $errors, $filtered_results;
 
-	$group_id = isset( $_POST['groupblog-group-id'] ) ? $_POST['groupblog-group-id'] : bp_get_current_group_id();
+	$group_id = isset( $_POST['groupblog-group-id'] ) ? (int) $_POST['groupblog-group-id'] : bp_get_current_group_id();
 
 	if ( ! bp_groupblog_blog_exists( $group_id ) ) {
 		if ( isset( $_POST['groupblog-enable-blog'] ) ) {
-			if ( $_POST['groupblog-create-new'] == 'yes' ) {
+			if ( isset( $_POST['groupblog-create-new'] ) && 'yes' === $_POST['groupblog-create-new'] ) {
 				// Create a new blog and assign the blog id to the global $groupblog_blog_id.
 				if ( ! bp_groupblog_validate_blog_signup() ) {
 					$errors = $filtered_results['errors'];
 					bp_core_add_message( $errors );
 					$group_id = '';
 				}
-			} elseif ( $_POST['groupblog-create-new'] == 'no' ) {
+			} elseif ( isset( $_POST['groupblog-create-new'] ) && 'no' === $_POST['groupblog-create-new'] ) {
 				// They're using an existing blog, so we try to assign that to $groupblog_blog_id.
-				if ( ! ( $groupblog_blog_id = $_POST['groupblog-blogid'] ) ) {
+				$groupblog_blog_id = isset( $_POST['groupblog-blogid'] ) ? (int) $_POST['groupblog-blogid'] : 0;
+				if ( ! $groupblog_blog_id ) {
 					// They forgot to choose a blog, so send them back and make them do it.
 					bp_core_add_message( __( 'Please choose one of your blogs from the drop-down menu.', 'bp-groupblog' ), 'error' );
 					if ( bp_is_action_variable( 'step', 0 ) ) {
@@ -584,16 +585,17 @@ function bp_groupblog_create_screen_save() {
 	$page_template_layout = isset( $_POST['page_template_layout'] ) ? $_POST['page_template_layout'] : '';
 	$enable_group_blog    = isset( $_POST['groupblog-enable-blog'] ) ? $_POST['groupblog-enable-blog'] : '';
 
-	if ( $_POST['groupblog-create-new'] == 'yes' ) {
+	if ( isset( $_POST['groupblog-create-new'] ) && 'yes' === $_POST['groupblog-create-new'] ) {
 		// Create a new blog and assign the blog id to the global $groupblog_blog_id.
 		if ( ! $groupblog_blog_id = bp_groupblog_validate_blog_signup() ) {
 			$errors = $filtered_results['errors'];
 			bp_core_add_message( $errors );
 			$group_id = '';
 		}
-	} elseif ( $_POST['groupblog-create-new'] == 'no' ) {
+	} elseif ( isset( $_POST['groupblog-create-new'] ) && 'no' === $_POST['groupblog-create-new'] ) {
 		// They're using an existing blog, so we try to assign that to $groupblog_blog_id.
-		if ( ! ( $groupblog_blog_id = $_POST['groupblog-blogid'] ) ) {
+		$groupblog_blog_id = isset( $_POST['groupblog-blogid'] ) ? (int) $_POST['groupblog-blogid'] : 0;
+		if ( ! $groupblog_blog_id ) {
 			// They forgot to choose a blog, so send them back and make them do it.
 			bp_core_add_message( __( 'Please choose one of your blogs from the drop-down menu.', 'bp-groupblog' ), 'error' );
 			bp_core_redirect( trailingslashit( $bp->loggedin_user->domain . $bp->groups->slug . '/create/step/' . $bp->action_variables[1] ) );
@@ -751,13 +753,15 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
  * @since 1.0
  */
 function bp_groupblog_validate_blog_form() {
-
 	$user = '';
 	if ( is_user_logged_in() ) {
 		$user = wp_get_current_user();
 	}
 
-	$result = wpmu_validate_blog_signup( $_POST['blogname'], $_POST['blog_title'], $user );
+	$blogname   = isset( $_POST['blogname'] ) ? sanitize_text_field( wp_unslash( $_POST['blogname'] ) ) : '';
+	$blog_title = isset( $_POST['blog_title'] ) ? sanitize_text_field( wp_unslash( $_POST['blog_title'] ) ) : '';
+
+	$result = wpmu_validate_blog_signup( $blogname, $blog_title, $user );
 
 	$errors = $result['errors'];
 
@@ -824,8 +828,9 @@ function bp_groupblog_validate_blog_form() {
 					 * @see https://github.com/WordPress/WordPress/commit/a0bbd154d93c20724b9e1f54d515468845870dc0
 					 */
 					case 'Sorry, site names may not contain the character &#8220;_&#8221;!':
-						if ( ! empty( $checks['allowunderscores'] ) && $checks['allowunderscores'] != 1 ) {
-							$newerrors->add( 'blogname',
+						if ( ! empty( $checks['allowunderscores'] ) && 1 === (int) $checks['allowunderscores'] ) {
+							$newerrors->add(
+								'blogname',
 								sprintf(
 									/* translators: %d: The minimum number of characters for a Site name. */
 									__( 'Sorry, blog names may not contain the character %s!', 'bp-groupblog' ),
@@ -1117,15 +1122,15 @@ function bp_groupblog_validate_blog_signup() {
 
 		$error_params = array(
 			'create_error'    => '4815162342',
-			'invalid_address' => urlencode( $_POST['blogname'] ),
-			'invalid_name'    => urlencode( $_POST['blog_title'] ),
+			'invalid_address' => isset( $_POST['blogname'] ) ? rawurlencode( sanitize_text_field( wp_unslash( $_POST['blogname'] ) ) ) : '',
+			'invalid_name'    => isset( $_POST['blog_title'] ) ? rawurlencode( sanitize_text_field( wp_unslash( $_POST['blog_title'] ) ) ) : '',
 		);
 		$redirect_url = add_query_arg( $error_params, $redirect_url );
 		bp_core_redirect( $redirect_url );
 
 	}
 
-	$public = (int) $_POST['blog_public'];
+	$public = isset( $_POST['blog_public'] ) ? (int) $_POST['blog_public'] : 0;
 
 	groups_update_groupmeta( $group_id, 'groupblog_public', $public );
 	groups_update_groupmeta( $group_id, 'groupblog_title', $blog_title );
