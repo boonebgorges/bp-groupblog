@@ -636,7 +636,7 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 
 	<div id="blog-details-fields">
 
-	<?php if ( ! $groupblog_create_screen && $blog_id != '' ) : ?>
+	<?php if ( ! $groupblog_create_screen && $blog_id ) : ?>
 		<?php /* We're showing the admin form */ ?>
 		<?php $blog_details = get_blog_details( get_groupblog_blog_id(), true ); ?>
 		<label for="blog_title"><strong><?php esc_html_e( 'Blog Title:', 'bp-groupblog' ); ?></strong></label>
@@ -1883,7 +1883,7 @@ function groupblog_screen_blog() {
 
 	if ( bp_is_groups_component() && bp_is_current_action( apply_filters( 'bp_groupblog_subnav_item_slug', 'blog' ) ) ) {
 
-		$checks = get_site_option( 'bp_groupblog_blog_defaults_options' );
+		$checks  = get_site_option( 'bp_groupblog_blog_defaults_options' );
 		$blog_id = get_groupblog_blog_id();
 
 		$home_url = ! empty( $blog_id ) ? get_home_url( get_groupblog_blog_id() ) : false;
