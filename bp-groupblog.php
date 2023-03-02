@@ -474,19 +474,19 @@ add_action( 'groups_join_group', 'bp_groupblog_just_joined_group', 5, 2 );
  *
  * @since 1.3
  *
- * @param int $user_id The user ID.
+ * @param int $user_id  The user ID.
  * @param int $group_id The group ID.
  */
 function bp_groupblog_changed_status_group( $user_id, $group_id ) {
 	bp_groupblog_upgrade_user( $user_id, $group_id );
 }
-add_action( 'groups_promoted_member',     'bp_groupblog_changed_status_group', 10, 2 );
-add_action( 'groups_demoted_member',      'bp_groupblog_changed_status_group', 10, 2 );
-add_action( 'groups_unbanned_member',     'bp_groupblog_changed_status_group', 10, 2 );
-add_action( 'groups_banned_member',       'bp_groupblog_changed_status_group', 10, 2 );
-add_action( 'groups_removed_member',      'bp_groupblog_changed_status_group', 10, 2 );
+add_action( 'groups_promoted_member', 'bp_groupblog_changed_status_group', 10, 2 );
+add_action( 'groups_demoted_member', 'bp_groupblog_changed_status_group', 10, 2 );
+add_action( 'groups_unbanned_member', 'bp_groupblog_changed_status_group', 10, 2 );
+add_action( 'groups_banned_member', 'bp_groupblog_changed_status_group', 10, 2 );
+add_action( 'groups_removed_member', 'bp_groupblog_changed_status_group', 10, 2 );
 add_action( 'groups_membership_accepted', 'bp_groupblog_changed_status_group', 10, 2 );
-add_action( 'groups_accept_invite',       'bp_groupblog_changed_status_group', 10, 2 );
+add_action( 'groups_accept_invite', 'bp_groupblog_changed_status_group', 10, 2 );
 
 
 /**
@@ -824,7 +824,8 @@ function bp_groupblog_validate_blog_form() {
 
 					case 'Site name must be at least 4 characters.':
 						if ( ! is_super_admin() && ! empty( $checks['minlength'] ) && strlen( $result['blogname'] ) < $checks['minlength'] ) {
-							$newerrors->add( 'blogname',
+							$newerrors->add(
+								'blogname',
 								sprintf(
 									/* translators: %d: The minimum number of characters for a blog name. */
 									__( 'Blog name must be at least %d characters.', 'bp-groupblog' ),
@@ -1119,7 +1120,7 @@ function bp_groupblog_validate_blog_signup() {
 	$checks = get_site_option( 'bp_groupblog_blog_defaults_options' );
 
 	if ( ! empty( $checks ) && $errors->get_error_code() ) {
-		$message = '';
+		$message  = '';
 		$message .= $errors->get_error_message( 'blogname' ) . '<br />';
 		$message .= __( ' We suggest adjusting the blog address below, in accordance with the following requirements:', 'bp-groupblog' ) . '<br />';
 		if ( 1 === (int) $checks['allowunderscores'] || 1 !== (int) $checks['allowdashes'] ) {
