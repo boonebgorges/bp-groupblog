@@ -244,16 +244,16 @@ function groupblog_edit_settings() {
  *
  * @since 1.5
  *
- * @param str $groupblog_enable_blog The enable blog setting.
- * @param str $groupblog_silent_add The silent add setting.
- * @param str $groupblog_default_admin_role The default admin role setting.
- * @param str $groupblog_default_mod_role The default moderator role setting.
- * @param str $groupblog_default_member_role The default member role setting.
- * @param str $page_template_layout The layout setting.
- * @param int $group_id The group ID.
- * @param int $groupblog_blog_id The blog ID.
+ * @param string $groupblog_enable_blog         The enable blog setting.
+ * @param string $groupblog_silent_add          The silent add setting.
+ * @param string $groupblog_default_admin_role  The default admin role setting.
+ * @param string $groupblog_default_mod_role    The default moderator role setting.
+ * @param string $groupblog_default_member_role The default member role setting.
+ * @param string $page_template_layout          The layout setting.
+ * @param int    $group_id                      The group ID.
+ * @param int    $groupblog_blog_id             The blog ID.
  */
-function groupblog_edit_base_settings( $groupblog_enable_blog, $groupblog_silent_add = null, $groupblog_default_admin_role, $groupblog_default_mod_role, $groupblog_default_member_role, $page_template_layout, $group_id, $groupblog_blog_id = null ) {
+function groupblog_edit_base_settings( $groupblog_enable_blog, $groupblog_silent_add = '', $groupblog_default_admin_role = '', $groupblog_default_mod_role = '', $groupblog_default_member_role = '', $page_template_layout = '', $group_id = 0, $groupblog_blog_id = 0 ) {
 	global $bp;
 
 	$group_id = (int) $group_id;
@@ -534,12 +534,12 @@ add_action( 'groups_leave_group', 'bp_groupblog_remove_user', 10, 2 );
  *
  * @since 1.3
  *
- * @param int $user_id The user ID.
+ * @param int  $user_id    The user ID.
  * @param bool $user_login Deprecated. Don't use.
- * @param int $blog_id The blog ID.
+ * @param int  $blog_id    The blog ID.
  * @return string The user's blog role.
  */
-function bp_groupblog_get_user_role( $user_id, $user_login = false, $blog_id ) {
+function bp_groupblog_get_user_role( $user_id, $user_login = false, $blog_id = 0 ) {
 	global $wpdb;
 
 	// Determine users role, if any, on this blog.
