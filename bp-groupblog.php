@@ -1921,6 +1921,19 @@ function bp_groupblog_delete_meta( $blog_id, $drop = false ) {
 add_action( 'delete_blog', 'bp_groupblog_delete_meta', 10, 1 );
 
 /**
+ * Deletes 'bp_groupblog_blog_group_ids' cache on group delete.
+ *
+ * @since 1.9.3
+ *
+ * @param int $group_id Group ID.
+ */
+function bp_groupblog_delete_meta_on_group_delete( $group_id ) {
+	$blog_id = get_groupblog_blog_id( $group_id );
+	wp_cache_delete( $blog_id, 'bp_groupblog_blog_group_ids' );
+}
+add_action( 'groups_before_delete_group', 'bp_groupblog_delete_meta_on_group_delete' );
+
+/**
  * Use the group avatar on the Site Directory page for groupblogs.
  *
  * If a site in the site loop is a groupblog, use the group logo only if
