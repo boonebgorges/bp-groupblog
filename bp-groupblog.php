@@ -645,8 +645,9 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 		<?php if ( $errmsg ) { ?>
 			<p class="error"><?php echo esc_html( $errmsg ); ?></p>
 		<?php } ?>
-		<p><?php echo $blog_details->blogname; ?></p>
-		<input name="blog_title" type="hidden" id="blog_title" value="<?php echo $blog_details->blogname; ?>" />
+
+		<p><?php echo esc_html( $blog_details->blogname ); ?></p>
+		<input name="blog_title" type="hidden" id="blog_title" value="<?php echo esc_attr( $blog_details->blogname ); ?>" />
 
 		<label for="blogname"><strong><?php esc_html_e( 'Blog Address:', 'bp-groupblog' ); ?></strong></label>
 		<?php $errmsg = $errors->get_error_message( 'blogname' ); ?>
@@ -654,21 +655,26 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 			<p class="error"><?php echo esc_html( $errmsg ); ?></p>
 		<?php endif ?>
 
-		<p><em><?php echo $blog_details->siteurl; ?> </em></p>
-		<input name="blogname" type="hidden" id="blogname" value="<?php echo $blog_details->siteurl; ?>" maxlength="50" />
+		<p><em><?php echo esc_html( $blog_details->siteurl ); ?> </em></p>
+		<input name="blogname" type="hidden" id="blogname" value="<?php echo esc_attr( $blog_details->siteurl ); ?>" maxlength="50" />
 
 		<div id="uncouple-blog">
-			<label for="uncouple"><?php printf( __( 'Uncouple the blog "%1$s" from the group "%2$s":', 'bp-groupblog' ), $blog_details->blogname, $bp->groups->current_group->name ); ?></label>
+			<?php // translators: 1. Site name; 2. Group name. ?>
+			<label for="uncouple"><?php printf( esc_html__( 'Uncouple the blog "%1$s" from the group "%2$s":', 'bp-groupblog' ), esc_html( $blog_details->blogname ), esc_html( $bp->groups->current_group->name ) ); ?></label>
 
-			<p class="description"><?php printf( __( '<strong>Note:</strong> Uncoupling will remove the blog from your group&#8217;s navigation and prevent future synchronization of group members and blog authors, but it will not remove change blog permissions for any current member. Visit <a href="%1$s">the Users panel</a> if you&#8217;d like to remove users from the blog.', 'bp-groupblog' ), $blog_details->siteurl . '/wp-admin/users.php' ); ?></p>
+			<?php // translators: Link to Users panel. ?>
+			<p class="description"><?php printf( __( '<strong>Note:</strong> Uncoupling will remove the blog from your group&#8217;s navigation and prevent future synchronization of group members and blog authors, but it will not remove change blog permissions for any current member. Visit <a href="%1$s">the Users panel</a> if you&#8217;d like to remove users from the blog.', 'bp-groupblog' ), esc_attr( $blog_details->siteurl . '/wp-admin/users.php' ) ); ?></p> <?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
-			<a class="button" href="<?php echo wp_nonce_url( bp_get_group_permalink( $bp->groups->current_group ) . 'admin/group-blog/uncouple', 'groupblog-uncouple' ); ?>"><?php esc_html_e( 'Uncouple', 'bp-groupblog' ); ?></a>
+			<a class="button" href="<?php echo esc_attr( wp_nonce_url( bp_get_group_permalink( $bp->groups->current_group ) . 'admin/group-blog/uncouple', 'groupblog-uncouple' ) ); ?>"><?php esc_html_e( 'Uncouple', 'bp-groupblog' ); ?></a>
 
 		</div>
 
-		<?php $bp->groups->current_group->status == 'public' ? $group_public = '1' : $group_public = '0'; ?>
-		<input type="hidden" id="blog_public" name="blog_public" value="<?php echo $group_public; ?>" />
-		<input type="hidden" id="groupblog_create_screen" name="groupblog_create_screen" value="<?php echo $groupblog_create_screen; ?>" />
+		<?php
+		$group_public = 'public' === groups_get_current_group()->status ? '1' : '0';
+		?>
+
+		<input type="hidden" id="blog_public" name="blog_public" value="<?php echo esc_attr( $group_public ); ?>" />
+		<input type="hidden" id="groupblog_create_screen" name="groupblog_create_screen" value="<?php echo esc_attr( $groupblog_create_screen ); ?>" />
 
 	<?php else : ?>
 		<?php /* Showing the create screen form */ ?>
@@ -687,8 +693,8 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 				foreach ( (array) $user_blogs as $user_blog ) {
 					if ( ! get_groupblog_group_id( $user_blog->userblog_id ) ) :
 						?>
-						<option value="<?php echo $user_blog->userblog_id; ?>"><?php echo $user_blog->blogname; ?></option>
-					<?php
+						<option value="<?php echo esc_attr( $user_blog->userblog_id ); ?>"><?php echo esc_html( $user_blog->blogname ); ?></option>
+						<?php
 					endif;
 				}
 				?>
@@ -744,17 +750,20 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 				?>
 
 				<?php if ( is_subdomain_install() ) : ?>
-					<span class="gbd-value"><em>http://</em><input name="blogname" type="text" id="blogname" value="<?php echo $blog_address; ?>" maxlength="50" /><em><?php echo $current_site->domain . $current_site->path; ?></em></span>
+					<span class="gbd-value"><em>http://</em><input name="blogname" type="text" id="blogname" value="<?php echo esc_attr( $blog_address ); ?>" maxlength="50" /><em><?php echo esc_attr( $current_site->domain . $current_site->path ); ?></em></span>
 				<?php else : ?>
-					<span class="gbd-value"><em>http://<?php echo $current_site->domain . $current_site->path; ?></em><input name="blogname" type="text" id="blogname" value="<?php echo $blog_address; ?>" maxlength="50" /></span>
+					<span class="gbd-value"><em>http://<?php echo esc_attr( $current_site->domain . $current_site->path ); ?></em><input name="blogname" type="text" id="blogname" value="<?php echo esc_attr( $blog_address ); ?>" maxlength="50" /></span>
 				<?php endif ?>
 
 			</li>
 		</ul>
 
-		<?php $bp->groups->current_group->status == 'public' ? $group_public = '1' : $group_public = '0'; ?>
-		<input type="hidden" id="blog_public" name="blog_public" value="<?php echo $group_public; ?>" />
-		<input type="hidden" id="groupblog_create_screen" name="groupblog_create_screen" value="<?php echo $groupblog_create_screen; ?>" />
+		<?php
+		$group_public = 'public' === groups_get_current_group()->status ? '1' : '0';
+		?>
+
+		<input type="hidden" id="blog_public" name="blog_public" value="<?php echo esc_attr( $group_public ); ?>" />
+		<input type="hidden" id="groupblog_create_screen" name="groupblog_create_screen" value="<?php echo esc_attr( $groupblog_create_screen ); ?>" />
 
 	<?php endif ?>
 
@@ -1077,15 +1086,15 @@ function bp_groupblog_signup_blog( $blogname = '', $blog_title = '', $errors = '
 					<tbody>
 					<tr>
 						<td class="available-theme top left">
-							<?php echo '<img src="' . WP_PLUGIN_URL . '/bp-groupblog/inc/i/screenshot-mag.png">'; ?>
+							<?php echo '<img src="' . esc_attr( WP_PLUGIN_URL ) . '/bp-groupblog/inc/i/screenshot-mag.png">'; ?>
 							<br /><br />
-							<input<?php if ( ! bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> name="page_template_layout" id="page_template_layout" value="magazine" type="radio" <?php if ( $page_template_layout == 'magazine' ) { echo 'checked="checked"'; } ?> /><label style="display:inline;"> <?php esc_html_e( 'Magazine', 'bp-groupblog' ); ?></label>
+							<input <?php disabled( ! bp_groupblog_is_blog_enabled( $group_id ) ); ?> name="page_template_layout" id="page_template_layout" value="magazine" type="radio" <?php checked( 'magazine', $page_template_layout ); ?> /><label style="display:inline;"> <?php esc_html_e( 'Magazine', 'bp-groupblog' ); ?></label>
 							<p class="description"><?php esc_html_e( 'Balanced template for groups with diverse postings.', 'bp-groupblog' ); ?></p>
 						</td>
 						<td class="available-theme top">
-							<?php echo '<img src="' . WP_PLUGIN_URL . '/bp-groupblog/inc/i/screenshot-micro.png">'; ?>
+							<?php echo '<img src="' . esc_attr( WP_PLUGIN_URL ) . '/bp-groupblog/inc/i/screenshot-micro.png">'; ?>
 							<br /><br />
-							<input<?php if ( ! bp_groupblog_is_blog_enabled( $group_id ) ) { ?> disabled="true"<?php } ?> name="page_template_layout" id="page_template_layout" value="microblog" type="radio" <?php if ( $page_template_layout == 'microblog' ) { echo 'checked="checked"'; } ?> /><label style="display:inline;"> <?php esc_html_e( 'Microblog', 'bp-groupblog' ); ?></label>
+							<input <?php disabled( ! bp_groupblog_is_blog_enabled( $group_id ) ); ?> name="page_template_layout" id="page_template_layout" value="microblog" type="radio" <?php checked( 'microblog', $page_template_layout ); ?> /><label style="display:inline;"> <?php esc_html_e( 'Microblog', 'bp-groupblog' ); ?></label>
 							<p class="description"><?php esc_html_e( 'Great for simple listing of posts in a chronological order.', 'bp-groupblog' ); ?></p>
 						</td>
 					</tr>
