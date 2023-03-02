@@ -588,7 +588,8 @@ function bp_groupblog_create_screen_save() {
 
 	if ( isset( $_POST['groupblog-create-new'] ) && 'yes' === $_POST['groupblog-create-new'] ) {
 		// Create a new blog and assign the blog id to the global $groupblog_blog_id.
-		if ( ! $groupblog_blog_id = bp_groupblog_validate_blog_signup() ) {
+		$groupblog_blog_id = bp_groupblog_validate_blog_signup();
+		if ( ! $groupblog_blog_id ) {
 			$errors = $filtered_results['errors'];
 			bp_core_add_message( $errors );
 			$group_id = '';
@@ -639,15 +640,18 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 		<?php /* We're showing the admin form */ ?>
 		<?php $blog_details = get_blog_details( get_groupblog_blog_id(), true ); ?>
 		<label for="blog_title"><strong><?php esc_html_e( 'Blog Title:', 'bp-groupblog' ); ?></strong></label>
-		<?php if ( $errmsg = $errors->get_error_message( 'blog_title' ) ) { ?>
-			<p class="error"><?php echo $errmsg; ?></p>
+
+		<?php $errmsg = $errors->get_error_message( 'blog_title' ); ?>
+		<?php if ( $errmsg ) { ?>
+			<p class="error"><?php echo esc_html( $errmsg ); ?></p>
 		<?php } ?>
 		<p><?php echo $blog_details->blogname; ?></p>
 		<input name="blog_title" type="hidden" id="blog_title" value="<?php echo $blog_details->blogname; ?>" />
 
 		<label for="blogname"><strong><?php esc_html_e( 'Blog Address:', 'bp-groupblog' ); ?></strong></label>
-		<?php if ( $errmsg = $errors->get_error_message( 'blogname' ) ) : ?>
-			<p class="error"><?php echo $errmsg; ?></p>
+		<?php $errmsg = $errors->get_error_message( 'blogname' ); ?>
+		<?php if ( $errmsg ) : ?>
+			<p class="error"><?php echo esc_html( $errmsg ); ?></p>
 		<?php endif ?>
 
 		<p><em><?php echo $blog_details->siteurl; ?> </em></p>
@@ -700,8 +704,9 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 			<li>
 				<label class="groupblog-label" for="blog_title"><strong><?php esc_html_e( 'Blog Title:', 'bp-groupblog' ); ?></strong></label>
 
-				<?php if ( $errmsg = $errors->get_error_message( 'blog_title' ) ) : ?>
-					<span class="error"><?php echo $errmsg; ?></span>
+				<?php $errmsg = $errors->get_error_message( 'blog_title' ); ?>
+				<?php if ( $errmsg ) : ?>
+					<span class="error"><?php echo esc_html( $errmsg ); ?></span>
 				<?php endif ?>
 
 				<?php
@@ -713,14 +718,15 @@ function bp_groupblog_show_blog_form( $blogname = '', $blog_title = '', $errors 
 				?>
 
 				<span class="gbd-value">
-					<input name="blog_title" type="text" id="blog_title" value="<?php echo $blog_title; ?>" />
+					<input name="blog_title" type="text" id="blog_title" value="<?php echo esc_attr( $blog_title ); ?>" />
 				</span>
 			</li>
 
 			<li>
 				<label class="groupblog-label" for="blogname"><strong><?php esc_html_e( 'Blog Address:', 'bp-groupblog' ); ?></strong></label>
-				<?php if ( $errmsg = $errors->get_error_message( 'blogname' ) ) : ?>
-					<span class="error"><?php echo $errmsg; ?></span>
+				<?php $errmsg = $errors->get_error_message( 'blogname' ); ?>
+				<?php if ( $errmsg ) : ?>
+					<span class="error"><?php echo esc_html( $errmsg ); ?></span>
 				<?php endif ?>
 
 				<?php
@@ -994,19 +1000,24 @@ function bp_groupblog_signup_blog( $blogname = '', $blog_title = '', $errors = '
 			<p><?php esc_html_e( 'Enable blog posting to allow adding of group members to the blog with the roles set below.', 'bp-groupblog' ); ?><br /><?php esc_html_e( 'When disabled, all members will temporarily be set to subscribers, disabling posting.', 'bp-groupblog' ); ?></p>
 
 			<div class="checkbox">
-				<label><input type="checkbox" name="groupblog-silent-add" id="groupblog-silent-add" value="1" <?php if ( bp_groupblog_silent_add( $group_id ) ) { ?>checked="checked"<?php } ?>/> <?php esc_html_e( 'Enable member blog posting', 'bp-groupblog' ); ?></label>
+				<label><input type="checkbox" name="groupblog-silent-add" id="groupblog-silent-add" value="1" <?php checked( bp_groupblog_silent_add( $group_id ) ); ?> /> <?php esc_html_e( 'Enable member blog posting', 'bp-groupblog' ); ?></label>
 			</div>
 
 			<?php
 			// Assign our default roles to variables.
 			// If nothing has been saved in the groupmeta yet, then we assign our own defalt values.
-			if ( ! ( $groupblog_default_admin_role = groups_get_groupmeta( $bp->groups->current_group->id, 'groupblog_default_admin_role' ) ) ) {
+			$groupblog_default_admin_role = groups_get_groupmeta( $bp->groups->current_group->id, 'groupblog_default_admin_role' );
+			if ( ! $groupblog_default_admin_role ) {
 				$groupblog_default_admin_role = $bp->groupblog->default_admin_role;
 			}
-			if ( ! ( $groupblog_default_mod_role = groups_get_groupmeta( $bp->groups->current_group->id, 'groupblog_default_mod_role' ) ) ) {
+
+			$groupblog_default_mod_role = groups_get_groupmeta( $bp->groups->current_group->id, 'groupblog_default_mod_role' );
+			if ( ! $groupblog_default_mod_role ) {
 				$groupblog_default_mod_role = $bp->groupblog->default_mod_role;
 			}
-			if ( ! ( $groupblog_default_member_role = groups_get_groupmeta( $bp->groups->current_group->id, 'groupblog_default_member_role' ) ) ) {
+
+			$groupblog_default_member_role = groups_get_groupmeta( $bp->groups->current_group->id, 'groupblog_default_member_role' );
+			if ( ! $groupblog_default_member_role ) {
 				$groupblog_default_member_role = $bp->groupblog->default_member_role;
 			}
 			?>
@@ -1050,7 +1061,8 @@ function bp_groupblog_signup_blog( $blogname = '', $blog_title = '', $errors = '
 		<?php if ( bp_groupblog_allow_group_admin_layout() ) : ?>
 
 			<?php
-			if ( ! ( $page_template_layout = groups_get_groupmeta( $bp->groups->current_group->id, 'page_template_layout' ) ) ) {
+			$page_template_layout = groups_get_groupmeta( $bp->groups->current_group->id, 'page_template_layout' );
+			if ( ! $page_template_layout ) {
 				$page_template_layout = groupblog_get_page_template_layout();
 			}
 			?>
