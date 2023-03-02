@@ -112,7 +112,7 @@ function bp_groupblog_setup_nav() {
 
 	if ( bp_is_group() ) {
 
-		$bp->groups->current_group->is_group_visible_to_member = ( 'public' == $bp->groups->current_group->status || groups_is_user_member( bp_loggedin_user_id(), bp_get_current_group_id() ) ) ? true : false;
+		$bp->groups->current_group->is_group_visible_to_member = ( 'public' === $bp->groups->current_group->status || groups_is_user_member( bp_loggedin_user_id(), bp_get_current_group_id() ) ) ? true : false;
 
 		$group_link = bp_get_group_permalink( groups_get_current_group() );
 
@@ -133,7 +133,7 @@ function bp_groupblog_setup_nav() {
 				// with the addition of a check for the array key to prevent PHP notices.
 				(
 					isset( $_POST['groupblog-create-new'] ) &&
-					$_POST['groupblog-create-new'] == 'yes'
+					'yes' === $_POST['groupblog-create-new']
 				)
 
 			) {
@@ -265,7 +265,7 @@ function groupblog_edit_base_settings( $groupblog_enable_blog, $groupblog_silent
 
 	foreach ( $default_role_array as $role_name => $role ) {
 		$old_default_role = groups_get_groupmeta( $group_id, $role_name );
-		if ( $role != $old_default_role ) {
+		if ( $role !== $old_default_role ) {
 			$update_users = true;
 			break;
 		}
@@ -314,7 +314,7 @@ function bp_groupblog_member_join( $group_id ) {
 			bp_group_the_member();
 			$user_id = bp_get_group_member_id();
 
-			if ( $group->creator_id != $user_id ) {
+			if ( (int) $group->creator_id !== (int) $user_id ) {
 				bp_groupblog_upgrade_user( $user_id, $group_id, $blog_id );
 			}
 		}
@@ -440,7 +440,7 @@ function bp_groupblog_upgrade_user( $user_id, $group_id, $blog_id = false ) {
 			break;
 	}
 
-	if ( $user_role == $default_role && $groupblog_silent_add == true ) {
+	if ( $user_role === $default_role && $groupblog_silent_add ) {
 		return false;
 	}
 
@@ -777,32 +777,31 @@ function bp_groupblog_validate_blog_form() {
 	foreach ( $errors->errors as $key => $value ) {
 
 		// If the error is with the blog name, check to see which one.
-		if ( $key == 'blogname' ) {
+		if ( 'blogname' === $key ) {
 
 			foreach ( $value as $subkey => $subvalue ) {
 
 				// TODO: This isn't compatible with languages other than "en_*".
 				// Maybe "switch_to_locale()" might help?
 				switch ( $subvalue ) {
-
 					/*
 					 * Removed in WordPress 4.4.
 					 * @see https://github.com/WordPress/WordPress/commit/a0bbd154d93c20724b9e1f54d515468845870dc0
 					 */
 					case 'Only lowercase letters (a-z) and numbers are allowed.':
-					// Support WordPress 4.4 string.
+						// Support WordPress 4.4 string.
 					case 'Site names can only contain lowercase letters (a-z) and numbers.':
 						$allowedchars = '';
-						if ( ! empty( $checks['allowdashes'] ) && $checks['allowdashes'] == 1 ) {
+						if ( ! empty( $checks['allowdashes'] ) && 1 === (int) $checks['allowdashes'] ) {
 							$allowedchars .= '-';
 						}
-						if ( ! empty( $checks['allowunderscores'] ) && $checks['allowunderscores'] == 1 ) {
+						if ( ! empty( $checks['allowunderscores'] ) && 1 === (int) $checks['allowunderscores'] ) {
 							$allowedchars .= '_';
 						}
 
 						$allowed = '/[a-z0-9' . $allowedchars . ']+/';
 						preg_match( $allowed, $result['blogname'], $maybe );
-						if ( $result['blogname'] != $maybe[0] ) {
+						if ( $result['blogname'] !== $maybe[0] ) {
 
 							// Still fails, so add an error to the object.
 							$newerrors->add( 'blogname', __( 'Only lowercase letters and numbers allowed.', 'bp-groupblog' ) );
@@ -839,7 +838,7 @@ function bp_groupblog_validate_blog_form() {
 						break;
 
 					case 'Sorry, site names must have letters too!':
-						if ( ! empty( $checks['allownumeric'] ) && $checks['allownumeric'] != 1 ) {
+						if ( ! empty( $checks['allownumeric'] ) && 1 === (int) $checks['allownumeric'] ) {
 							$newerrors->add( 'blogname', __( 'Sorry, blog names must have letters too!', 'bp-groupblog' ) );
 						}
 						break;
@@ -878,10 +877,10 @@ function bp_groupblog_sanitize_blog_name( $group_name = '' ) {
 	$checks = get_site_option( 'bp_groupblog_blog_defaults_options' );
 
 	$baddies = array();
-	if ( ! empty( $checks['allowdashes'] ) && $checks['allowdashes'] != '1' ) {
+	if ( ! empty( $checks['allowdashes'] ) && 1 !== (int) $checks['allowdashes'] ) {
 		$baddies[] = '-';
 	}
-	if ( ! empty( $checks['allowunderscores'] ) && $checks['allowunderscores'] != '1' ) {
+	if ( ! empty( $checks['allowunderscores'] ) && 1 === (int) $checks['allowunderscores'] ) {
 		$baddies[] = '_';
 	}
 
@@ -1108,11 +1107,11 @@ function bp_groupblog_validate_blog_signup() {
 		$message = '';
 		$message .= $errors->get_error_message( 'blogname' ) . '<br />';
 		$message .= __( ' We suggest adjusting the blog address below, in accordance with the following requirements:', 'bp-groupblog' ) . '<br />';
-		if ( $checks['allowunderscores'] != '1' || $checks['allowdashes'] != '1' ) {
+		if ( 1 === (int) $checks['allowunderscores'] || 1 !== (int) $checks['allowdashes'] ) {
 			$message .= __( ' &raquo; Only letters and numbers allowed.', 'bp-groupblog' ) . '<br />';
 		}
 		$message .= sprintf( __( ' &raquo; Must be at least %s characters.', 'bp-groupblog' ), $checks['minlength'] ) . '<br />';
-		if ( $checks['allownumeric'] != '1' ) {
+		if ( 1 === (int) $checks['allownumeric'] ) {
 			$message .= __( ' &raquo; Has to contain letters as well.', 'bp-groupblog' );
 		}
 		bp_core_add_message( $message, 'error' );
@@ -1185,7 +1184,7 @@ function bp_groupblog_catch_transition_post_type_status( $new_status, $old_statu
 	// This is an edit.
 	if ( $new_status === $old_status ) {
 		// An edit of an existing post should update the existing activity item.
-		if ( $new_status == 'publish' ) {
+		if ( 'publish' === $new_status ) {
 			$group_id = get_groupblog_group_id( get_current_blog_id() );
 
 			// Grab existing activity ID.
@@ -1251,7 +1250,7 @@ function bp_groupblog_set_group_to_post_activity( $activity, $args = array() ) {
 	// Regular BP save routine.
 	} else {
 		// Stop if this activity item is not a blog post.
-		if ( $activity->type != 'new_blog_post' ) {
+		if ( 'new_blog_post' !== $activity->type ) {
 			return;
 		}
 
@@ -1330,7 +1329,7 @@ function bp_groupblog_set_group_to_post_activity( $activity, $args = array() ) {
 	$activity->component = 'groups';
 
 	// Use group's privacy settings for activity privacy.
-	$activity->hide_sitewide = $group->status == 'public' ? 0 : 1;
+	$activity->hide_sitewide = 'public' === $group->status ? 0 : 1;
 
 	/*
 	 * Need to set type as new_groupblog_post or filters won't work.
@@ -1806,13 +1805,13 @@ function _bp_groupblog_set_activity_id_for_groupblog_comment( $activity_id, $arg
  *
  * @since 1.8.4
  *
- * @param str $retval The URL.
+ * @param string $retval   The URL.
  * @param object $activity The activity object.
  * @return str $retval The modified URL.
  */
 function bp_groupblog_activity_permalink( $retval, $activity ) {
 	// Not a groupblog post? Stop now.
-	if ( $activity->type !== 'new_groupblog_post' && $activity->type !== 'new_groupblog_comment' ) {
+	if ( 'new_groupblog_post' !== $activity->type && 'new_groupblog_comment' !== $activity->type ) {
 		return $retval;
 	}
 
