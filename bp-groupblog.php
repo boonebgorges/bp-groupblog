@@ -34,20 +34,20 @@ function bp_groupblog_setup() {
 
 	// Set up the array of potential defaults.
 	$groupblog_blogdefaults = array(
-		'theme' => 'bp-default|bp-groupblog',
-		'page_template_layout' => 'magazine',
-		'delete_blogroll_links' => '1',
-		'default_cat_name' => 'Uncategorized',
-		'default_link_cat' => 'Links',
-		'delete_first_post' => 0,
-		'delete_first_comment' => 0,
-		'allowdashes' => 0,
-		'allowunderscores' => 0,
-		'allownumeric' => 0,
-		'minlength' => 4,
-		'redirectblog' => 0,
+		'theme'                  => 'bp-default|bp-groupblog',
+		'page_template_layout'   => 'magazine',
+		'delete_blogroll_links'  => '1',
+		'default_cat_name'       => 'Uncategorized',
+		'default_link_cat'       => 'Links',
+		'delete_first_post'      => 0,
+		'delete_first_comment'   => 0,
+		'allowdashes'            => 0,
+		'allowunderscores'       => 0,
+		'allownumeric'           => 0,
+		'minlength'              => 4,
+		'redirectblog'           => 0,
 		'deep_group_integration' => 0,
-		'pagetitle' => 'Blog',
+		'pagetitle'              => 'Blog',
 	);
 	// Add a site option so that we'll know set up ran.
 	add_site_option( 'bp_groupblog_blog_defaults_setup', 1 );
@@ -93,13 +93,12 @@ if ( file_exists( WP_PLUGIN_DIR . '/bp-groupblog/languages/groupblog-' . get_loc
 function bp_groupblog_setup_globals() {
 	global $bp, $wpdb;
 
-	$bp->groupblog = new stdClass();
-	$bp->groupblog->image_base = WP_PLUGIN_DIR . '/bp-groupblog/groupblog/images';
-	$bp->groupblog->slug = BP_GROUPBLOG_SLUG;
-	$bp->groupblog->default_admin_role = BP_GROUPBLOG_DEFAULT_ADMIN_ROLE;
-	$bp->groupblog->default_mod_role = BP_GROUPBLOG_DEFAULT_MOD_ROLE;
+	$bp->groupblog                      = new stdClass();
+	$bp->groupblog->image_base          = WP_PLUGIN_DIR . '/bp-groupblog/groupblog/images';
+	$bp->groupblog->slug                = BP_GROUPBLOG_SLUG;
+	$bp->groupblog->default_admin_role  = BP_GROUPBLOG_DEFAULT_ADMIN_ROLE;
+	$bp->groupblog->default_mod_role    = BP_GROUPBLOG_DEFAULT_MOD_ROLE;
 	$bp->groupblog->default_member_role = BP_GROUPBLOG_DEFAULT_MEMBER_ROLE;
-
 }
 add_action( 'bp_setup_globals', 'bp_groupblog_setup_globals' );
 
@@ -148,13 +147,13 @@ function bp_groupblog_setup_nav() {
 
 				bp_core_new_subnav_item(
 					array(
-						'name' => $name,
-						'slug' => $slug,
-						'parent_url' => $group_link,
-						'parent_slug' => $parent_slug,
+						'name'            => $name,
+						'slug'            => $slug,
+						'parent_url'      => $group_link,
+						'parent_slug'     => $parent_slug,
 						'screen_function' => 'groupblog_screen_blog',
-						'position' => 32,
-						'item_css_id' => 'nav-group-blog',
+						'position'        => 32,
+						'item_css_id'     => 'nav-group-blog',
 					)
 				);
 			}
@@ -257,8 +256,8 @@ function groupblog_edit_base_settings( $groupblog_enable_blog, $groupblog_silent
 	}
 
 	$default_role_array = array(
-		'groupblog_default_admin_role' => $groupblog_default_admin_role,
-		'groupblog_default_mod_role' => $groupblog_default_mod_role,
+		'groupblog_default_admin_role'  => $groupblog_default_admin_role,
+		'groupblog_default_mod_role'    => $groupblog_default_mod_role,
 		'groupblog_default_member_role' => $groupblog_default_member_role,
 	);
 
@@ -940,14 +939,17 @@ function bp_groupblog_signup_blog( $blogname = '', $blog_title = '', $errors = '
 	}
 
 	// allow definition of default variables.
-	$filtered_results = apply_filters( 'signup_blog_init', array(
-		'blogname' => $blogname,
-		'blog_title' => $blog_title,
-		'errors' => $errors,
-	) );
-	$blogname = $filtered_results['blogname'];
-	$blog_title = $filtered_results['blog_title'];
-	$errors = $filtered_results['errors'];
+	$filtered_results = apply_filters(
+		'signup_blog_init',
+		array(
+			'blogname'   => $blogname,
+			'blog_title' => $blog_title,
+			'errors'     => $errors,
+		)
+	);
+	$blogname         = $filtered_results['blogname'];
+	$blog_title       = $filtered_results['blog_title'];
+	$errors           = $filtered_results['errors'];
 
 	if ( ! isset( $groupblog_create_screen ) ) {
 		$groupblog_create_screen = false;
@@ -1134,10 +1136,13 @@ function bp_groupblog_validate_blog_signup() {
 	groups_update_groupmeta( $group_id, 'groupblog_path', $path );
 	groups_update_groupmeta( $group_id, 'groupblog_domain', $domain );
 
-	$meta = apply_filters( 'signup_create_blog_meta', array(
-		'lang_id' => 1,
-		'public' => $public,
-	) ); // Deprecated.
+	$meta = apply_filters(
+		'signup_create_blog_meta',
+		array(
+			'lang_id' => 1,
+			'public'  => $public,
+		)
+	); // Deprecated.
 	$meta = apply_filters( 'add_signup_meta', $meta );
 
 	$groupblog_blog_id = wpmu_create_blog( $domain, $path, $blog_title, $current_user->ID, $meta, $wpdb->siteid );
@@ -1184,12 +1189,14 @@ function bp_groupblog_catch_transition_post_type_status( $new_status, $old_statu
 			$group_id = get_groupblog_group_id( get_current_blog_id() );
 
 			// Grab existing activity ID.
-			$id = bp_activity_get_activity_id( array(
-				'component'         => 'groups',
-				'type'              => 'new_groupblog_post',
-				'item_id'           => $group_id,
-				'secondary_item_id' => $post->ID,
-			) );
+			$id = bp_activity_get_activity_id(
+				array(
+					'component'         => 'groups',
+					'type'              => 'new_groupblog_post',
+					'item_id'           => $group_id,
+					'secondary_item_id' => $post->ID,
+				)
+			);
 
 			if ( empty( $id ) ) {
 				return;
@@ -1197,17 +1204,19 @@ function bp_groupblog_catch_transition_post_type_status( $new_status, $old_statu
 
 			// Grab activity item and modify some properties.
 			$activity = new BP_Activity_Activity( $id );
-			$activity->content = $post->post_content;
+
+			$activity->content       = $post->post_content;
 			$activity->date_recorded = bp_core_current_time();
 
 			// Pass activity to our edit function.
-			bp_groupblog_set_group_to_post_activity( $activity, array(
-				'group_id' => $group_id,
-				'post'     => $post,
-			) );
+			bp_groupblog_set_group_to_post_activity(
+				$activity,
+				array(
+					'group_id' => $group_id,
+					'post'     => $post,
+				)
+			);
 		}
-
-		return;
 	}
 }
 add_action( 'transition_post_status', 'bp_groupblog_catch_transition_post_type_status', 10, 3 );
@@ -1258,11 +1267,13 @@ function bp_groupblog_set_group_to_post_activity( $activity, $args = array() ) {
 		$post = get_post( $post_id );
 
 		// Try to see if we are editing an existing groupblog post.
-		$id = bp_activity_get_activity_id( array(
-			'type'              => 'new_groupblog_post',
-			'item_id'           => $group_id,
-			'secondary_item_id' => $post_id,
-		) );
+		$id = bp_activity_get_activity_id(
+			array(
+				'type'              => 'new_groupblog_post',
+				'item_id'           => $group_id,
+				'secondary_item_id' => $post_id,
+			)
+		);
 	}
 
 	// Fetch group data/
@@ -1270,8 +1281,8 @@ function bp_groupblog_set_group_to_post_activity( $activity, $args = array() ) {
 
 	// Only allow certain HTML tags in post titles.
 	if ( ! empty( $post->post_title ) ) {
-		$allowed_tags = array(
-			'em' => array(),
+		$allowed_tags     = array(
+			'em'     => array(),
 			'strong' => array(),
 		);
 		$post->post_title = wp_kses( $post->post_title, $allowed_tags );
@@ -1297,8 +1308,8 @@ function bp_groupblog_set_group_to_post_activity( $activity, $args = array() ) {
 	// Build args for action filter.
 	$filter_args = array(
 		'new_post' => ! empty( $id ) ? true : false,
-		'post' => $post,
-		'group' => $group,
+		'post'     => $post,
+		'group'    => $group,
 		'activity' => $activity,
 	);
 
@@ -1315,8 +1326,8 @@ function bp_groupblog_set_group_to_post_activity( $activity, $args = array() ) {
 	$activity->primary_link = get_permalink( $post->ID );
 
 	// Replace the necessary values to display in group activity stream.
-	$activity->item_id       = (int) $group_id;
-	$activity->component     = 'groups';
+	$activity->item_id   = (int) $group_id;
+	$activity->component = 'groups';
 
 	// Use group's privacy settings for activity privacy.
 	$activity->hide_sitewide = $group->status == 'public' ? 0 : 1;
@@ -1375,12 +1386,14 @@ function bp_groupblog_remove_post( $post_id, $blog_id = 0, $user_id = 0 ) {
 	do_action( 'bp_groupblog_before_remove_post', $blog_id, $post_id, $user_id, $group_id );
 
 	// Delete activity stream item.
-	bp_blogs_delete_activity( array(
-		'item_id' => $group_id,
-		'secondary_item_id' => $post_id,
-		'type' => 'new_groupblog_post',
-		'component' => $bp->groups->id,
-	) );
+	bp_blogs_delete_activity(
+		array(
+			'item_id'           => $group_id,
+			'secondary_item_id' => $post_id,
+			'type'              => 'new_groupblog_post',
+			'component'         => $bp->groups->id,
+		)
+	);
 
 	do_action( 'bp_groupblog_remove_post', $blog_id, $post_id, $user_id, $group_id );
 }
@@ -1540,10 +1553,10 @@ function bp_groupblog_format_activity_action_new_groupblog_comment( $action, $ac
 	$args = array(
 		'user_link' => $user_link,
 		'post_link' => $post_link,
-		'blog_url' => $blog_url,
+		'blog_url'  => $blog_url,
 		'blog_name' => $blog_name,
-		'blog_id' => $blog_id,
-		'activity' => $activity,
+		'blog_id'   => $blog_id,
+		'activity'  => $activity,
 	);
 
 	/**
@@ -1620,14 +1633,16 @@ function bp_groupblog_transition_comment_status( $new_status, $old_status, $comm
 		return;
 	}
 
-	if ( in_array( $new_status, array( 'delete', 'hold' ) ) ) {
-		bp_activity_delete_by_item_id( array(
-			'item_id'           => $group_id,
-			'secondary_item_id' => $comment->comment_ID,
-			'component'         => 'groups',
-			'type'              => 'new_groupblog_comment',
-			'user_id'           => false,
-		) );
+	if ( in_array( $new_status, array( 'delete', 'hold' ), true ) ) {
+		bp_activity_delete_by_item_id(
+			array(
+				'item_id'           => $group_id,
+				'secondary_item_id' => $comment->comment_ID,
+				'component'         => 'groups',
+				'type'              => 'new_groupblog_comment',
+				'user_id'           => false,
+			)
+		);
 
 		remove_action( 'transition_comment_status', 'bp_activity_transition_post_type_comment_status', 10 );
 		return;
@@ -1680,19 +1695,21 @@ function bp_groupblog_delete_activity_on_delete_blog_comment( $comment_id ) {
 		return;
 	}
 
-	$comment = get_comment( $comment_id );
+	$comment   = get_comment( $comment_id );
 	$post_type = get_post_type( $comment->comment_post_ID );
 	if ( 'post' !== $post_type ) {
 		return;
 	}
 
-	bp_activity_delete_by_item_id( array(
-		'item_id'           => $group_id,
-		'secondary_item_id' => $comment_id,
-		'component'         => 'groups',
-		'type'              => 'new_groupblog_comment',
-		'user_id'           => false,
-	) );
+	bp_activity_delete_by_item_id(
+		array(
+			'item_id'           => $group_id,
+			'secondary_item_id' => $comment_id,
+			'component'         => 'groups',
+			'type'              => 'new_groupblog_comment',
+			'user_id'           => false,
+		)
+	);
 
 	remove_action( 'delete_comment', 'bp_activity_post_type_remove_comment', 10 );
 }
@@ -1756,8 +1773,8 @@ function _bp_groupblog_set_activity_id_for_groupblog_comment( $activity_id, $arg
 	}
 
 	$args['component'] = 'groups';
-	$args['type'] = 'new_groupblog_comment';
-	$args['item_id'] = buddypress()->activity->groupblog_temp_id;
+	$args['type']      = 'new_groupblog_comment';
+	$args['item_id']   = buddypress()->activity->groupblog_temp_id;
 
 	// Check BuddyPress version before getting the activity ID.
 	if ( version_compare( bp_get_version(), '10.0.0', '>=' ) ) {
@@ -1947,14 +1964,16 @@ function bp_groupblog_use_group_avatar_in_site_loop( $retval, $blog_id, $r ) {
 	}
 
 	// Site is using the site admin's avatar, so switch to group logo.
-	return bp_core_fetch_avatar( array(
-		'item_id'    => $group_id,
-		'avatar_dir' => 'group-avatars',
-		'object'     => 'group',
-		'type'       => $r['type'],
-		'alt'        => 'Group logo',
-		'width'      => $r['width'],
-		'height'     => $r['height'],
-	) );
+	return bp_core_fetch_avatar(
+		array(
+			'item_id'    => $group_id,
+			'avatar_dir' => 'group-avatars',
+			'object'     => 'group',
+			'type'       => $r['type'],
+			'alt'        => 'Group logo',
+			'width'      => $r['width'],
+			'height'     => $r['height'],
+		)
+	);
 }
 add_filter( 'bp_get_blog_avatar', 'bp_groupblog_use_group_avatar_in_site_loop', 10, 3 );
