@@ -273,7 +273,6 @@ function groupblog_edit_base_settings( $groupblog_enable_blog, $groupblog_silent
 
 	groups_update_groupmeta( $group_id, 'groupblog_enable_blog', $groupblog_enable_blog );
 	groups_update_groupmeta( $group_id, 'groupblog_blog_id', $groupblog_blog_id );
-	wp_cache_delete( $groupblog_blog_id, 'bp_groupblog_blog_group_ids' );
 
 	groups_update_groupmeta( $group_id, 'groupblog_silent_add', $groupblog_silent_add );
 
@@ -939,7 +938,6 @@ function bp_groupblog_process_uncouple() {
 
 		// Unset the groupblog ID.
 		groups_update_groupmeta( bp_get_current_group_id(), 'groupblog_blog_id', '' );
-		wp_cache_delete( $blog_id, 'bp_groupblog_blog_group_ids' );
 
 		bp_core_add_message( __( 'Blog uncoupled.', 'bp-groupblog' ) );
 
@@ -1952,7 +1950,6 @@ function bp_groupblog_delete_meta( $blog_id ) {
 
 	groups_update_groupmeta( $group_id, 'groupblog_enable_blog', '' );
 	groups_update_groupmeta( $group_id, 'groupblog_blog_id', '' );
-	wp_cache_delete( $blog_id, 'bp_groupblog_blog_group_ids' );
 
 	groups_update_groupmeta( $group_id, 'groupblog_silent_add', '' );
 
@@ -1961,19 +1958,6 @@ function bp_groupblog_delete_meta( $blog_id ) {
 	groups_update_groupmeta( $group_id, 'groupblog_default_member_role', '' );
 }
 add_action( 'delete_blog', 'bp_groupblog_delete_meta', 10, 1 );
-
-/**
- * Deletes 'bp_groupblog_blog_group_ids' cache on group delete.
- *
- * @since 1.9.3
- *
- * @param int $group_id Group ID.
- */
-function bp_groupblog_delete_meta_on_group_delete( $group_id ) {
-	$blog_id = get_groupblog_blog_id( $group_id );
-	wp_cache_delete( $blog_id, 'bp_groupblog_blog_group_ids' );
-}
-add_action( 'groups_before_delete_group', 'bp_groupblog_delete_meta_on_group_delete' );
 
 /**
  * Use the group avatar on the Site Directory page for groupblogs.
