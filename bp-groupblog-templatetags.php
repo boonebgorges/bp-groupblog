@@ -187,14 +187,20 @@ function get_groupblog_group_id( $blog_id ) {
 
 	$group_id = 0;
 
-	$cached = wp_cache_get( $blog_id, 'bp_groupblog_blog_group_ids' );
-	if ( false === $cached ) {
-		$group_id = (int) $wpdb->get_var(
-			$wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'groupblog_blog_id' AND meta_value = %s", $blog_id )
-		);
-		wp_cache_set( $blog_id, $group_id, 'bp_groupblog_blog_group_ids' );
-	} else {
-		$group_id = (int) $cached;
+	$get = BP_Groups_Group::get(
+		[
+			'fields'     => 'ids',
+			'meta_query' => [
+				[
+					'key'   => 'groupblog_blog_id',
+					'value' => (int) $blog_id
+				]
+			]
+		]
+	);
+
+	if ( ! empty( $get['groups'] ) ) {
+		$group_id = $get['groups'][0];
 	}
 
 	return $group_id;
