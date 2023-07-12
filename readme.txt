@@ -51,6 +51,9 @@ The BuddyPress Groupblog plugin extends the group functionality by enabling each
 
 == Changelog ==
 
+= 1.9.3 =
+* When a user leaves the group, remove them altogether from the group blog.
+
 = 1.9.2 =
 * Use group avatar on Site Directory for groupblogs, rather than creator user avatar.
 * Allow query args for page butons on blog tab to be filtered.
