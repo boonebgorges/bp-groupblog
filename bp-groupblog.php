@@ -514,9 +514,8 @@ function bp_groupblog_remove_user( $group_id, $user_id = false ) {
 		return;
 	}
 
-	$user = new WP_User( $user_id );
-	$user->for_blog( $blog_id );
-	$user->set_role( 'subscriber' );
+	remove_user_from_blog( $user_id, $blog_id, 0 );
+
 	wp_cache_delete( $user_id, 'users' );
 }
 add_action( 'groups_leave_group', 'bp_groupblog_remove_user', 10, 2 );
