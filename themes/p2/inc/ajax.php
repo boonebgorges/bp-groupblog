@@ -40,7 +40,7 @@ class P2Ajax {
 		if ( strlen( $term ) < 2 )
 			die(); // require 2 chars for matching
 		$results = $wpdb->get_col( "SELECT t.name FROM $wpdb->term_taxonomy AS tt INNER JOIN $wpdb->terms AS t ON tt.term_id = t.term_id WHERE tt.taxonomy = 'post_tag' AND t.name LIKE ( '%". like_escape( $wpdb->escape( $term ) ) . "%' )" );
-		echo join( $results, "\n" );
+		echo join( "\n", $results );
 	}
 
 	function logged_in_out() {
